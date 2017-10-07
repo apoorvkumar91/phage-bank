@@ -3,12 +3,12 @@
 
 Install python
 
-Windows only:
-Add python into the PATH variable
+[Windows only:
+Add python into the PATH variable]
 
 python -m pip install -U pip
-Windows only:
-Add the env variable for pip : It is under the insatlled python directory/Scripts
+[Windows only:
+Add the env variable for pip : It is under the insatlled python directory/Scripts]
 
 Install Django
 pip install django
