@@ -28,7 +28,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
+PROJECT_PATH = os.path.join(BASE_DIR, 'templates')
+print (PROJECT_PATH)
 # Application definition
 
 INSTALLED_APPS = [
@@ -53,11 +54,19 @@ MIDDLEWARE_CLASSES = [
 ]
 
 ROOT_URLCONF = 'BioBank.urls'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+TEMPLATE_DIRS = (
+    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+      os.path.join(os.path.dirname(__file__), 'templates'),
+)
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [PROJECT_PATH],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
