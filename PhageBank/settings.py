@@ -42,6 +42,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'homeapp',
+    'contact',
     'django.contrib.auth',
     'django.contrib.admin',
     'django.contrib.contenttypes',
@@ -49,6 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'PhageBank.core',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -87,7 +89,13 @@ WSGI_APPLICATION = 'PhageBank.wsgi.application'
 
 # added by AK
 db_from_env = dj_database_url.config(conn_max_age=500)
-#DATABASES['default'].update(db_from_env)
+
+# Honor the 'X-Forwarded-Proto' header for request.is_secure()
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Allow all host headers
+ALLOWED_HOSTS = ['*']
+
 
 # end - AK - more additions at the end of the file
 
@@ -98,6 +106,14 @@ DATABASES = {
     }
 }
 
+#DATABASES = {
+#    'default': dj_database_url.config()
+#    
+#}
+
+#DATABASES['default'] =  dj_database_url.config()
+#
+#DATABASES['default'].update(db_from_env)
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
@@ -119,6 +135,7 @@ USE_TZ = True
 
 # Changes by AK
 
+# Static asset configuration
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
