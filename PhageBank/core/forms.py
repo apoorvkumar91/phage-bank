@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from PhageBank.core.models import PhageData
+from PhageBank.core.models import PhageData, PeopleData, HostData
 
 
 class SignUpForm(UserCreationForm):
@@ -14,9 +14,18 @@ class SignUpForm(UserCreationForm):
         fields = ("username", 'first_name', 'last_name', 'email', 'password1', 'password2',)
 
 class AddPhageForm(forms.ModelForm):
-    phage_name = forms.CharField(label='Phage Name', max_length=30, required=True, help_text='Required.')
-    host_name = forms.CharField(label='Host Name', max_length=30, required=True, help_text='Required.')
+    phage_first_name = forms.CharField(label='Phage First Name', max_length=30, required=True, help_text='Required.')
+    phage_second_name = forms.CharField(label='Phage Second Name', max_length=30, required=True, help_text='Required.')
 
     class Meta:
         model = PhageData
-        fields = ('phage_name', 'host_name')
+        fields = ('phage_first_name', 'phage_second_name')
+
+class AddPeopleForm(forms.ModelForm):
+    people_first_name = forms.CharField(label='People First Name', max_length=30, required=True, help_text='Required.')
+    people_second_name = forms.CharField(label='People Second Name', max_length=30, required=True, help_text='Required.')
+
+    class Meta:
+        model = PeopleData
+        fields = ('people_first_name', 'people_second_name')
+
