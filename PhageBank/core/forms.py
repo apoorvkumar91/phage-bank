@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from PhageBank.core.models import PhageData, PeopleData, HostData
+from PhageBank.core.models import PhageData
 
 
 class SignUpForm(UserCreationForm):
@@ -13,19 +13,38 @@ class SignUpForm(UserCreationForm):
         model = User
         fields = ("username", 'first_name', 'last_name', 'email', 'password1', 'password2',)
 
+
 class AddPhageForm(forms.ModelForm):
-    phage_first_name = forms.CharField(label='Phage First Name', max_length=30, required=True, help_text='Required.')
-    phage_second_name = forms.CharField(label='Phage Second Name', max_length=30, required=True, help_text='Required.')
+    phage_name = forms.CharField(label='Phage Name',
+                                 max_length=30, required=True,
+                                 help_text='Required.')
+
+    phage_host_name = forms.CharField(label='Host Name',
+                                      max_length=30, required=True,
+                                      help_text='Required.')
+
+    phage_isolator_name = forms.CharField(label='Isolator Name',
+                                          max_length=30,
+                                          required=True,
+                                          help_text='Required.')
+
+    phage_experimenter_name = forms.CharField(label='Experimenter Name',
+                                              max_length=30,
+                                              required=True,
+                                              help_text='Required.')
+
+    phage_CPT_id = forms.CharField(label='CPT id',
+                                   max_length=30,
+                                   required=True,
+                                   help_text='Required.')
+
+    phage_isolator_loc = forms.CharField(label='Isolator Location',
+                                         max_length=5000,
+                                         required=True,
+                                         help_text='Required.')
 
     class Meta:
         model = PhageData
-        fields = ('phage_first_name', 'phage_second_name')
-
-class AddPeopleForm(forms.ModelForm):
-    people_first_name = forms.CharField(label='People First Name', max_length=30, required=True, help_text='Required.')
-    people_second_name = forms.CharField(label='People Second Name', max_length=30, required=True, help_text='Required.')
-
-    class Meta:
-        model = PeopleData
-        fields = ('people_first_name', 'people_second_name')
-
+        fields = ('phage_name', 'phage_host_name',
+                  'phage_isolator_name', 'phage_experimenter_name',
+                  'phage_CPT_id', 'phage_isolator_loc')
