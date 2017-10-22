@@ -3,7 +3,7 @@ from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect, render_to_response
 from django.template import RequestContext
 
-from PhageBank.core.forms import SignUpForm, AddPhageForm, AddHostForm, AddPeopleForm
+from PhageBank.core.forms import SignUpForm, AddPhageForm, AddPeopleForm
 
 
 @login_required
