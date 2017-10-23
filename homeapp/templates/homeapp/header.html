@@ -1,6 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<style>
+
+	navbutton {
+	transform-style: preserve-3d;
+}
+navbutton:after {
+	top: -100%;
+	left: 0px;
+	width: 100%;
+	position: absolute;
+	background: #3a9999;
+	border-radius: 5px;
+	content: 'Flipped';
+	transform-origin: left bottom;
+	transform: rotateX(90deg);
+}
+
+</style>
+
 <head>
 	<title>Phagebook</title>
 	<meta charset="utf-8" />
@@ -18,7 +37,7 @@
 
 <body class="body" style="background-color:#f6f6f6">
 	<div class="container-fluid" style="min-height:95%;">
-		<div class="row"  style="position:fixed; width: 100%; top: 0; height: 150px; background: #1B8EBA; color: white;z-index: 10;">
+		<div class="row"  style="position:fixed; width: 100%; top: 0; height: 150px; background:#1B8EBA; color: white;z-index: 10;">
 			  <div class="col-sm-2">
 				  <br>
 				  <center>
@@ -46,43 +65,40 @@
 		</div><hr>
 		<div style="margin-bottom: 150px;"></div>
 		<div class="row">
-		  <div class="col-sm-2">
-		  <br>
+		  	<div class="col-sm-2">
+		  	<br>
+		  	<br>
+				<div class="well bs-sidebar" id="sidebar" style="background:#f6f6f6; position:fixed; z-index:9; height:100%; width:20%;">
+			  		<ul class="nav nav-pills nav-stacked">
+                  		<div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
 
-		  <br>
-			<div class="well bs-sidebar" id="sidebar" style="background-color:#f6f6f6">
-			  <ul class="nav nav-pills nav-stacked">
-                  <div style="clear:both" align="center">
-				      <li><a href='/'>Home</a></li>
-                      <br>
-				      <li><a href='/login/'>Login</a></li>
-                      <br>
-					  <li><a href='/add/'>Add Phage Entry</a></li>
-					  <br>
-					  <li><a href='/view/'>View All Phages</a></li>
-					  <br>
-				      <li><a href='/contact/'>Contact</a></li>
-                  </div>
-			  </ul>
-			</div> <!--well bs-sidebar affix-->
-		  </div> <!--col-sm-2-->
-		  <div class="col-sm-8">
-			<div class='container-fluid' style="background-color:#fff">
+				      		<a class="nav-link active" style="background:#1B8EBA;" id="v-pills-home-tab" data-toggle="pill" href='/' role="tab" aria-controls="v-pills-home" aria-selected="true">Home</a>
+								<br>
+				      		<a class="nav-link active" style="background:#1B8EBA;" id="v-pills-home-tab" data-toggle="pill" href='/login/' role="tab" aria-controls="v-pills-home" aria-selected="true">Login</a>
+                      		<br>
+					  		<a class="nav-link active" style="background:#1B8EBA;" id="v-pills-home-tab" data-toggle="pill" href='/add/' role="tab" aria-controls="v-pills-home" aria-selected="true">Add Phage Entry</a>
+					  		<br>
+					  		<a class="nav-link active" style="background:#1B8EBA;" id="v-pills-home-tab" data-toggle="pill" href='/view/' role="tab" aria-controls="v-pills-home" aria-selected="true">View All Phages</a>
+					  		<br>
+							<a class="nav-link active" style="background:#1B8EBA;" id="v-pills-home-tab" data-toggle="pill" href='/contact/' role="tab" aria-controls="v-pills-home" aria-selected="true">Contact</a>
+                  		</div>
+			  		</ul>
+				</div> <!--well bs-sidebar affix-->
+		  	</div> <!--col-sm-2-->
+
+		  	<div class="col-sm-8">
+			<div class='container-fluid' style="background:#fff; position:absolute; right:0; width:100%; height:auto; margin-bottom:150px; left:100px;">
 			<br><br>
 			   {% block content %}
 			   {% endblock %}
+				<br><br>
 			</div>
 		  </div>
-            <div class="col-sm-2">
-			<div class='container-fluid'>
-			<br><br>
-			</div>
-            </div>
 		</div>
 	</div>
 	<footer>
-		<div class="container-fluid" style='margin-left:15px'>
-			<p><a href="#" target="blank">Contact</a> | <a href="#" target="blank">LinkedIn</a> | <a href="#" target="blank">Twitter</a> | <a href="#" target="blank">Google+</a></p>
+		<div class="container-fluid" style="height:200px; position:fixed; background:#1B8EBA; z-index:10;">
+			<p><a style="color:white;" href="#" target="blank">Contact</a> | <a style="color:white;" href="#" target="blank">LinkedIn</a> | <a style="color:white;" href="#" target="blank">Twitter</a> | <a style="color:white;" href="#" target="blank">Google+</a></p>
 		</div>
 	</footer>
 

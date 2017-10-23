@@ -76,7 +76,8 @@ class AddPhageForm(forms.ModelForm):
         HTML("<button class='accordion'>Research Information</button>"),
         HTML("<div class='panel'>"),
         Div('phage_isolator_loc'),
-        HTML("</div>")
+        HTML("</div>"),
+        HTML("<br><br>")
     )
 
 
