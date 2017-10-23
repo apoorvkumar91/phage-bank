@@ -28,14 +28,14 @@ def signup(request):
 
 def addphage(request):
     if request.method == 'POST':
-        form = AddPhageForm(request.POST)
-        if form.is_valid():
-            form.save()
+        phageform = AddPhageForm(request.POST)
+        if phageform.is_valid():
+            phageform.save()
             return redirect('home')
     else:
-        form = AddPhageForm()
-    return render(request, 'addphage.html',
-                  {'form': form})
+        phageform = AddPhageForm()
+        return render(request, 'addphage.html', {'form': phageform})
+
 
 def viewphages(request):
     query_results = PhageData.objects.all()
