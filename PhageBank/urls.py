@@ -20,4 +20,5 @@ urlpatterns = [
         auth_views.password_reset_confirm, name='password_reset_confirm'),
     url(r'^reset/done/$', auth_views.password_reset_complete, name='password_reset_complete'),
     url(r'^contact/$', include('contact.urls')),
+    url(r'^uploads/form/$', core_views.model_form_upload, name='model_form_upload'),
 ]
