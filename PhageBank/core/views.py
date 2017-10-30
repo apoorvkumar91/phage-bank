@@ -6,6 +6,7 @@ import io
 from PhageBank.core.forms import SignUpForm, AddPhageForm, UploadFileForm
 from PhageBank.core.models import PhageData
 
+
 @login_required
 def home(request):
     return render(request, 'home.html')
@@ -46,6 +47,14 @@ def handle_uploaded_file(uploadedfile):
 def viewphages(request):
     query_results = PhageData.objects.all()
     return render(request, 'viewphages.html', {'query_results': query_results})
+
+
+def viewPhage(request):
+    phageName = request.GET.get('name')
+    phage = PhageData.objects.filter(phage_name=phageName)
+    return render(request, 'viewPhage.html', {'query_results': phage})
+
+
 
 def model_form_upload(request):
     if request.method == 'POST':
