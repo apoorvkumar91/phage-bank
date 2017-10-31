@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'PhageBank.core',
     'django_extensions',
+    'aloe'
 ]
 
 MIDDLEWARE = [

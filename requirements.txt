@@ -20,3 +20,4 @@ whitenoise>=3.3.0
 django_extensions
 Faker
 django-crispy-forms
+aloe
