@@ -1,14 +1,14 @@
 {% extends "homeapp/header.html" %}
 
 {% block content %}
-    <a  href="/logout">Logout</a>
-    <li>
-      <a href="{%url 'model_form_upload' %}">Upload Spreadsheet</a>
-    </li>
+    <a class="float-right"  href="/logout"><u>Logout</u></a>
+
+
 <h2>Welcome, {{ user.get_full_name }}</h2>
 <br>
 <br>
 <p>Username: {{ user.username }}</p>
 <p>Email Address: {{ user.email }}</p>
+<a href="{%url 'model_form_upload' %}"><u>Upload Spreadsheet</u></a>
 <br>
 {% endblock %}

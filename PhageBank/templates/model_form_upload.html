@@ -1,11 +1,14 @@
-{% extends 'base.html' %}
+{% extends "homeapp/header.html" %}
+
 
 {% block content %}
+<a class="float-right"  href="/logout"><u>Logout</u></a>
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ form.as_p }}
+    <br>
+    {{ form.as_p }} <br>
     <button type="submit">Upload</button>
   </form>
-
-  <p><a href="{% url 'home' %}">Return to home</a></p>
+<br>
+<p><a href="{% url 'home' %}"><u>Return to home</u></a></p>
 {% endblock %}
