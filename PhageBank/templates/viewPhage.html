@@ -11,15 +11,16 @@
             <div class="well well-sm">
                 <div class="row">
                     <div class="col-sm-6 col-md-8">
-                        <p>Phage Name: {{ item.phage_name }}</p>
-                        <p>Host Name: {{ item.phage_host_name }}</p>
-                        <p>Isolator Name: {{ item.phage_isolator_name }}</p>
-                        <p>Experimenter Name: {{ item.phage_experimenter_name }}</p>
-                        <p>CPT ID: {{ item.phage_CPT_id }}</p>
-                        <p>Isolator Location: {{ item.phage_isolator_loc }}</p>
+                        <p><b>Phage Name:</b>  {{ item.phage_name }}</p>
+                        <p><b>Host Name:</b>  {{ item.phage_host_name }}</p>
+                        <p><b>Isolator Name:</b>  {{ item.phage_isolator_name }}</p>
+                        <p><b>Experimenter Name:</b>  {{ item.phage_experimenter_name }}</p>
+                        <p><b>CPT ID:</b>  {{ item.phage_CPT_id }}</p>
+                        <p><b>Isolator Location:</b>  {{ item.phage_isolator_loc }}</p>
                     </div>
                     <div class="col-sm-4 col-md-4">
-                        <img src="{{ item.profile_image }}" alt="" class="img-rounded img-responsive" />
+                        {% load staticfiles %}
+                        <img src="{% static 'img/phage.png' %}" alt="" class="img-rounded img-responsive" />
                     </div>
                 </div>
             </div>
