@@ -51,8 +51,8 @@ def viewphages(request):
 
 def viewPhage(request):
     phageName = request.GET.get('name')
-    phage = PhageData.objects.filter(phage_name=phageName)
-    return render(request, 'viewPhage.html', {'query_results': phage})
+    phage = PhageData.objects.get(phage_name=phageName)
+    return render(request, 'viewPhage.html', {'item': phage})
 
 
 
