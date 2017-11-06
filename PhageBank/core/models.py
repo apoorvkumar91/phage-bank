@@ -10,3 +10,4 @@ class PhageData(models.Model):
     phage_experimenter_name = models.CharField(max_length=30, default='none')
     phage_CPT_id = models.CharField(max_length=100, default='none')
     phage_isolator_loc = models.CharField(max_length=5000, default='none')
+    phage_all_links = models.CharField(max_length=5000, default='none')
