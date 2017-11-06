@@ -1,11 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
+from django.contrib import messages
 import csv
 import io
 from PhageBank.core.forms import SignUpForm, AddPhageForm, UploadFileForm
 from PhageBank.core.models import PhageData
-
 
 @login_required
 def home(request):
@@ -25,15 +25,20 @@ def signup(request):
         form = SignUpForm()
     return render(request, 'signup.html', {'form': form})
 
+@login_required
 def addphage(request):
-    if request.method == 'POST':
-        phageform = AddPhageForm(request.POST)
-        if phageform.is_valid():
-            phageform.save()
-            return redirect('home')
+    if request.user.is_authenticated():
+        if request.method == 'POST':
+            phageform = AddPhageForm(request.POST)
+            if phageform.is_valid():
+                phageform.save()
+                return redirect('home')
+        else:
+            phageform = AddPhageForm()
+            return render(request, 'addphage.html', {'form': phageform})
     else:
-        phageform = AddPhageForm()
-        return render(request, 'addphage.html', {'form': phageform})
+        #messages.error(request,'Login or signup first!')
+        return render(request,'Login.html')
 
 def handle_uploaded_file(uploadedfile):
     csv_file = uploadedfile
