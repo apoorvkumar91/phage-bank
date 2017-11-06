@@ -69,7 +69,12 @@ navbutton:after {
 				<div class="well bs-sidebar" id="sidebar" style="background:#f6f6f6; position:fixed; z-index:9; height:100%; width:20%;">
 			  		<ul class="nav nav-pills nav-stacked">
                   		<div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-
+							{% if login_status %}
+							<a class="nav-link active" style="background:#777777;" id="v-pills-home-tab" data-toggle="pill" role="tab" aria-controls="v-pills-home" aria-selected="true">Welcome {{ username }} </a>
+							{% else %}
+							<a class="nav-link active" style="background:#777777;" id="v-pills-home-tab" data-toggle="pill" role="tab" aria-controls="v-pills-home" aria-selected="true">Welcome Guest</a>
+							{% endif %}
+								<br>
 				      		<a class="nav-link active" style="background:#1B8EBA;" id="v-pills-home-tab" data-toggle="pill" href='/' role="tab" aria-controls="v-pills-home" aria-selected="true">Home</a>
 								<br>
 							{% if login_status %}

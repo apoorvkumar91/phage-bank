@@ -17,6 +17,7 @@ import pandas as pd
 @login_required
 def home(request):
     return render(request, 'home.html', {'login_status': request.user.is_authenticated(),
+                                         'username': request.user.username
                                                 }
                  )
 
@@ -47,17 +48,21 @@ def addphage(request):
         else:
             phageform = AddPhageForm()
             return render(request, 'addphage.html', {'form': phageform,
-                                                     'login_status': request.user.is_authenticated()
+                                                     'login_status': request.user.is_authenticated(),
+                                                     'username': request.user.username
                                                      })
     else:
         #messages.error(request,'Login or signup first!')
-        return render(request,'Login.html')
+        return render(request,'Login.html',
+                      {'login_status': request.user.is_authenticated()
+                       })
 
 
 def viewphages(request):
     query_results = PhageData.objects.all()
     return render(request, 'viewphages.html', {'query_results': query_results,
-                                               'login_status': request.user.is_authenticated()
+                                               'login_status': request.user.is_authenticated(),
+                                               'username': request.user.username
                                                })
 
 
@@ -65,7 +70,8 @@ def viewPhage(request):
     phageName = request.GET.get('name')
     phage = PhageData.objects.get(phage_name=phageName)
     return render(request, 'viewPhage.html', {'item': phage,
-                                              'login_status': request.user.is_authenticated()
+                                              'login_status': request.user.is_authenticated(),
+                                              'username': request.user.username
                                               })
 
 
@@ -115,5 +121,6 @@ def model_form_upload(request):
 
 def contact(request):
     return render(request,'contact.html',{'content':['In case of any questions / suggestions, email me at:','cory.maughmer@tamu.edu'],
-                                          'login_status': request.user.is_authenticated()
+                                          'login_status': request.user.is_authenticated(),
+                                          'username': request.user.username
                                           })
