@@ -6,9 +6,10 @@ from django.contrib.auth.models import User
 import csv
 from io import StringIO
 from io import TextIOWrapper
-from PhageBank.core.forms import SignUpForm, AddPhageForm, UploadFileForm
+from PhageBank.core.forms import SignUpForm, AddPhageForm, UploadFileForm, LinkForm
 from PhageBank.core.models import PhageData
-
+from django.forms.formsets import BaseFormSet
+from django.forms.formsets import formset_factory
 from csvvalidator import *
 import datetime
 import sqlite3
@@ -39,17 +40,38 @@ def signup(request):
 
 @login_required
 def addphage(request):
+    LinkFormSet = formset_factory(LinkForm, formset=BaseFormSet)
     if request.user.is_authenticated():
         if request.method == 'POST':
             phageform = AddPhageForm(request.POST)
-            if phageform.is_valid():
+            link_formset = LinkFormSet(request.POST)
+            if phageform.is_valid() and link_formset.is_valid():
+                link_text = ""
+                for link_form in link_formset:
+                    lin = link_form.cleaned_data
+                    url = lin.get('link')
+                    link_text = link_text + str(url) + ";;;;"
                 phageform.save()
+                phagename = phageform.cleaned_data.get('phage_name')
+                phage = PhageData.objects.get(phage_name=phagename)
+                phage.phage_all_links = link_text
+                phage.save()
                 return redirect('home')
+            else:
+                phageform = AddPhageForm()
+                link_formset = LinkFormSet()
+                return render(request, 'addphage.html', {'form': phageform,
+                                                         'login_status': request.user.is_authenticated(),
+                                                         'username': request.user.username,
+                                                         'link_formset': link_formset
+                                                         })
         else:
             phageform = AddPhageForm()
+            link_formset = LinkFormSet()
             return render(request, 'addphage.html', {'form': phageform,
                                                      'login_status': request.user.is_authenticated(),
-                                                     'username': request.user.username
+                                                     'username': request.user.username,
+                                                     'link_formset': link_formset
                                                      })
     else:
         #messages.error(request,'Login or signup first!')

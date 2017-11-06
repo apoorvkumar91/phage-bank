@@ -10,6 +10,7 @@ from crispy_forms.layout import Submit, Reset, HTML
 from crispy_forms.layout import Button
 from django.core import validators
 from django.core.exceptions import ValidationError
+from django.forms.formsets import BaseFormSet
 
 def validate_file_extension(value):
     if not value.name.endswith('.csv'):
@@ -76,8 +77,8 @@ class AddPhageForm(forms.ModelForm):
 
     phage_CPT_id = forms.CharField(label='CPT id',
                                    max_length=30,
-                                   required=True,
-                                   help_text='Required.',
+                                   required=False,
+                                   help_text='Optional.',
                                    widget=forms.TextInput(attrs={'autofocus': 'autofocus',
                                                                  'autocomplete': 'off',
                                                                  'size': '100',
@@ -96,16 +97,6 @@ class AddPhageForm(forms.ModelForm):
                                                                        })
                                          )
 
-    phage_all_links = forms.CharField(label='Link',
-                                      max_length=5000,
-                                      required=True,
-                                      help_text='Optional',
-                                      widget=forms.TextInput(attrs={'autofocus': 'autofocus',
-                                                                    'autocomplete': 'off',
-                                                                    'size': '100',
-                                                                    'style': 'font-size: small',
-                                                                    })
-                                      )
 
 
 
@@ -114,7 +105,7 @@ class AddPhageForm(forms.ModelForm):
         fields = ('phage_name', 'phage_host_name',
                   'phage_isolator_name', 'phage_experimenter_name',
                   'phage_CPT_id', 'phage_isolator_loc',
-                  'phage_all_links',)
+                  )
 
 
     helper = FormHelper()
@@ -122,8 +113,8 @@ class AddPhageForm(forms.ModelForm):
     helper.form_class = 'form-horizontal'
     helper.label_class = 'accordion'
     helper.field_class = 'accordion'
-    helper.add_input(Submit('submit', 'Submit', css_class='btn-success'))
-    helper.add_input(Reset('cancel', 'Clear', css_class='btn-warning'))
+    #helper.add_input(Submit('submit', 'Submit', css_class='btn-success'))
+    #helper.add_input(Reset('cancel', 'Clear', css_class='btn-warning'))
     helper.layout = Layout(
         HTML("<button class='accordion'>Phage Data</button>"),
         HTML("<div class='panel'>"),
@@ -143,11 +134,29 @@ class AddPhageForm(forms.ModelForm):
         HTML("<button class='accordion'>Images, Documents & Links</button>"),
         HTML("<div class='panel'>"),
         HTML("<br>"),
-        Div('phage_all_links'),
+        HTML("{{ link_formset.management_form }}"),
+        HTML("{% for link_form in link_formset %} <div class='link-formset'> {{ link_form.link }} </div> {% endfor %}"),
+        HTML("<script> $('.link-formset').formset({addText: 'add link', deleteText: 'remove'});</script>"),
         HTML("</div>"),
-        HTML("<br><br>")
+        HTML("<button class='accordion'>Additional Information</button>"),
+        HTML("<div class='panel'>"),
+        HTML("<br>"),
+        Div('phage_isolator_loc'),
+        HTML("</div>"),
+        HTML("<br><br>"),
+        HTML("<input type = 'submit' value = 'Submit' class ='btn-success'/>")
     )
 
 
-
+class LinkForm(forms.Form):
+    link = forms.CharField(label='URL',
+                                      max_length=5000,
+                                      required=False,
+                                      help_text='Optional',
+                                      widget=forms.TextInput(attrs={'autofocus': 'autofocus',
+                                                                    'autocomplete': 'off',
+                                                                    'size': '100',
+                                                                    'style': 'font-size: small',
+                                                                    })
+                                      )
 
