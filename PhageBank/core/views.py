@@ -71,3 +71,5 @@ def model_form_upload(request):
         form = UploadFileForm()
     return render(request, 'model_form_upload.html', {'form': form})
 
+def contact(request):
+    return render(request,'contact.html',{'content':['In case of any questions / suggestions, email me at:','cory.maughmer@tamu.edu']})
