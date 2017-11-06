@@ -8,10 +8,16 @@ from crispy_forms.bootstrap import Field, InlineRadios, TabHolder, Tab, Accordio
 from crispy_forms.layout import Submit, Layout, Div, Fieldset, MultiField
 from crispy_forms.layout import Submit, Reset, HTML
 from crispy_forms.layout import Button
+from django.core import validators
+from django.core.exceptions import ValidationError
+
+def validate_file_extension(value):
+    if not value.name.endswith('.csv'):
+        raise ValidationError(u'File In  CSV format Only')
 
 class UploadFileForm(forms.Form):
     title = forms.CharField(max_length=50)
-    file = forms.FileField()
+    file = forms.FileField(validators=[validate_file_extension])
 
 class SignUpForm(UserCreationForm):
     first_name = forms.CharField(max_length=30, required=False, help_text='Optional.')
