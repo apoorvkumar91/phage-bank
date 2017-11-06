@@ -16,7 +16,10 @@ import pandas as pd
 
 @login_required
 def home(request):
-    return render(request, 'home.html')
+    return render(request, 'home.html', {'login_status': request.user.is_authenticated(),
+                                                }
+                 )
+
 
 def signup(request):
     if request.method == 'POST':
@@ -32,6 +35,7 @@ def signup(request):
         form = SignUpForm()
     return render(request, 'signup.html', {'form': form})
 
+
 @login_required
 def addphage(request):
     if request.user.is_authenticated():
@@ -42,19 +46,28 @@ def addphage(request):
                 return redirect('home')
         else:
             phageform = AddPhageForm()
-            return render(request, 'addphage.html', {'form': phageform})
+            return render(request, 'addphage.html', {'form': phageform,
+                                                     'login_status': request.user.is_authenticated()
+                                                     })
     else:
         #messages.error(request,'Login or signup first!')
         return render(request,'Login.html')
 
+
 def viewphages(request):
     query_results = PhageData.objects.all()
-    return render(request, 'viewphages.html', {'query_results': query_results})
+    return render(request, 'viewphages.html', {'query_results': query_results,
+                                               'login_status': request.user.is_authenticated()
+                                               })
+
 
 def viewPhage(request):
     phageName = request.GET.get('name')
     phage = PhageData.objects.get(phage_name=phageName)
-    return render(request, 'viewPhage.html', {'item': phage})
+    return render(request, 'viewPhage.html', {'item': phage,
+                                              'login_status': request.user.is_authenticated()
+                                              })
+
 
 def populate(reader, request):
     fields = reader.fieldnames
@@ -99,5 +112,8 @@ def model_form_upload(request):
         form = UploadFileForm()
     return render(request, 'model_form_upload.html', {'form': form})
 
+
 def contact(request):
-    return render(request,'contact.html',{'content':['In case of any questions / suggestions, email me at:','cory.maughmer@tamu.edu']})
+    return render(request,'contact.html',{'content':['In case of any questions / suggestions, email me at:','cory.maughmer@tamu.edu'],
+                                          'login_status': request.user.is_authenticated()
+                                          })
