@@ -45,7 +45,7 @@ navbutton:after {
 				  </center>
 			  </div>
 			  <div class="col-sm-10">
-                  <div class="row">
+                  <div class="container-fluid">
                       <div class="col-sm-10">
                           <br>
 				          <center>
@@ -71,7 +71,12 @@ navbutton:after {
 				<div class="well bs-sidebar" id="sidebar" style="background:#f6f6f6; position:fixed; z-index:9; height:100%; width:20%;">
 			  		<ul class="nav nav-pills nav-stacked">
                   		<div class="nav flex-column nav-pills" id="v-pills-tab" aria-orientation="vertical">
-
+							{% if login_status %}
+							<li><a class="nav-link active" style="background:#777777;" id="v-pills-home-tab-0a" role="tab" aria-controls="v-pills-home" aria-selected="true">Welcome {{ username }} </a></li>
+							{% else %}
+							<li><a class="nav-link active" style="background:#777777;" id="v-pills-home-tab-0b" role="tab" aria-controls="v-pills-home" aria-selected="true">Welcome Guest</a></li>
+							{% endif %}
+							<br>
 				      		<li><a class="nav-link active" style="background:#1B8EBA;" id="v-pills-home-tab-1" href='/' aria-controls="v-pills-home" aria-selected="true">Home</a>
 							</li>
 								<br>

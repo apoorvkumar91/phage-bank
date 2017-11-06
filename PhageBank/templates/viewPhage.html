@@ -1,26 +1,32 @@
 {% extends "homeapp/header.html" %}
 
-{% block content %}
-<h2>Phage Details</h2>
 
+
+
+{% block content %}
+
+<h2>Phage Details</h2>
+<br>
 <br>
 
-<div class="container">
+
+<div class="container-fluid">
     <div class="row">
-        <div class="col-xs-12 col-sm-6 col-md-6">
+        <div class="col-md-12">
             <div class="well well-sm">
                 <div class="row">
-                    <div class="col-sm-6 col-md-8">
-                        <p><b>Phage Name:</b>  {{ item.phage_name }}</p>
+                    <div class="col-md-6">
+                        {% load staticfiles %}
+                        <img src="{% static 'img/phage.png' %}" alt="" class="img-rounded img-responsive" />
+                    </div>
+                    <div class="col-md-6">
+                        <p><span class="glyphicon glyphicon-leaf"></span><b>Phage Name:</b>  {{ item.phage_name }}</p>
                         <p><b>Host Name:</b>  {{ item.phage_host_name }}</p>
                         <p><b>Isolator Name:</b>  {{ item.phage_isolator_name }}</p>
                         <p><b>Experimenter Name:</b>  {{ item.phage_experimenter_name }}</p>
                         <p><b>CPT ID:</b>  {{ item.phage_CPT_id }}</p>
                         <p><b>Isolator Location:</b>  {{ item.phage_isolator_loc }}</p>
-                    </div>
-                    <div class="col-sm-4 col-md-4">
-                        {% load staticfiles %}
-                        <img src="{% static 'img/phage.png' %}" alt="" class="img-rounded img-responsive" />
+                        <p><b>URL:</b>  {{ item.phage_all_links }}</p>
                     </div>
                 </div>
             </div>
@@ -28,11 +34,9 @@
     </div>
 </div>
 
-
-
 {% endblock %}
 
-body{padding-top:30px;}
+body{padding-top:20px;}
 
 .glyphicon {  margin-bottom: 10px;margin-right: 10px;}
 
@@ -41,3 +45,7 @@ display: block;
 line-height: 1.428571429;
 color: #999;
 }
+
+
+
+

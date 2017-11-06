@@ -6,9 +6,10 @@ from django.contrib.auth.models import User
 import csv
 from io import StringIO
 from io import TextIOWrapper
-from PhageBank.core.forms import SignUpForm, AddPhageForm, UploadFileForm
+from PhageBank.core.forms import SignUpForm, AddPhageForm, UploadFileForm, LinkForm
 from PhageBank.core.models import PhageData
-
+from django.forms.formsets import BaseFormSet
+from django.forms.formsets import formset_factory
 from csvvalidator import *
 import datetime
 import sqlite3
@@ -16,7 +17,11 @@ import pandas as pd
 
 @login_required
 def home(request):
-    return render(request, 'home.html')
+    return render(request, 'home.html', {'login_status': request.user.is_authenticated(),
+                                         'username': request.user.username
+                                                }
+                 )
+
 
 def signup(request):
     if request.method == 'POST':
@@ -32,29 +37,65 @@ def signup(request):
         form = SignUpForm()
     return render(request, 'signup.html', {'form': form})
 
+
 @login_required
 def addphage(request):
+    LinkFormSet = formset_factory(LinkForm, formset=BaseFormSet)
     if request.user.is_authenticated():
         if request.method == 'POST':
             phageform = AddPhageForm(request.POST)
-            if phageform.is_valid():
+            link_formset = LinkFormSet(request.POST)
+            if phageform.is_valid() and link_formset.is_valid():
+                link_text = ""
+                for link_form in link_formset:
+                    lin = link_form.cleaned_data
+                    url = lin.get('link')
+                    link_text = link_text + str(url) + ";;;;"
                 phageform.save()
+                phagename = phageform.cleaned_data.get('phage_name')
+                phage = PhageData.objects.get(phage_name=phagename)
+                phage.phage_all_links = link_text
+                phage.save()
                 return redirect('home')
+            else:
+                phageform = AddPhageForm()
+                link_formset = LinkFormSet()
+                return render(request, 'addphage.html', {'form': phageform,
+                                                         'login_status': request.user.is_authenticated(),
+                                                         'username': request.user.username,
+                                                         'link_formset': link_formset
+                                                         })
         else:
             phageform = AddPhageForm()
-            return render(request, 'addphage.html', {'form': phageform})
+            link_formset = LinkFormSet()
+            return render(request, 'addphage.html', {'form': phageform,
+                                                     'login_status': request.user.is_authenticated(),
+                                                     'username': request.user.username,
+                                                     'link_formset': link_formset
+                                                     })
     else:
         #messages.error(request,'Login or signup first!')
-        return render(request,'Login.html')
+        return render(request,'Login.html',
+                      {'login_status': request.user.is_authenticated()
+                       })
+
 
 def viewphages(request):
     query_results = PhageData.objects.all()
-    return render(request, 'viewphages.html', {'query_results': query_results})
+    return render(request, 'viewphages.html', {'query_results': query_results,
+                                               'login_status': request.user.is_authenticated(),
+                                               'username': request.user.username
+                                               })
+
 
 def viewPhage(request):
     phageName = request.GET.get('name')
     phage = PhageData.objects.get(phage_name=phageName)
-    return render(request, 'viewPhage.html', {'item': phage})
+    return render(request, 'viewPhage.html', {'item': phage,
+                                              'login_status': request.user.is_authenticated(),
+                                              'username': request.user.username
+                                              })
+
 
 def populate(reader, request):
     fields = reader.fieldnames
@@ -99,5 +140,9 @@ def model_form_upload(request):
         form = UploadFileForm()
     return render(request, 'model_form_upload.html', {'form': form})
 
+
 def contact(request):
-    return render(request,'contact.html',{'content':['In case of any questions / suggestions, email me at:','cory.maughmer@tamu.edu']})
+    return render(request,'contact.html',{'content':['In case of any questions / suggestions, email me at:','cory.maughmer@tamu.edu'],
+                                          'login_status': request.user.is_authenticated(),
+                                          'username': request.user.username
+                                          })

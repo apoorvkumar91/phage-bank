@@ -7,4 +7,6 @@ from django.http import HttpResponse
 # Create your views here.
 
 def index(request):
-	return render(request, 'homeapp/home.html')
+	return render(request, 'homeapp/home.html',{'login_status': request.user.is_authenticated(),
+                                                'username': request.user.username
+												})
