@@ -10,6 +10,8 @@ from PhageBank.core.forms import SignUpForm, AddPhageForm, UploadFileForm, LinkF
 from PhageBank.core.models import PhageData
 from django.forms.formsets import BaseFormSet
 from django.forms.formsets import formset_factory
+from django.contrib.auth.decorators import user_passes_test
+
 from csvvalidator import *
 import datetime
 import sqlite3
@@ -89,6 +91,7 @@ def viewphages(request):
 
 
 def viewPhage(request):
+
     phageName = request.GET.get('name')
     phage = PhageData.objects.get(phage_name=phageName)
     return render(request, 'viewPhage.html', {'item': phage,
@@ -127,7 +130,7 @@ def populate(reader, request):
         else:
             obj.save()
 
-
+@user_passes_test(lambda u: u.is_superuser)
 def model_form_upload(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
