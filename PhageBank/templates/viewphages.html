@@ -3,7 +3,8 @@
 {% block content %}
 <h2>Phages</h2>
 
-<table class="table-bordered table-responsive">
+<table id="phages" class="table table-bordered table-responsive">
+    <thead>
     <tr>
         <th style="padding: 10px;">Phage Name</th>
         <th style="padding: 10px;">Host Name</th>
@@ -12,6 +13,8 @@
         <th style="padding: 10px;">CPT Id</th>
         <th style="padding: 10px;">Isolator Location</th>
     </tr>
+    </thead>
+    <tbody>
     {% for item in query_results %}
     <tr>
         <td style="padding: 8px;"><a href='/phage/?name={{ item.phage_name }}'>{{ item.phage_name }}</a></td>
@@ -22,6 +25,14 @@
         <td style="padding: 8px;">{{ item.phage_isolator_loc }}</td>
     </tr>
     {% endfor %}
+    </tbody>
 </table>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+    $('#phages').dataTable();
+});
+</script>
 
 {% endblock %}
