@@ -21,3 +21,6 @@ django_extensions
 Faker
 django-crispy-forms
 aloe
+pandas
+validators
+csvvalidator
