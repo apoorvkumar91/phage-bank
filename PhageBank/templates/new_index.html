@@ -8,13 +8,15 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Business Frontpage - Start Bootstrap Template</title>
+    <title>PhageBank</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
 
     <!-- Custom styles for this template -->
-    <link href="css/phage.css" rel="stylesheet">
+    {% load staticfiles %}
+    <link href="{% static 'css/phage.css' %}" rel="stylesheet">
 
 </head>
 
@@ -65,8 +67,8 @@
     <div class="row">
         <div class="col-sm-8">
             <h2 class="mt-4">What We Do</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A deserunt neque tempore recusandae animi soluta quasi? Asperiores rem dolore eaque vel, porro, soluta unde debitis aliquam laboriosam. Repellat explicabo, maiores!</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis optio neque consectetur consequatur magni in nisi, natus beatae quidem quam odit commodi ducimus totam eum, alias, adipisci nesciunt voluptate. Voluptatum.</p>
+            <p class="text-justify">The Center for Phage Technology studies bacterial viruses with the aim of developing therapies to treat antibiotic resistant bacterial infections, a growing problem in human medicine. They have to identify and catalog a large library of these bacteriophage and in doing so, the team generates an immense amount of data that must be available and accessed in a reasonable way by their researchers.</p>
+            <p class="text-justify">Currently, this data is not centralized in a meaningful way and it is increasingly difficult to track where a given phage is in the identification and development process. As they expand the library of phage, this problem will grow to become more and more unmanageable. So a system like the proposed Phage DB project will allow them to store, categorize, and analyze the data more intelligently and easily. Providing an intuitive UI will allow their researchers to interact with the system more regularly and streamline the data storage, allowing more focus on the science over the bookkeeping.</p>
             <p>
                 <a class="btn btn-primary btn-lg" href="#">Call to Action &raquo;</a>
             </p>
@@ -74,17 +76,15 @@
         <div class="col-sm-4">
             <h2 class="mt-4">Contact Us</h2>
             <address>
-                <strong>Start Bootstrap</strong>
-                <br>3481 Melrose Place
-                <br>Beverly Hills, CA 90210
+                <strong>Center for Phage Technology</strong><i class="fa fa-map-marker"></i>
+                <br>Dept. of Biochemistry and Biophysics
+                <br>Texas A&M University 2128 TAMU
+                <br>College Station, TX USA 77843-2128
                 <br>
             </address>
             <address>
-                <abbr title="Phone">P:</abbr>
-                (123) 456-7890
-                <br>
-                <abbr title="Email">E:</abbr>
-                <a href="mailto:#">name@example.com</a>
+                <abbr title="Website">Web:</abbr>
+                <a href="https://cpt.tamu.edu/">https://cpt.tamu.edu/</a>
             </address>
         </div>
     </div>
@@ -144,7 +144,7 @@
 
 <!-- Bootstrap core JavaScript -->
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 
 </body>
 
