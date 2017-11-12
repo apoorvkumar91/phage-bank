@@ -22,6 +22,11 @@ def index(request):
                                                 'username': request.user.username
                                                 })
 
+def new_index(request):
+    return render(request, 'new_index.html',{'login_status': request.user.is_authenticated(),
+                                          'username': request.user.username
+                                          })
+
 @login_required
 def home(request):
     return render(request, 'home.html', {'login_status': request.user.is_authenticated(),
