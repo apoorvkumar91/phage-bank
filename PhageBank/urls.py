@@ -6,7 +6,7 @@ from PhageBank.core import views as core_views
 
 urlpatterns = [
     # Uncomment the next line to enable the admin:
-    url(r'^$', include('homeapp.urls')),
+    url(r'^$', core_views.index, name='index'),
     url(r'^home/', core_views.home, name='home'),
     url(r'^admin/', admin.site.urls),
     url(r'^login/$', auth_views.login, {'template_name': 'login.html'}, name='login'),

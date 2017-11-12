@@ -17,6 +17,11 @@ import datetime
 import sqlite3
 import pandas as pd
 
+def index(request):
+    return render(request, 'index.html',{'login_status': request.user.is_authenticated(),
+                                                'username': request.user.username
+                                                })
+
 @login_required
 def home(request):
     return render(request, 'home.html', {'login_status': request.user.is_authenticated(),
@@ -149,3 +154,6 @@ def contact(request):
                                           'login_status': request.user.is_authenticated(),
                                           'username': request.user.username
                                           })
+
+def header(request):
+    return render(request, 'header.html')
