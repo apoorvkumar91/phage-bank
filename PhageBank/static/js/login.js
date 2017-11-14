@@ -1,20 +1,20 @@
 $(function () {
 
-  $(".js-create-signup").click(function () {
+  $(".js-create-login").click(function () {
     $.ajax({
-      url: '/signup',
+      url: '/mylogin',
       type: 'get',
       dataType: 'json',
       beforeSend: function () {
-        $("#myModalSignup").modal("show");
+        $("#myModalLogin").modal("show");
       },
       success: function (data) {
-        $("#myModalSignup .modal-content").html(data.html_form);
+        $("#myModalLogin .modal-content").html(data.html_form);
       }
     });
   });
 
-   $("#myModalSignup").on("submit", ".js-user-create-form", function () {
+   $("#myModalLogin").on("submit", ".js-user-login-form", function () {
     var form = $(this);
     $.ajax({
       url: form.attr("action"),
@@ -23,10 +23,10 @@ $(function () {
       dataType: 'json',
       success: function (data) {
         if (data.form_is_valid) {
-          alert("User Registered Successfully!");  // <-- This is just a placeholder for now for testing
+          alert("User Logged in Successfully!");  // <-- This is just a placeholder for now for testing
         }
         else {
-          $("#myModalSignup .modal-content").html(data.html_form);
+          $("#myModalLogin .modal-content").html(data.html_form);
         }
       }
     });

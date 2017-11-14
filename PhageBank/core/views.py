@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 import csv
 from io import StringIO
 from io import TextIOWrapper
-from PhageBank.core.forms import SignUpForm, AddPhageForm, UploadFileForm, LinkForm
+from PhageBank.core.forms import SignUpForm, AddPhageForm, UploadFileForm, LinkForm, LoginForm
 from PhageBank.core.models import PhageData
 from django.forms.formsets import BaseFormSet
 from django.forms.formsets import formset_factory
@@ -58,6 +58,30 @@ def signup(request):
                                          request=request
                                          )
     return JsonResponse(data)
+
+def mylogin(request):
+    msg = dict()
+    form = LoginForm()
+
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                msg['form_is_valid'] = True
+            else:
+                msg['form_is_valid'] = False
+        else:
+            form = LoginForm()
+    context = {'form': form}
+    msg['html_form'] = render_to_string('partial_login.html',
+                                         context,
+                                         request=request
+                                         )
+    return JsonResponse(msg)
 
 @login_required
 def addphage(request):
