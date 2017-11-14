@@ -29,6 +29,7 @@ def new_index(request):
                                           'username': request.user.username
                                           })
 
+@login_required
 def add_phage(request):
     return render(request, 'add_phage.html')
 

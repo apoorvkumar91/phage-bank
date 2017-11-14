@@ -23,7 +23,8 @@ $(function () {
       dataType: 'json',
       success: function (data) {
         if (data.form_is_valid) {
-          alert("User Logged in Successfully!");  // <-- This is just a placeholder for now for testing
+          $('#myModalLogin').modal('hide');
+          RedirectToPage();
         }
         else {
           $("#myModalLogin .modal-content").html(data.html_form);
@@ -32,4 +33,10 @@ $(function () {
     });
     return false;
   });
+
+    function RedirectToPage()
+      {
+          window.location='/add_phage';
+      }
+
 });

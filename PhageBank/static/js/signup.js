@@ -23,6 +23,7 @@ $(function () {
       dataType: 'json',
       success: function (data) {
         if (data.form_is_valid) {
+        $('#myModalSignup').modal('hide');
           alert("User Registered Successfully!");  // <-- This is just a placeholder for now for testing
         }
         else {
