@@ -11,6 +11,8 @@ from PhageBank.core.models import PhageData
 from django.forms.formsets import BaseFormSet
 from django.forms.formsets import formset_factory
 from django.contrib.auth.decorators import user_passes_test
+from django.template.loader import render_to_string
+from django.http import JsonResponse
 
 from csvvalidator import *
 import datetime
@@ -34,21 +36,25 @@ def home(request):
                                                 }
                  )
 
-
 def signup(request):
+    data = dict()
+
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
             form.save()
-            username = form.cleaned_data.get('username')
-            raw_password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=raw_password)
-            login(request, user)
-            return redirect('home')
+            data['form_is_valid'] = True
+        else:
+            data['form_is_valid'] = False
     else:
         form = SignUpForm()
-    return render(request, 'signup.html', {'form': form})
 
+    context = {'form': form}
+    data['html_form'] = render_to_string('partial_signup.html',
+                                         context,
+                                         request=request
+                                         )
+    return JsonResponse(data)
 
 @login_required
 def addphage(request):
