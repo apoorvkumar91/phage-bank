@@ -10,7 +10,7 @@ urlpatterns = [
     url(r'^new_index/', core_views.new_index, name='new_index'),
     url(r'^home/', core_views.home, name='home'),
     url(r'^admin/', admin.site.urls),
-    url(r'^login/$', auth_views.login, {'template_name': 'login.html'}, name='login'),
+    url(r'^mylogin/$', core_views.mylogin, name='mylogin'),
     url(r'^logout/$', auth_views.logout, {'next_page': 'login'}, name='logout'),
     url(r'^signup/$', core_views.signup, name='signup'),
     url(r'^add/$', core_views.addphage, name='add'),

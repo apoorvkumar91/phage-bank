@@ -12,3 +12,5 @@ class PhageData(models.Model):
     phage_submitted_user = models.CharField(max_length=5000, default='none')
     phage_submitted_date = models.DateTimeField(default=datetime.now, blank=True)
     phage_all_links = models.CharField(max_length=5000, default='none')
+
+
