@@ -35,6 +35,87 @@ class LoginForm(forms.ModelForm):
         model = User
         fields = ("username", "password",)
 
+class Add_Phage_DataForm(forms.ModelForm):
+    phage_name = forms.CharField(label='Phage Name',
+                                 max_length=30,
+                                 required=True,
+                                 help_text='Required.',
+                                 widget=forms.TextInput(attrs={'autofocus': 'autofocus',
+                                                               'autocomplete': 'off',
+                                                               'size': '100',
+                                                               'style': 'font-size: small',
+                                                               })
+                                 )
+
+    phage_host_name = forms.CharField(label='Host Name',
+                                      max_length=30,
+                                      required=True,
+                                      help_text='Required.',
+                                      widget=forms.TextInput(attrs={'autofocus': 'autofocus',
+                                                                    'autocomplete': 'off',
+                                                                    'size': '100',
+                                                                    'style': 'font-size: small',
+                                                                    })
+                                      )
+
+    class Meta:
+        model = PhageData
+        fields = ("phage_name", "phage_host_name",)
+
+class Add_ResearcherForm(forms.ModelForm):
+    phage_isolator_name = forms.CharField(label='Isolator Name',
+                                          max_length=30,
+                                          required=True,
+                                          help_text='Required.',
+                                          widget=forms.TextInput(attrs={'autofocus': 'autofocus',
+                                                                        'autocomplete': 'off',
+                                                                        'size': '100',
+                                                                        'style': 'font-size: small',
+                                                                        })
+                                          )
+
+    phage_experimenter_name = forms.CharField(label='Experimenter Name',
+                                              max_length=30,
+                                              required=True,
+                                              help_text='Required.',
+                                              widget=forms.TextInput(attrs={'autofocus': 'autofocus',
+                                                                            'autocomplete': 'off',
+                                                                            'size': '100',
+                                                                            'style': 'font-size: small',
+                                                                            })
+                                              )
+
+    class Meta:
+        model = PhageData
+        fields = ("phage_isolator_name", "phage_experimenter_name",)
+
+class Add_ResearchForm(forms.ModelForm):
+    phage_CPT_id = forms.CharField(label='CPT id',
+                                   max_length=30,
+                                   required=False,
+                                   help_text='Optional.',
+                                   widget=forms.TextInput(attrs={'autofocus': 'autofocus',
+                                                                 'autocomplete': 'off',
+                                                                 'size': '100',
+                                                                 'style': 'font-size: small',
+                                                                 })
+                                   )
+
+    phage_isolator_loc = forms.CharField(label='Isolator Location',
+                                         max_length=5000,
+                                         required=True,
+                                         help_text='Required.',
+                                         widget=forms.TextInput(attrs={'autofocus': 'autofocus',
+                                                                       'autocomplete': 'off',
+                                                                       'size': '100',
+                                                                       'style': 'font-size: small',
+                                                                       })
+                                         )
+
+    class Meta:
+        model = PhageData
+        fields = ("phage_CPT_id", "phage_isolator_loc",)
+
 class AddPhageForm(forms.ModelForm):
     phage_name = forms.CharField(label='Phage Name',
                                  max_length=30,
@@ -101,8 +182,6 @@ class AddPhageForm(forms.ModelForm):
                                                                        'style': 'font-size: small',
                                                                        })
                                          )
-
-
 
 
     class Meta:

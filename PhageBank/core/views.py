@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 import csv
 from io import StringIO
 from io import TextIOWrapper
-from PhageBank.core.forms import SignUpForm, AddPhageForm, UploadFileForm, LinkForm, LoginForm
+from PhageBank.core.forms import SignUpForm, AddPhageForm, UploadFileForm, LinkForm, LoginForm, Add_Phage_DataForm, Add_ResearcherForm, Add_ResearchForm
 from PhageBank.core.models import PhageData
 from django.forms.formsets import BaseFormSet
 from django.forms.formsets import formset_factory
@@ -83,6 +83,52 @@ def mylogin(request):
                                          request=request
                                          )
     return JsonResponse(msg)
+
+@login_required
+def add_phage(request):
+    if request.user.is_authenticated():
+        if request.method == 'POST':
+            pform = Add_Phage_DataForm(request.POST)
+            rrform = Add_ResearcherForm(request.POST)
+            rform = Add_ResearchForm(request.POST)
+            if pform.is_valid() and rrform.is_valid() and rform.is_valid() :
+                pform.save()
+                phagename = pform.cleaned_data.get('phage_name')
+                phage = PhageData.objects.get(phage_name=phagename)
+                phageisoname = rrform.cleaned_data.get('phage_isolator_name')
+                phageexpname = rrform.cleaned_data.get('phage_experimenter_name')
+                phagecptid = rform.cleaned_data.get('phage_CPT_id')
+                phageisoloc = rform.cleaned_data.get('phage_isolator_loc')
+                phage.phage_isolator_name = phageisoname
+                phage.phage_experimenter_name = phageexpname
+                phage.phage_CPT_id = phagecptid
+                phage.phage_isolator_loc = phageisoloc
+                phage.save()
+                return redirect('new_index')
+            else:
+                pform = Add_Phage_DataForm()
+                rrform = Add_ResearcherForm()
+                rform = Add_ResearchForm()
+                return render(request, 'add_phage.html', {'pform': pform,
+                                                          'rrform': rrform,
+                                                          'rform': rform,
+                                                          'login_status': request.user.is_authenticated(),
+                                                          'username': request.user.username,
+                                                         })
+        else:
+            pform = Add_Phage_DataForm()
+            rrform = Add_ResearcherForm()
+            rform = Add_ResearchForm()
+            return render(request, 'add_phage.html', {'pform': pform,
+                                                      'rrform': rrform,
+                                                      'rform': rform,
+                                                      'login_status': request.user.is_authenticated(),
+                                                      'username': request.user.username,
+                                                     })
+    else:
+        return render(request,'Login.html',
+                      {'login_status': request.user.is_authenticated()
+                       })
 
 @login_required
 def addphage(request):
