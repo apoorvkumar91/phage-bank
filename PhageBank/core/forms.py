@@ -49,7 +49,7 @@ class Add_Phage_DataForm(forms.ModelForm):
 
     phage_host_name = forms.CharField(label='Host Name',
                                       max_length=30,
-                                      required=True,
+                                      required=False,
                                       help_text='Required.',
                                       widget=forms.TextInput(attrs={'autofocus': 'autofocus',
                                                                     'autocomplete': 'off',
@@ -65,7 +65,7 @@ class Add_Phage_DataForm(forms.ModelForm):
 class Add_ResearcherForm(forms.ModelForm):
     phage_isolator_name = forms.CharField(label='Isolator Name',
                                           max_length=30,
-                                          required=True,
+                                          required=False,
                                           help_text='Required.',
                                           widget=forms.TextInput(attrs={'autofocus': 'autofocus',
                                                                         'autocomplete': 'off',
@@ -76,7 +76,7 @@ class Add_ResearcherForm(forms.ModelForm):
 
     phage_experimenter_name = forms.CharField(label='Experimenter Name',
                                               max_length=30,
-                                              required=True,
+                                              required=False,
                                               help_text='Required.',
                                               widget=forms.TextInput(attrs={'autofocus': 'autofocus',
                                                                             'autocomplete': 'off',
@@ -103,7 +103,7 @@ class Add_ResearchForm(forms.ModelForm):
 
     phage_isolator_loc = forms.CharField(label='Isolator Location',
                                          max_length=5000,
-                                         required=True,
+                                         required=False,
                                          help_text='Required.',
                                          widget=forms.TextInput(attrs={'autofocus': 'autofocus',
                                                                        'autocomplete': 'off',
@@ -115,6 +115,7 @@ class Add_ResearchForm(forms.ModelForm):
     class Meta:
         model = PhageData
         fields = ("phage_CPT_id", "phage_isolator_loc",)
+
 
 class AddPhageForm(forms.ModelForm):
     phage_name = forms.CharField(label='Phage Name',
@@ -236,7 +237,7 @@ class LinkForm(forms.Form):
     link = forms.CharField(label='URL',
                                       max_length=5000,
                                       required=False,
-                                      help_text='Optional',
+                                      help_text='',
                                       widget=forms.TextInput(attrs={'autofocus': 'autofocus',
                                                                     'autocomplete': 'off',
                                                                     'size': '100',
@@ -244,3 +245,40 @@ class LinkForm(forms.Form):
                                                                     })
                                       )
 
+
+
+class AForm(forms.Form):
+    image = forms.CharField(label='Image',
+                                      max_length=5000,
+                                      required=False,
+                                      help_text='',
+                                      widget=forms.TextInput(attrs={'autofocus': 'autofocus',
+                                                                    'autocomplete': 'off',
+                                                                    'size': '100',
+                                                                    'style': 'font-size: small',
+                                                                    })
+                                      )
+
+    doc = forms.CharField(label='Document',
+                                      max_length=5000,
+                                      required=False,
+                                      help_text='',
+                                      widget=forms.TextInput(attrs={'autofocus': 'autofocus',
+                                                                    'autocomplete': 'off',
+                                                                    'size': '100',
+                                                                    'style': 'font-size: small',
+                                                                    })
+                                      )
+
+
+class AIForm(forms.Form):
+    link = forms.CharField(label='URL',
+                                      max_length=5000,
+                                      required=False,
+                                      help_text='',
+                                      widget=forms.TextInput(attrs={'autofocus': 'autofocus',
+                                                                    'autocomplete': 'off',
+                                                                    'size': '100',
+                                                                    'style': 'font-size: small',
+                                                                    })
+                                      )

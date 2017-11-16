@@ -6,10 +6,12 @@ from django.contrib.auth.models import User
 import csv
 from io import StringIO
 from io import TextIOWrapper
-from PhageBank.core.forms import SignUpForm, AddPhageForm, UploadFileForm, LinkForm, LoginForm, Add_Phage_DataForm, Add_ResearcherForm, Add_ResearchForm
+from PhageBank.core.forms import Add_ResearchForm, AForm, AIForm
+from PhageBank.core.forms import SignUpForm, AddPhageForm, UploadFileForm, LinkForm, LoginForm, Add_Phage_DataForm, Add_ResearcherForm
 from PhageBank.core.models import PhageData
 from django.forms.formsets import BaseFormSet
 from django.forms.formsets import formset_factory
+from django.forms import inlineformset_factory
 from django.contrib.auth.decorators import user_passes_test
 from django.template.loader import render_to_string
 from django.http import JsonResponse
@@ -89,6 +91,7 @@ def mylogin(request):
                                          )
     return JsonResponse(msg)
 
+
 @login_required
 def add_phage(request):
     if request.user.is_authenticated():
@@ -96,7 +99,9 @@ def add_phage(request):
             pform = Add_Phage_DataForm(request.POST)
             rrform = Add_ResearcherForm(request.POST)
             rform = Add_ResearchForm(request.POST)
-            if pform.is_valid() and rrform.is_valid() and rform.is_valid() :
+            aform = AForm(request.POST)
+            aiform = AIForm(request.POST)
+            if pform.is_valid() and rrform.is_valid() and rform.is_valid() and aform.is_valid() and aiform.is_valid():
                 pform.save()
                 phagename = pform.cleaned_data.get('phage_name')
                 phage = PhageData.objects.get(phage_name=phagename)
@@ -104,19 +109,27 @@ def add_phage(request):
                 phageexpname = rrform.cleaned_data.get('phage_experimenter_name')
                 phagecptid = rform.cleaned_data.get('phage_CPT_id')
                 phageisoloc = rform.cleaned_data.get('phage_isolator_loc')
+                phagealllink = aiform.cleaned_data.get('link')
+                phageimage = aform.cleaned_data.get('image')
+                phagedoc = aform.cleaned_data.get('doc')
                 phage.phage_isolator_name = phageisoname
                 phage.phage_experimenter_name = phageexpname
                 phage.phage_CPT_id = phagecptid
                 phage.phage_isolator_loc = phageisoloc
+                phage.phage_all_links = phagealllink
                 phage.save()
                 return redirect('add_phage')
             else:
                 pform = Add_Phage_DataForm()
                 rrform = Add_ResearcherForm()
                 rform = Add_ResearchForm()
+                aform = AForm()
+                aiform = AIForm()
                 return render(request, 'add_phage.html', {'pform': pform,
                                                           'rrform': rrform,
                                                           'rform': rform,
+                                                          'aform': aform,
+                                                          'aiform': aiform,
                                                           'login_status': request.user.is_authenticated(),
                                                           'username': request.user.username,
                                                          })
@@ -124,9 +137,13 @@ def add_phage(request):
             pform = Add_Phage_DataForm()
             rrform = Add_ResearcherForm()
             rform = Add_ResearchForm()
+            aform = AForm()
+            aiform = AIForm()
             return render(request, 'add_phage.html', {'pform': pform,
                                                       'rrform': rrform,
                                                       'rform': rform,
+                                                      'aform': aform,
+                                                      'aiform': aiform,
                                                       'login_status': request.user.is_authenticated(),
                                                       'username': request.user.username,
                                                      })
@@ -134,6 +151,7 @@ def add_phage(request):
         return render(request,'Login.html',
                       {'login_status': request.user.is_authenticated()
                        })
+
 
 @login_required
 def addphage(request):

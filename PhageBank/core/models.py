@@ -14,3 +14,4 @@ class PhageData(models.Model):
     phage_all_links = models.CharField(max_length=5000, default='none')
 
 
+
