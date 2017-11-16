@@ -180,6 +180,14 @@ def viewphages(request):
                                                })
 
 
+def view_phages(request):
+    query_results = PhageData.objects.all()
+    return render(request, 'view_phages.html', {'query_results': query_results,
+                                               'login_status': request.user.is_authenticated(),
+                                               'username': request.user.username
+                                               })
+
+
 def viewPhage(request):
 
     phageName = request.GET.get('name')

@@ -17,6 +17,7 @@ urlpatterns = [
     url(r'^add/$', core_views.addphage, name='add'),
     url(r'^contact/$', core_views.contact, name='contact'),
     url(r'^view/$', core_views.viewphages, name='view'),
+    url(r'^view_phages/$', core_views.view_phages, name='view_phages'),
     url(r'^phage/$', core_views.viewPhage, name='phage'),
     url(r'^password_reset/$', auth_views.password_reset, name='password_reset'),
     url(r'^password_reset/done/$', auth_views.password_reset_done, name='password_reset_done'),
