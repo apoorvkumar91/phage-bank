@@ -248,6 +248,14 @@ def viewPhage(request):
                                               })
 
 
+def view_phage(request):
+    phageName = request.GET.get('name')
+    phage = PhageData.objects.get(phage_name=phageName)
+    return render(request, 'view_phage.html', {'item': phage,
+                                              'login_status': request.user.is_authenticated(),
+                                              'username': request.user.username
+                                              })
+
 def populate(reader, request):
     fields = reader.fieldnames
     for row in reader:

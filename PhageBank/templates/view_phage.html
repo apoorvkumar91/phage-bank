@@ -1,0 +1,51 @@
+{% extends "logged_in.html" %}
+
+
+
+
+{% block content %}
+
+<h2>Phage Details</h2>
+<br>
+<br>
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="well well-sm">
+                <div class="row">
+                    <div class="col-md-6">
+                        {% load staticfiles %}
+                        <img src="{% static 'images/phage.png' %}" alt="" class="img-rounded img-responsive" />
+                    </div>
+                    <div class="col-md-6">
+                        <p><span class="glyphicon glyphicon-leaf"></span><b>Phage Name:</b>  {{ item.phage_name }}</p>
+                        <p><b>Host Name:</b>  {{ item.phage_host_name }}</p>
+                        <p><b>Isolator Name:</b>  {{ item.phage_isolator_name }}</p>
+                        <p><b>Experimenter Name:</b>  {{ item.phage_experimenter_name }}</p>
+                        <p><b>CPT ID:</b>  {{ item.phage_CPT_id }}</p>
+                        <p><b>Isolator Location:</b>  {{ item.phage_isolator_loc }}</p>
+                        <p><b>URL:</b>  {{ item.phage_all_links }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+body{padding-top:20px;}
+
+.glyphicon {  margin-bottom: 10px;margin-right: 10px;}
+
+small {
+display: block;
+line-height: 1.428571429;
+color: #999;
+}
+
+
+
+
