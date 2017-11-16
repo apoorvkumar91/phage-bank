@@ -118,7 +118,6 @@ def add_phage(request):
                 phagecptid = rform.cleaned_data.get('phage_CPT_id')
                 phageisoloc = rform.cleaned_data.get('phage_isolator_loc')
                 phagealllink = aiform.cleaned_data.get('link')
-                phagedoc = aform.cleaned_data.get('doc')
                 phage.phage_isolator_name = phageisoname
                 phage.phage_experimenter_name = phageexpname
                 phage.phage_CPT_id = phagecptid
@@ -126,18 +125,25 @@ def add_phage(request):
                 phage.phage_all_links = phagealllink
                 print("Saurabh")
                 phage.save()
+                phagedoc = aform.cleaned_data.get('doc')
                 phageimage = aform.cleaned_data.get('image')
                 dest_dir = os.path.join(settings.MEDIA_ROOT, "images", phagename)
+                docs_dest_dir = os.path.join(settings.MEDIA_ROOT, "docs", phagename)
                 try:
                     os.mkdir(dest_dir)
+                    os.mkdir(docs_dest_dir)
                 except:
                     pass
-                print("image=" + str(phageimage))
                 dest = os.path.join(dest_dir, str(phageimage))
+                docsdest = os.path.join(docs_dest_dir, str(phagedoc))
                 if phageimage is None:
                     pass
                 else:
                     handle_uploaded_file(phageimage, dest)
+                if phagedoc is None:
+                    pass
+                else:
+                    handle_uploaded_file(phagedoc, docsdest)
                 return redirect('add_phage')
             else:
                 print("Saurabhwa")

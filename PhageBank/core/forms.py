@@ -251,16 +251,8 @@ class LinkForm(forms.Form):
 class AForm(forms.Form):
     image = forms.ImageField(label='Upload Image', required=False, widget=forms.FileInput())
 
-    doc = forms.CharField(label='Document',
-                                      max_length=5000,
-                                      required=False,
-                                      help_text='',
-                                      widget=forms.TextInput(attrs={'autofocus': 'autofocus',
-                                                                    'autocomplete': 'off',
-                                                                    'size': '100',
-                                                                    'style': 'font-size: small',
-                                                                    })
-                                      )
+    doc = forms.FileField(label='Upload File', required=False, widget=forms.FileInput())
+
 
 
 class AIForm(forms.Form):
