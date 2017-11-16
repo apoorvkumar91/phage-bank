@@ -104,7 +104,7 @@ def add_phage(request):
                 phage.phage_CPT_id = phagecptid
                 phage.phage_isolator_loc = phageisoloc
                 phage.save()
-                return redirect('new_index')
+                return redirect('add_phage')
             else:
                 pform = Add_Phage_DataForm()
                 rrform = Add_ResearcherForm()
