@@ -12,6 +12,7 @@ from django.core import validators
 from django.core.exceptions import ValidationError
 from django.forms.formsets import BaseFormSet
 
+
 def validate_file_extension(value):
     if not value.name.endswith('.csv'):
         raise ValidationError(u'File In  CSV format Only')
@@ -248,16 +249,7 @@ class LinkForm(forms.Form):
 
 
 class AForm(forms.Form):
-    image = forms.CharField(label='Image',
-                                      max_length=5000,
-                                      required=False,
-                                      help_text='',
-                                      widget=forms.TextInput(attrs={'autofocus': 'autofocus',
-                                                                    'autocomplete': 'off',
-                                                                    'size': '100',
-                                                                    'style': 'font-size: small',
-                                                                    })
-                                      )
+    image = forms.ImageField(label='Upload Image', required=False, widget=forms.FileInput())
 
     doc = forms.CharField(label='Document',
                                       max_length=5000,

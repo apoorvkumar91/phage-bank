@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.models import User
 import csv
+from django.conf import settings
 from io import StringIO
 from io import TextIOWrapper
 from PhageBank.core.forms import Add_ResearchForm, AForm, AIForm
@@ -16,6 +17,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.template.loader import render_to_string
 from django.http import JsonResponse
 
+import os
 from csvvalidator import *
 import datetime
 import sqlite3
@@ -92,6 +94,12 @@ def mylogin(request):
     return JsonResponse(msg)
 
 
+def handle_uploaded_file(f, dest):
+    with open(dest, 'w') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
+
+
 @login_required
 def add_phage(request):
     if request.user.is_authenticated():
@@ -99,7 +107,7 @@ def add_phage(request):
             pform = Add_Phage_DataForm(request.POST)
             rrform = Add_ResearcherForm(request.POST)
             rform = Add_ResearchForm(request.POST)
-            aform = AForm(request.POST)
+            aform = AForm(request.POST, request.FILES)
             aiform = AIForm(request.POST)
             if pform.is_valid() and rrform.is_valid() and rform.is_valid() and aform.is_valid() and aiform.is_valid():
                 pform.save()
@@ -110,16 +118,29 @@ def add_phage(request):
                 phagecptid = rform.cleaned_data.get('phage_CPT_id')
                 phageisoloc = rform.cleaned_data.get('phage_isolator_loc')
                 phagealllink = aiform.cleaned_data.get('link')
-                phageimage = aform.cleaned_data.get('image')
                 phagedoc = aform.cleaned_data.get('doc')
                 phage.phage_isolator_name = phageisoname
                 phage.phage_experimenter_name = phageexpname
                 phage.phage_CPT_id = phagecptid
                 phage.phage_isolator_loc = phageisoloc
                 phage.phage_all_links = phagealllink
+                print("Saurabh")
                 phage.save()
+                phageimage = aform.cleaned_data.get('image')
+                dest_dir = os.path.join(settings.MEDIA_ROOT, "images", phagename)
+                try:
+                    os.mkdir(dest_dir)
+                except:
+                    pass
+                print("image=" + str(phageimage))
+                dest = os.path.join(dest_dir, str(phageimage))
+                if phageimage is None:
+                    pass
+                else:
+                    handle_uploaded_file(phageimage, dest)
                 return redirect('add_phage')
             else:
+                print("Saurabhwa")
                 pform = Add_Phage_DataForm()
                 rrform = Add_ResearcherForm()
                 rform = Add_ResearchForm()
