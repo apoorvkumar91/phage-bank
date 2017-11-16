@@ -29,6 +29,11 @@ def new_index(request):
                                           'username': request.user.username
                                           })
 
+def logged_in_index(request):
+    return render(request, 'logged_in_index.html',{'login_status': request.user.is_authenticated(),
+                                                   'username': request.user.username
+                                          })
+
 @login_required
 def add_phage(request):
     return render(request, 'add_phage.html')
