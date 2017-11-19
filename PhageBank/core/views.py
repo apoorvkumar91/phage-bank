@@ -101,7 +101,6 @@ def handle_uploaded_file(f, dest):
         for chunk in f.chunks():
             destination.write(chunk)
 
-
 @login_required
 def add_phage(request):
     if request.user.is_authenticated():
@@ -125,7 +124,6 @@ def add_phage(request):
                 phage.phage_CPT_id = phagecptid
                 phage.phage_isolator_loc = phageisoloc
                 phage.phage_all_links = phagealllink
-                print("Saurabh")
                 phage.save()
                 phagedoc = aform.cleaned_data.get('doc')
                 phageimage = aform.cleaned_data.get('image')
@@ -149,7 +147,6 @@ def add_phage(request):
                 query_results = PhageData.objects.all()
                 return render(request, 'view_phages.html', {'add_status':'true','query_results':query_results}  )
             else:
-                print("Saurabhwa")
                 pform = Add_Phage_DataForm()
                 rrform = Add_ResearcherForm()
                 rform = Add_ResearchForm()
@@ -289,7 +286,6 @@ def editPhage(request, name):
         aform = AForm(request.POST, request.FILES)
         aiform = AIForm(request.POST)
         if request.method=="POST":
-            print("Manish")
             if pform.is_valid() and rrform.is_valid() and rform.is_valid() and aform.is_valid() and aiform.is_valid():
                 phage.phage_name = pform.cleaned_data.get('phage_name')
                 if(name!=phage.phage_name and PreData.objects.filter(phagename = name).count()==0):
@@ -329,7 +325,6 @@ def editPhage(request, name):
                 query_results = PhageData.objects.all()
                 return render(request, 'view_phages.html', {'edit_status':'true','query_results':query_results}  )
             else:
-                print("Manish here")
                 phage = PhageData.objects.get(phage_name=name)
                 print (phage.phage_host_name)
                 phage.save()
@@ -348,7 +343,6 @@ def editPhage(request, name):
             rform = Edit_ResearchForm(request.POST, instance=phage)
             aform = AForm()
             aiform = AIForm()
-            print("OUT")
             return render(request, 'EditPhage.html', {'item': phage,
                                                       'pform': pform,
                                                       'rrform': rrform,
