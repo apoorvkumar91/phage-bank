@@ -253,14 +253,14 @@ def viewPhage(request):
 def view_phage(request):
     phageName = request.GET.get('name')
     phage = PhageData.objects.get(phage_name=phageName)
-    return render(request, 'view_phage.html', {'item': phage,
+    previous_names = phage.PhageName.all()
+    return render(request, 'view_phage.html', {'item': phage,'previous_names':previous_names,
                                               'login_status': request.user.is_authenticated(),
                                               'username': request.user.username
                                               })
 
 @login_required
 def deletephages(request,name):
-    print("here")
     if request.user.is_authenticated():
 
         phage = PhageData.objects.get(phage_name=name).delete()
