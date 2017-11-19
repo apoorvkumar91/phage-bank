@@ -2,6 +2,24 @@
 
 
 {% block content %}
+ {% if edit_status == 'true' %}
+    <div class="alert alert-success alert-dismissable">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+        <strong>Success!</strong> The phage entry is updated successfully.
+    </div>
+ {% endif %}
+    {% if delete_status == 'true' %}
+    <div class="alert alert-success alert-dismissable">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+        <strong>Success!</strong> The phage entry is deleted successfully.
+    </div>
+    {% endif %}
+        {% if add_status == 'true' %}
+    <div class="alert alert-success alert-dismissable">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+        <strong>Success!</strong> The phage entry is added successfully.
+    </div>
+        {% endif %}
 <h2>Phages</h2>
 
 <table id="phages" class="table table-bordered table-responsive">

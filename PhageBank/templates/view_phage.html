@@ -6,9 +6,75 @@
 {% block content %}
 
 <h2>Phage Details</h2>
+ {#   <a href="{% url 'edit_details' name=item.phage_name %}"><u>(Edit the phage entry)</u></a>#}
+{#    <p><a href="{% url 'view' name=item.phage_name %}"><u>(Delete the phage entry)</u></a>#}
+    <button type="button" class="btn" data-toggle="modal" data-target="#myEditModal">
+        Edit Data
+    </button>
+    <button type="button" class="float-right btn btn-danger" data-toggle="modal" data-target="#myDeleteModal">
+        Delete
+    </button>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    </p>
 <br>
 <br>
 
+<div class="modal fade" id="myDeleteModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">{{ "Phage Name: " }}{{  item.phage_name }}</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        Are you sure you want to delete?
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+          <button type="button" class="btn btn-primary"><a style="text-decoration: none; color: white;" href="{% url 'view' name=item.phage_name %}">Yes</a></button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="myEditModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">{{ "Phage Name: " }}{{  item.phage_name }}</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        Are you sure you want to edit?
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+          <button type="button" class="btn btn-primary"><a style="text-decoration: none; color: white;" href="{% url 'edit_details' name=item.phage_name %}">Yes</a></button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+      </div>
+
+    </div>
+  </div>
+</div>
 
 <div class="container-fluid">
     <div class="row">

@@ -31,7 +31,6 @@ class SignUpForm(UserCreationForm):
         fields = ("username", 'first_name', 'last_name', 'email', 'password1', 'password2',)
 
 class LoginForm(forms.ModelForm):
-
     class Meta:
         model = User
         fields = ("username", "password",)
@@ -266,3 +265,18 @@ class AIForm(forms.Form):
                                                                     'style': 'font-size: small',
                                                                     })
                                       )
+
+class Edit_Phage_DataForm(forms.ModelForm):
+    class Meta:
+        model = PhageData
+        fields = ('phage_name', 'phage_host_name',)
+
+class Edit_ResearcherForm(forms.ModelForm):
+    class Meta:
+        model = PhageData
+        fields = ("phage_isolator_name", "phage_experimenter_name",)
+
+class Edit_ResearchForm(forms.ModelForm):
+    class Meta:
+        model = PhageData
+        fields = ("phage_CPT_id", "phage_isolator_loc",)

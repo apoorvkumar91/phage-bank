@@ -7,15 +7,17 @@ import csv
 from django.conf import settings
 from io import StringIO
 from io import TextIOWrapper
-from PhageBank.core.forms import Add_ResearchForm, AForm, AIForm
+from PhageBank.core.forms import Add_ResearchForm, AForm, AIForm, Edit_Phage_DataForm, Edit_ResearcherForm, Edit_ResearchForm
 from PhageBank.core.forms import SignUpForm, AddPhageForm, UploadFileForm, LinkForm, LoginForm, Add_Phage_DataForm, Add_ResearcherForm
-from PhageBank.core.models import PhageData
+from PhageBank.core.models import PhageData, PreData
 from django.forms.formsets import BaseFormSet
 from django.forms.formsets import formset_factory
 from django.forms import inlineformset_factory
 from django.contrib.auth.decorators import user_passes_test
 from django.template.loader import render_to_string
 from django.http import JsonResponse
+from django.template import RequestContext
+from django.contrib.messages import get_messages
 
 import os
 from csvvalidator import *
@@ -144,7 +146,8 @@ def add_phage(request):
                     pass
                 else:
                     handle_uploaded_file(phagedoc, docsdest)
-                return redirect('add_phage')
+                query_results = PhageData.objects.all()
+                return render(request, 'view_phages.html', {'add_status':'true','query_results':query_results}  )
             else:
                 print("Saurabhwa")
                 pform = Add_Phage_DataForm()
@@ -233,6 +236,8 @@ def viewphages(request):
 def view_phages(request):
     query_results = PhageData.objects.all()
     return render(request, 'view_phages.html', {'query_results': query_results,
+                                                'edit_status':'false','add_status':'false',
+                                                'delete_status':'false',
                                                'login_status': request.user.is_authenticated(),
                                                'username': request.user.username
                                                })
@@ -255,6 +260,109 @@ def view_phage(request):
                                               'login_status': request.user.is_authenticated(),
                                               'username': request.user.username
                                               })
+
+@login_required
+def deletephages(request,name):
+    print("here")
+    if request.user.is_authenticated():
+
+        phage = PhageData.objects.get(phage_name=name).delete()
+        query_results = PhageData.objects.all()
+        return render(request, 'view_phages.html', {'query_results': query_results,'delete_status':'true',
+                                               'login_status': request.user.is_authenticated(),
+                                               'username': request.user.username
+                                               })
+    else:
+        #messages.error(request,'Login or signup first!')
+        return render(request,'login.html',
+                      {'login_status': request.user.is_authenticated()
+                       })
+
+@login_required
+def editPhage(request, name):
+    if request.user.is_authenticated():
+        phage = PhageData.objects.get(phage_name = name)
+        print(phage.phage_isolator_name)
+        pform = Edit_Phage_DataForm(request.POST, instance=phage, initial = {'phage_name':phage.phage_name })
+        rrform = Edit_ResearcherForm(request.POST, instance=phage)
+        rform = Edit_ResearchForm(request.POST, instance=phage)
+        aform = AForm(request.POST, request.FILES)
+        aiform = AIForm(request.POST)
+        if request.method=="POST":
+            print("Manish")
+            if pform.is_valid() and rrform.is_valid() and rform.is_valid() and aform.is_valid() and aiform.is_valid():
+                phage.phage_name = pform.cleaned_data.get('phage_name')
+                if(name!=phage.phage_name and PreData.objects.filter(phagename = name).count()==0):
+                    obj = PreData.objects.create(testkey=phage)
+                    obj.testkey = phage
+                    obj.phagename = name
+                    print (obj.phagename)
+                    obj.save()
+                    print (phage.PhageName.all().values())
+                #phage = PhageData.objects.get(phage_name=phagename)
+                phage.phage_isolator_name = rrform.cleaned_data.get('phage_isolator_name')
+                phage.phage_experimenter_name = rrform.cleaned_data.get('phage_experimenter_name')
+                phage.phage_CPT_id = rform.cleaned_data.get('phage_CPT_id')
+                phage.phage_isolator_loc = rform.cleaned_data.get('phage_isolator_loc')
+                phage.phage_all_links = aiform.cleaned_data.get('link')
+                pform.save()
+                phage.save()
+                phagedoc = aform.cleaned_data.get('doc')
+                phageimage = aform.cleaned_data.get('image')
+                dest_dir = os.path.join(settings.MEDIA_ROOT, "images", phage.phage_name)
+                docs_dest_dir = os.path.join(settings.MEDIA_ROOT, "docs", phage.phage_name)
+                try:
+                    os.mkdir(dest_dir)
+                    os.mkdir(docs_dest_dir)
+                except:
+                    pass
+                dest = os.path.join(dest_dir, str(phage.phage_name))
+                docsdest = os.path.join(docs_dest_dir, str(phagedoc))
+                if phageimage is None:
+                    pass
+                else:
+                    handle_uploaded_file(phageimage, dest)
+                if phagedoc is None:
+                    pass
+                else:
+                    handle_uploaded_file(phagedoc, docsdest)
+                query_results = PhageData.objects.all()
+                return render(request, 'view_phages.html', {'edit_status':'true','query_results':query_results}  )
+            else:
+                print("Manish here")
+                phage = PhageData.objects.get(phage_name=name)
+                print (phage.phage_host_name)
+                phage.save()
+                return render(request, 'EditPhage.html', {'item': phage,
+                                                          'pform': pform,
+                                                          'rrform': rrform,
+                                                          'rform': rform,
+                                                          'aform': aform,
+                                                          'aiform': aiform,
+                                                          'login_status': request.user.is_authenticated(),
+                                                          'username': request.user.username,
+                                                         })
+        else:
+            pform = Edit_Phage_DataForm(request.POST, instance=phage)
+            rrform = Edit_ResearcherForm(request.POST, instance=phage)
+            rform = Edit_ResearchForm(request.POST, instance=phage)
+            aform = AForm()
+            aiform = AIForm()
+            print("OUT")
+            return render(request, 'EditPhage.html', {'item': phage,
+                                                      'pform': pform,
+                                                      'rrform': rrform,
+                                                      'rform': rform,
+                                                      'aform': aform,
+                                                      'aiform': aiform,
+                                                      'login_status': request.user.is_authenticated(),
+                                                      'username': request.user.username,
+                                                     })
+    else:
+        return render(request,'Login.html',
+                      {'login_status': request.user.is_authenticated()
+                       })
+
 
 def populate(reader, request):
     fields = reader.fieldnames

@@ -1,0 +1,144 @@
+{% extends "logged_in.html" %}
+{% load widget_tweaks %}
+
+{% block content %}
+<h4>Edit the Phage Details</h4>
+{% load staticfiles %}
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="{% static 'js/jquery.formset.js' %}"></script>
+<form method="post" action="{% url 'edit_details' name=item.phage_name %}" enctype='multipart/form-data'>
+    {% csrf_token %}
+<div id="accordion">
+    <div class="card">
+        <div class="card-header">
+            <a class="card-link" data-toggle="collapse" data-parent="#accordion" href="#phagedata">
+                Phage Data
+            </a>
+        </div>
+        <div id="phagedata" class="collapse show">
+            <div class="card-body">
+                {% for field in pform %}
+                <div class="form-group{% if field.errors %} has-error{% endif %}">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+
+                    {% if field.name == 'phage_name'%}
+                    {% render_field field class="form-control" value=item.phage_name%}
+
+                    {% elif field.name == 'phage_host_name'%}
+                    {% render_field field class="form-control" value=item.phage_host_name%}
+                    {% endif %}
+
+                    {% for error in field.errors %}
+                    <p class="help-block">{{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <a class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#researcher">
+                Researcher Details
+            </a>
+        </div>
+        <div id="researcher" class="collapse">
+            <div class="card-body">
+                {% for field in rrform %}
+                <div class="form-group{% if field.errors %} has-error{% endif %}">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {% if field.name == 'phage_isolator_name'%}
+                    {% render_field field class="form-control" value=item.phage_isolator_name%}
+
+                    {% elif field.name == 'phage_experimenter_name'%}
+                    {% render_field field class="form-control" value=item.phage_experimenter_name%}
+                    {% endif %}
+                    {% for error in field.errors %}
+                    <p class="help-block">{{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <a class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#research">
+                Research Information
+            </a>
+        </div>
+        <div id="research" class="collapse">
+            <div class="card-body">
+                {% for field in rform %}
+                <div class="form-group{% if field.errors %} has-error{% endif %}">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {% if field.name == 'phage_isolator_loc'%}
+                    {% render_field field class="form-control" value=item.phage_isolator_loc%}
+
+                    {% elif field.name == 'phage_CPT_id'%}
+                    {% render_field field class="form-control" value=item.phage_CPT_id%}
+                    {% endif %}
+                    {% for error in field.errors %}
+                    <p class="help-block">{{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <a class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#attachments">
+                Attachments
+            </a>
+        </div>
+        <div id="attachments" class="collapse">
+            <div class="card-body">
+                {% for field in aform %}
+                <div class="form-group{% if field.errors %} has-error{% endif %}">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {% render_field field class="form-control" %}
+                    {% for error in field.errors %}
+                    <p class="help-block">{{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <a class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#addinfo">
+                Additional Information
+            </a>
+        </div>
+        <div id="addinfo" class="collapse">
+            <div class="card-body">
+                {% for field in aiform %}
+                <div class="form-group{% if field.errors %} has-error{% endif %}">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {% render_field field class="form-control" %}
+                    {% for error in field.errors %}
+                    <p class="help-block">{{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+    <br>
+    <div class="row float-right">
+        <button type="button" class="btn btn-default">Reset</button>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <button type="submit" class="btn btn-success">Submit</button>
+    </div>
+
+    <br><br><br>
+</form>
+
+{% endblock %}

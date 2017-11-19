@@ -27,4 +27,6 @@ urlpatterns = [
         auth_views.password_reset_confirm, name='password_reset_confirm'),
     url(r'^reset/done/$', auth_views.password_reset_complete, name='password_reset_complete'),
     url(r'^uploads/form/$', core_views.model_form_upload, name='model_form_upload'),
+    url(r'^edit_details/(?P<name>[-\w]+)$', core_views.editPhage, name='edit_details'),
+    url(r'^view/(?P<name>[-\w]+)$', core_views.deletephages, name='view'),
 ]
