@@ -124,7 +124,10 @@ def add_phage(request):
                 phage.phage_CPT_id = phagecptid
                 phage.phage_isolator_loc = phageisoloc
                 phage.phage_all_links = phagealllink
+                phage.phage_submitted_user = request.user.username
+                print(request.user.username)
                 phage.save()
+                print(phage.phage_submitted_user)
                 phagedoc = aform.cleaned_data.get('doc')
                 phageimage = aform.cleaned_data.get('image')
                 dest_dir = os.path.join(settings.MEDIA_ROOT, "images", phagename)
@@ -229,6 +232,14 @@ def viewphages(request):
                                                'username': request.user.username
                                                })
 
+def my_phages(request):
+    query_results = PhageData.objects.filter(phage_submitted_user=request.user.username)
+    return render(request, 'view_phages.html', {'query_results': query_results,
+                                                'edit_status':'false','add_status':'false',
+                                                'delete_status':'false',
+                                               'login_status': request.user.is_authenticated(),
+                                               'username': request.user.username
+                                               })
 
 def view_phages(request):
     query_results = PhageData.objects.all()

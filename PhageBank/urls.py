@@ -29,4 +29,6 @@ urlpatterns = [
     url(r'^uploads/form/$', core_views.model_form_upload, name='model_form_upload'),
     url(r'^edit_details/$', core_views.editPhage, name='edit_details'),
     url(r'^delete/$', core_views.deletephages, name='view'),
+    url(r'^my_phages/$', core_views.my_phages, name='my_phages'),
+
 ]
