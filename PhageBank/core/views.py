@@ -260,10 +260,10 @@ def view_phage(request):
                                               })
 
 @login_required
-def deletephages(request,name):
+def deletephages(request):
     if request.user.is_authenticated():
-
-        phage = PhageData.objects.get(phage_name=name).delete()
+        x = request.GET.get('name')
+        phage = PhageData.objects.get(phage_name=x).delete()
         query_results = PhageData.objects.all()
         return render(request, 'view_phages.html', {'query_results': query_results,'delete_status':'true',
                                                'login_status': request.user.is_authenticated(),
@@ -276,8 +276,9 @@ def deletephages(request,name):
                        })
 
 @login_required
-def editPhage(request, name):
+def editPhage(request):
     if request.user.is_authenticated():
+        name = request.GET.get('name')
         phage = PhageData.objects.get(phage_name = name)
         print(phage.phage_isolator_name)
         pform = Edit_Phage_DataForm(request.POST, instance=phage, initial = {'phage_name':phage.phage_name })

@@ -43,7 +43,7 @@
 
       <!-- Modal footer -->
       <div class="modal-footer">
-          <button type="button" class="btn btn-primary"><a style="text-decoration: none; color: white;" href="{% url 'view' name=item.phage_name %}">Yes</a></button>
+          <button type="button" class="btn btn-primary"><a style="text-decoration: none; color: white;" href='/delete/?name={{ item.phage_name }}'>Yes</a></button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
       </div>
 
@@ -68,7 +68,7 @@
 
       <!-- Modal footer -->
       <div class="modal-footer">
-          <button type="button" class="btn btn-primary"><a style="text-decoration: none; color: white;" href="{% url 'edit_details' name=item.phage_name %}">Yes</a></button>
+          <button type="button" class="btn btn-primary"><a style="text-decoration: none; color: white;" href='/edit_details/?name={{ item.phage_name }}'>Yes</a></button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
       </div>
 
