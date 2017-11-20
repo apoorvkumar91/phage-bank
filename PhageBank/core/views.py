@@ -274,8 +274,16 @@ def view_phage(request):
 def deletephages(request):
     if request.user.is_authenticated():
         x = request.GET.get('name')
+        dest_dir = os.path.join(settings.MEDIA_ROOT, "images", x)
+        docs_dest_dir = os.path.join(settings.MEDIA_ROOT, "docs", x)
+        try:
+            os.rmdir(dest_dir)
+            os.rmdir(docs_dest_dir)
+        except:
+            pass
         phage = PhageData.objects.get(phage_name=x).delete()
         query_results = PhageData.objects.all()
+
         return render(request, 'view_phages.html', {'query_results': query_results,'delete_status':'true',
                                                'login_status': request.user.is_authenticated(),
                                                'username': request.user.username
@@ -317,13 +325,17 @@ def editPhage(request):
                 phage.save()
                 phagedoc = aform.cleaned_data.get('doc')
                 phageimage = aform.cleaned_data.get('image')
+                dest_dir_old = os.path.join(settings.MEDIA_ROOT, "images", name)
+                docs_dest_dir_old = os.path.join(settings.MEDIA_ROOT, "docs", name)
                 dest_dir = os.path.join(settings.MEDIA_ROOT, "images", phage.phage_name)
                 docs_dest_dir = os.path.join(settings.MEDIA_ROOT, "docs", phage.phage_name)
+                print(dest_dir_old)
+                print(dest_dir)
                 try:
-                    os.mkdir(dest_dir)
-                    os.mkdir(docs_dest_dir)
+                    os.rename(dest_dir_old,dest_dir)
+                    os.rename(docs_dest_dir_old,docs_dest_dir)
                 except:
-                    pass
+                   pass
                 dest = os.path.join(dest_dir, str(phage.phage_name))
                 docsdest = os.path.join(docs_dest_dir, str(phagedoc))
                 if phageimage is None:
