@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
+from django.utils.safestring import mark_safe
 from django.contrib.auth.models import User
 from PhageBank.core.models import PhageData
 from crispy_forms.helper import FormHelper
@@ -92,10 +93,14 @@ class Add_ResearcherForm(forms.ModelForm):
                                                                             'style': 'font-size: small',
                                                                             })
                                               )
-
+    INCIDENT_LIVE = (
+        ('0', 'Lab-A'),
+        ('1', 'Lab-B'),
+    )
+    phage_lab = forms.CharField(label='Select your Lab', widget=forms.Select(choices=INCIDENT_LIVE))
     class Meta:
         model = PhageData
-        fields = ("phage_isolator_name", "phage_experimenter_name",)
+        fields = ("phage_isolator_name", "phage_experimenter_name","phage_lab",)
 
 class Add_ResearchForm(forms.ModelForm):
     phage_CPT_id = forms.CharField(label='CPT id',
@@ -123,122 +128,6 @@ class Add_ResearchForm(forms.ModelForm):
     class Meta:
         model = PhageData
         fields = ("phage_CPT_id", "phage_isolator_loc",)
-
-
-class AddPhageForm(forms.ModelForm):
-    phage_name = forms.CharField(label='Phage Name',
-                                 max_length=30,
-                                 required=True,
-                                 help_text='Required.',
-                                 widget=forms.TextInput(attrs={'autofocus': 'autofocus',
-                                                               'autocomplete': 'off',
-                                                               'size': '100',
-                                                               'style': 'font-size: small',
-                                                               })
-                                 )
-
-    phage_host_name = forms.CharField(label='Host Name',
-                                      max_length=30,
-                                      required=True,
-                                      help_text='Required.',
-                                      widget=forms.TextInput(attrs={'autofocus': 'autofocus',
-                                                                    'autocomplete': 'off',
-                                                                    'size': '100',
-                                                                    'style': 'font-size: small',
-                                                                    })
-                                      )
-
-    phage_isolator_name = forms.CharField(label='Isolator Name',
-                                          max_length=30,
-                                          required=True,
-                                          help_text='Required.',
-                                          widget=forms.TextInput(attrs={'autofocus': 'autofocus',
-                                                                        'autocomplete': 'off',
-                                                                        'size': '100',
-                                                                        'style': 'font-size: small',
-                                                                        })
-                                          )
-
-    phage_experimenter_name = forms.CharField(label='Experimenter Name',
-                                              max_length=30,
-                                              required=True,
-                                              help_text='Required.',
-                                              widget=forms.TextInput(attrs={'autofocus': 'autofocus',
-                                                                            'autocomplete': 'off',
-                                                                            'size': '100',
-                                                                            'style': 'font-size: small',
-                                                                            })
-                                              )
-
-    phage_CPT_id = forms.CharField(label='CPT id',
-                                   max_length=30,
-                                   required=False,
-                                   help_text='Optional.',
-                                   widget=forms.TextInput(attrs={'autofocus': 'autofocus',
-                                                                 'autocomplete': 'off',
-                                                                 'size': '100',
-                                                                 'style': 'font-size: small',
-                                                                 })
-                                   )
-
-    phage_isolator_loc = forms.CharField(label='Isolator Location',
-                                         max_length=5000,
-                                         required=True,
-                                         help_text='Required.',
-                                         widget=forms.TextInput(attrs={'autofocus': 'autofocus',
-                                                                       'autocomplete': 'off',
-                                                                       'size': '100',
-                                                                       'style': 'font-size: small',
-                                                                       })
-                                         )
-
-
-    class Meta:
-        model = PhageData
-        fields = ('phage_name', 'phage_host_name',
-                  'phage_isolator_name', 'phage_experimenter_name',
-                  'phage_CPT_id', 'phage_isolator_loc',
-                  )
-
-
-    helper = FormHelper()
-    helper.form_method = 'post'
-    helper.form_class = 'form-horizontal'
-    helper.label_class = 'accordion'
-    helper.field_class = 'accordion'
-    #helper.add_input(Submit('submit', 'Submit', css_class='btn-success'))
-    #helper.add_input(Reset('cancel', 'Clear', css_class='btn-warning'))
-    helper.layout = Layout(
-        HTML("<button class='accordion'>Phage Data</button>"),
-        HTML("<div class='panel'>"),
-        HTML("<br>"),
-        Div('phage_name', 'phage_host_name', 'phage_CPT_id'),
-        HTML("</div>"),
-        HTML("<button class='accordion'>Researcher Details</button>"),
-        HTML("<div class='panel'>"),
-        HTML("<br>"),
-        Div('phage_isolator_name', 'phage_experimenter_name'),
-        HTML("</div>"),
-        HTML("<button class='accordion'>Research Information</button>"),
-        HTML("<div class='panel'>"),
-        HTML("<br>"),
-        Div('phage_isolator_loc'),
-        HTML("</div>"),
-        HTML("<button class='accordion'>Images, Documents & Links</button>"),
-        HTML("<div class='panel'>"),
-        HTML("<br>"),
-        HTML("{{ link_formset.management_form }}"),
-        HTML("{% for link_form in link_formset %} <div class='link-formset'> {{ link_form.link }} </div> {% endfor %}"),
-        HTML("<script> $('.link-formset').formset({addText: 'add link', deleteText: 'remove'});</script>"),
-        HTML("</div>"),
-        HTML("<button class='accordion'>Additional Information</button>"),
-        HTML("<div class='panel'>"),
-        HTML("<br>"),
-        Div('phage_isolator_loc'),
-        HTML("</div>"),
-        HTML("<br><br>"),
-        HTML("<input type = 'submit' value = 'Submit' class ='btn-success'/>")
-    )
 
 
 class LinkForm(forms.Form):

@@ -8,7 +8,7 @@ from django.conf import settings
 from io import StringIO
 from io import TextIOWrapper
 from PhageBank.core.forms import Add_ResearchForm, AForm, AIForm, Edit_Phage_DataForm, Edit_ResearcherForm, Edit_ResearchForm
-from PhageBank.core.forms import SignUpForm, AddPhageForm, UploadFileForm, LinkForm, LoginForm, Add_Phage_DataForm, Add_ResearcherForm
+from PhageBank.core.forms import SignUpForm, UploadFileForm, LinkForm, LoginForm, Add_Phage_DataForm, Add_ResearcherForm
 from PhageBank.core.models import PhageData, PreData
 from django.forms.formsets import BaseFormSet
 from django.forms.formsets import formset_factory
