@@ -36,7 +36,7 @@ $(function () {
 
     function RedirectToPage()
       {
-          window.location='/add_phage';
+          window.location='/view_phages/';
       }
 
 });
