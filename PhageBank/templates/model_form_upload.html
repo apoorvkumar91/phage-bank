@@ -1,14 +1,12 @@
-{% extends "header.html" %}
+{% extends "logged_in.html" %}
 
 
 {% block content %}
-<a class="float-right"  href="/logout"><u>Logout</u></a>
-  <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <br>
-    {{ form.as_p }} <br>
-    <button type="submit">Upload</button>
-  </form>
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <br>
+  {{ form.as_p }} <br>
+  <button type="submit">Upload</button>
+</form>
 <br>
-<p><a href="{% url 'home' %}"><u>Return to home</u></a></p>
 {% endblock %}
