@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.utils.safestring import mark_safe
 from django.contrib.auth.models import User
-from PhageBank.core.models import PhageData
+from PhageBank.core.models import PhageData, ExperimentData
 from crispy_forms.helper import FormHelper
 from django.core.urlresolvers import reverse
 from crispy_forms.bootstrap import Field, InlineRadios, TabHolder, Tab, Accordion, AccordionGroup
@@ -129,6 +129,74 @@ class Add_ResearchForm(forms.ModelForm):
         model = PhageData
         fields = ("phage_CPT_id", "phage_isolator_loc",)
 
+class Add_Experiment_Form(forms.ModelForm):
+    owner = forms.CharField(label='Owner',
+                                 max_length=100,
+                                 required=False,
+                                 widget=forms.TextInput(attrs={'autofocus': 'autofocus',
+                                                               'autocomplete': 'off',
+                                                               'size': '100',
+                                                               'style': 'font-size: small',
+                                                               })
+                                 )
+
+    timestamp = forms.DateField(label='Date of Experiment',
+                                    widget=forms.DateInput(attrs={'autofocus': 'autofocus',
+                                                                      'type': 'date'}))
+
+    category = forms.CharField(label='Category',
+                               max_length=100,
+                               required=False,
+                               widget=forms.TextInput(attrs={'autofocus': 'autofocus',
+                                                             'autocomplete': 'off',
+                                                             'size': '100',
+                                                             'style': 'font-size: small',
+                                                             })
+                               )
+
+    short_name = forms.CharField(label='Short Name',
+                               max_length=100,
+                               required=False,
+                               widget=forms.TextInput(attrs={'autofocus': 'autofocus',
+                                                             'autocomplete': 'off',
+                                                             'size': '100',
+                                                             'style': 'font-size: small',
+                                                             })
+                               )
+
+    full_name = forms.CharField(label='Full Name',
+                               max_length=5000,
+                               required=False,
+                               widget=forms.TextInput(attrs={'autofocus': 'autofocus',
+                                                             'autocomplete': 'off',
+                                                             'size': '5000',
+                                                             'style': 'font-size: small',
+                                                             })
+                               )
+
+    methods = forms.CharField(label='Methods',
+                               max_length=5000,
+                               required=False,
+                               widget=forms.Textarea(attrs={'autofocus': 'autofocus',
+                                                             'autocomplete': 'off',
+                                                             'size': '5000',
+                                                             'style': 'font-size: small',
+                                                             })
+                               )
+
+    results = forms.CharField(label='Results',
+                               max_length=5000,
+                               required=False,
+                               widget=forms.Textarea(attrs={'autofocus': 'autofocus',
+                                                             'autocomplete': 'off',
+                                                             'size': '5000',
+                                                             'style': 'font-size: small',
+                                                             })
+                               )
+
+    class Meta:
+        model = ExperimentData
+        fields = ("owner", "timestamp","category","short_name","full_name","methods","results")
 
 class LinkForm(forms.Form):
     link = forms.CharField(label='URL',

@@ -8,8 +8,8 @@ from django.conf import settings
 from io import StringIO
 from io import TextIOWrapper
 from PhageBank.core.forms import Add_ResearchForm, AForm, AIForm, Edit_Phage_DataForm, Edit_ResearcherForm, Edit_ResearchForm
-from PhageBank.core.forms import SignUpForm, UploadFileForm, LinkForm, LoginForm, Add_Phage_DataForm, Add_ResearcherForm
-from PhageBank.core.models import PhageData, PreData
+from PhageBank.core.forms import SignUpForm, UploadFileForm, LinkForm, LoginForm, Add_Phage_DataForm, Add_ResearcherForm, Add_Experiment_Form
+from PhageBank.core.models import PhageData, PreData, ExperimentData
 from django.forms.formsets import BaseFormSet
 from django.forms.formsets import formset_factory
 from django.forms import inlineformset_factory
@@ -108,9 +108,10 @@ def add_phage(request):
             pform = Add_Phage_DataForm(request.POST)
             rrform = Add_ResearcherForm(request.POST)
             rform = Add_ResearchForm(request.POST)
+            expform = Add_Experiment_Form(request.POST)
             aform = AForm(request.POST, request.FILES)
             aiform = AIForm(request.POST)
-            if pform.is_valid() and rrform.is_valid() and rform.is_valid() and aform.is_valid() and aiform.is_valid():
+            if pform.is_valid() and rrform.is_valid() and rform.is_valid() and expform.is_valid() and aform.is_valid() and aiform.is_valid():
                 pform.save()
                 phagename = pform.cleaned_data.get('phage_name')
                 phage = PhageData.objects.get(phage_name=phagename)
@@ -127,6 +128,18 @@ def add_phage(request):
                 phage.phage_submitted_user = request.user.username
                 print(request.user.username)
                 phage.save()
+
+                exp = ExperimentData.objects.create(expkey=phage)
+                exp.expkey = phage
+                exp.owner = expform.cleaned_data.get('owner')
+                #exp.timestamp = expform.cleaned_data.get('timestamp')
+                exp.category = expform.cleaned_data.get('category')
+                exp.short_name = expform.cleaned_data.get('short_name')
+                exp.full_name = expform.cleaned_data.get('full_name')
+                exp.methods = expform.cleaned_data.get('methods')
+                exp.results = expform.cleaned_data.get('results')
+                exp.save()
+                print (phage.PName.all().values())
                 print(phage.phage_submitted_user)
                 phagedoc = aform.cleaned_data.get('doc')
                 phageimage = aform.cleaned_data.get('image')
@@ -153,11 +166,13 @@ def add_phage(request):
                 pform = Add_Phage_DataForm()
                 rrform = Add_ResearcherForm()
                 rform = Add_ResearchForm()
+                expform = Add_Experiment_Form()
                 aform = AForm()
                 aiform = AIForm()
                 return render(request, 'add_phage.html', {'pform': pform,
                                                           'rrform': rrform,
                                                           'rform': rform,
+                                                          'expform': expform,
                                                           'aform': aform,
                                                           'aiform': aiform,
                                                           'login_status': request.user.is_authenticated(),
@@ -167,11 +182,13 @@ def add_phage(request):
             pform = Add_Phage_DataForm()
             rrform = Add_ResearcherForm()
             rform = Add_ResearchForm()
+            expform = Add_Experiment_Form()
             aform = AForm()
             aiform = AIForm()
             return render(request, 'add_phage.html', {'pform': pform,
                                                       'rrform': rrform,
                                                       'rform': rform,
+                                                      'expform': expform,
                                                       'aform': aform,
                                                       'aiform': aiform,
                                                       'login_status': request.user.is_authenticated(),
@@ -265,7 +282,8 @@ def view_phage(request):
     phageName = request.GET.get('name')
     phage = PhageData.objects.get(phage_name=phageName)
     previous_names = phage.PhageName.all()
-    return render(request, 'view_phage.html', {'item': phage,'previous_names':previous_names,
+    expdata = phage.PName.all()
+    return render(request, 'view_phage.html', {'item': phage,'previous_names':previous_names,'expdata':expdata,
                                               'login_status': request.user.is_authenticated(),
                                               'username': request.user.username
                                               })

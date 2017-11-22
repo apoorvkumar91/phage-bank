@@ -93,6 +93,11 @@
                         <p><b>CPT ID:</b>  {{ item.phage_CPT_id }}</p>
                         <p><b>Isolator Location:</b>  {{ item.phage_isolator_loc }}</p>
                         <p><b>URL:</b>  {{ item.phage_all_links }}</p>
+                        <p><b>Exp data: </b>
+                            {%for query in expdata %}
+                            {{  query.owner}}{{","}}
+                            {% endfor %}
+                        </p>
                         <p><b>Previous names: </b>
                             {%for query in previous_names %}
                             {{  query.phagename}}{{","}}
