@@ -1,4 +1,4 @@
-{% extends "logged_in.html" %}
+{% extends login_status|yesno:"logged_in.html,not_logged_in.html" %}
 
 
 {% block content %}
