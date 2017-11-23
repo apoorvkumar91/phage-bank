@@ -29,6 +29,12 @@ class ExperimentData(models.Model):
     methods = models.CharField(max_length=5000, default='none')
     results = models.CharField(max_length=5000, default='none')
 
+class IsolationData(models.Model):
+    isokey = models.ForeignKey(PhageData, related_name='iso_phageName')
+    owner = models.CharField(max_length=100, default='none')
+    location = models.CharField(max_length=100, default='none')
+    timestamp = models.DateTimeField(default=datetime.now)
+    type = models.CharField(max_length=100, default='none')
 
 
 

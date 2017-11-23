@@ -7,9 +7,9 @@ import csv
 from django.conf import settings
 from io import StringIO
 from io import TextIOWrapper
-from PhageBank.core.forms import Add_ResearchForm, AForm, AIForm, Edit_Phage_DataForm, Edit_ResearcherForm, Edit_ResearchForm
-from PhageBank.core.forms import SignUpForm, UploadFileForm, LinkForm, LoginForm, Add_Phage_DataForm, Add_ResearcherForm, Add_Experiment_Form
-from PhageBank.core.models import PhageData, PreData, ExperimentData
+from PhageBank.core.forms import Add_ResearchForm, AForm, AIForm, Edit_Phage_DataForm, Edit_ResearcherForm, Edit_ResearchForm, Edit_IsolationDataForm
+from PhageBank.core.forms import SignUpForm, UploadFileForm, LinkForm, LoginForm, Add_Phage_DataForm, Add_ResearcherForm, Add_Experiment_Form,Isolation_Form
+from PhageBank.core.models import PhageData, PreData, ExperimentData, IsolationData
 from django.forms.formsets import BaseFormSet
 from django.forms.formsets import formset_factory
 from django.forms import inlineformset_factory
@@ -101,6 +101,28 @@ def handle_uploaded_file(f, dest):
         for chunk in f.chunks():
             destination.write(chunk)
 
+#Fill the model object in similar fashion
+def fillExpObject(expform, phage):
+    exp =  ExperimentData.objects.create(expkey=phage)
+    exp.expkey = phage
+    exp.owner = expform.cleaned_data.get('owner')
+    # exp.timestamp = expform.cleaned_data.get('timestamp')
+    exp.category = expform.cleaned_data.get('category')
+    exp.short_name = expform.cleaned_data.get('short_name')
+    exp.full_name = expform.cleaned_data.get('full_name')
+    exp.methods = expform.cleaned_data.get('methods')
+    exp.results = expform.cleaned_data.get('results')
+    exp.save()
+
+def fillIsoltionObject(isoform, phage):
+    iso = IsolationData.objects.create(isokey=phage)
+    iso.isokey = phage
+    iso.owner = isoform.cleaned_data.get('owner')
+    iso.location = isoform.cleaned_data.get('location')
+    iso.type = isoform.cleaned_data.get('type')
+    iso.timestamp = isoform.cleaned_data.get('timestamp')
+    iso.save()
+
 @login_required
 def add_phage(request):
     if request.user.is_authenticated():
@@ -109,38 +131,29 @@ def add_phage(request):
             rrform = Add_ResearcherForm(request.POST)
             rform = Add_ResearchForm(request.POST)
             expform = Add_Experiment_Form(request.POST)
+            isoform = Isolation_Form(request.POST)
             aform = AForm(request.POST, request.FILES)
             aiform = AIForm(request.POST)
-            if pform.is_valid() and rrform.is_valid() and rform.is_valid() and expform.is_valid() and aform.is_valid() and aiform.is_valid():
+            if pform.is_valid() and rrform.is_valid() and rform.is_valid() and expform.is_valid() and isoform.is_valid() \
+                    and aform.is_valid() and aiform.is_valid():
                 pform.save()
                 phagename = pform.cleaned_data.get('phage_name')
                 phage = PhageData.objects.get(phage_name=phagename)
-                phageisoname = rrform.cleaned_data.get('phage_isolator_name')
-                phageexpname = rrform.cleaned_data.get('phage_experimenter_name')
-                phagecptid = rform.cleaned_data.get('phage_CPT_id')
-                phageisoloc = rform.cleaned_data.get('phage_isolator_loc')
-                phagealllink = aiform.cleaned_data.get('link')
-                phage.phage_isolator_name = phageisoname
-                phage.phage_experimenter_name = phageexpname
-                phage.phage_CPT_id = phagecptid
-                phage.phage_isolator_loc = phageisoloc
-                phage.phage_all_links = phagealllink
+
+                phage.phage_CPT_id = rform.cleaned_data.get('phage_CPT_id')
+                phage.phage_isolator_loc = rform.cleaned_data.get('phage_isolator_loc')
+                phage.phage_all_links = aiform.cleaned_data.get('link')
+                phage.phage_isolator_name = rrform.cleaned_data.get('phage_isolator_name')
+                phage.phage_experimenter_name = rrform.cleaned_data.get('phage_experimenter_name')
                 phage.phage_submitted_user = request.user.username
                 print(request.user.username)
                 phage.save()
 
-                exp = ExperimentData.objects.create(expkey=phage)
-                exp.expkey = phage
-                exp.owner = expform.cleaned_data.get('owner')
-                #exp.timestamp = expform.cleaned_data.get('timestamp')
-                exp.category = expform.cleaned_data.get('category')
-                exp.short_name = expform.cleaned_data.get('short_name')
-                exp.full_name = expform.cleaned_data.get('full_name')
-                exp.methods = expform.cleaned_data.get('methods')
-                exp.results = expform.cleaned_data.get('results')
-                exp.save()
-                print (phage.PName.all().values())
-                print(phage.phage_submitted_user)
+                fillExpObject(expform, phage)
+                # print (phage.PName.all().values())
+                # print(phage.phage_submitted_user)
+                fillIsoltionObject(isoform, phage)
+
                 phagedoc = aform.cleaned_data.get('doc')
                 phageimage = aform.cleaned_data.get('image')
                 dest_dir = os.path.join(settings.MEDIA_ROOT, "images", phagename)
@@ -167,12 +180,14 @@ def add_phage(request):
                 rrform = Add_ResearcherForm()
                 rform = Add_ResearchForm()
                 expform = Add_Experiment_Form()
+                isoform = Isolation_Form()
                 aform = AForm()
                 aiform = AIForm()
                 return render(request, 'add_phage.html', {'pform': pform,
                                                           'rrform': rrform,
                                                           'rform': rform,
                                                           'expform': expform,
+                                                          'isoform': isoform,
                                                           'aform': aform,
                                                           'aiform': aiform,
                                                           'login_status': request.user.is_authenticated(),
@@ -183,12 +198,14 @@ def add_phage(request):
             rrform = Add_ResearcherForm()
             rform = Add_ResearchForm()
             expform = Add_Experiment_Form()
+            isoform = Isolation_Form()
             aform = AForm()
             aiform = AIForm()
             return render(request, 'add_phage.html', {'pform': pform,
                                                       'rrform': rrform,
                                                       'rform': rform,
                                                       'expform': expform,
+                                                      'isoform':isoform,
                                                       'aform': aform,
                                                       'aiform': aiform,
                                                       'login_status': request.user.is_authenticated(),
@@ -199,56 +216,7 @@ def add_phage(request):
                       {'login_status': request.user.is_authenticated()
                        })
 
-
-@login_required
-def addphage(request):
-    LinkFormSet = formset_factory(LinkForm, formset=BaseFormSet)
-    if request.user.is_authenticated():
-        if request.method == 'POST':
-            phageform = AddPhageForm(request.POST)
-            link_formset = LinkFormSet(request.POST)
-            if phageform.is_valid() and link_formset.is_valid():
-                link_text = ""
-                for link_form in link_formset:
-                    lin = link_form.cleaned_data
-                    url = lin.get('link')
-                    link_text = link_text + str(url) + ";;;;"
-                phageform.save()
-                phagename = phageform.cleaned_data.get('phage_name')
-                phage = PhageData.objects.get(phage_name=phagename)
-                phage.phage_all_links = link_text
-                phage.save()
-                return redirect('home')
-            else:
-                phageform = AddPhageForm()
-                link_formset = LinkFormSet()
-                return render(request, 'addphage.html', {'form': phageform,
-                                                         'login_status': request.user.is_authenticated(),
-                                                         'username': request.user.username,
-                                                         'link_formset': link_formset
-                                                         })
-        else:
-            phageform = AddPhageForm()
-            link_formset = LinkFormSet()
-            return render(request, 'addphage.html', {'form': phageform,
-                                                     'login_status': request.user.is_authenticated(),
-                                                     'username': request.user.username,
-                                                     'link_formset': link_formset
-                                                     })
-    else:
-        #messages.error(request,'Login or signup first!')
-        return render(request,'Login.html',
-                      {'login_status': request.user.is_authenticated()
-                       })
-
-
-def viewphages(request):
-    query_results = PhageData.objects.all()
-    return render(request, 'viewphages.html', {'query_results': query_results,
-                                               'login_status': request.user.is_authenticated(),
-                                               'username': request.user.username
-                                               })
-
+#this form show the phages per user
 def my_phages(request):
     query_results = PhageData.objects.filter(phage_submitted_user=request.user.username)
     return render(request, 'view_phages.html', {'query_results': query_results,
@@ -257,7 +225,7 @@ def my_phages(request):
                                                'login_status': request.user.is_authenticated(),
                                                'username': request.user.username
                                                })
-
+#this form shows all the phages
 def view_phages(request):
     query_results = PhageData.objects.all()
     return render(request, 'view_phages.html', {'query_results': query_results,
@@ -266,18 +234,7 @@ def view_phages(request):
                                                'login_status': request.user.is_authenticated(),
                                                'username': request.user.username
                                                })
-
-
-def viewPhage(request):
-
-    phageName = request.GET.get('name')
-    phage = PhageData.objects.get(phage_name=phageName)
-    return render(request, 'viewPhage.html', {'item': phage,
-                                              'login_status': request.user.is_authenticated(),
-                                              'username': request.user.username
-                                              })
-
-
+#this form shows a particular phage
 def view_phage(request):
     phageName = request.GET.get('name')
     phage = PhageData.objects.get(phage_name=phageName)

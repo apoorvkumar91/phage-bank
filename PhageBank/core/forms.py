@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.utils.safestring import mark_safe
 from django.contrib.auth.models import User
-from PhageBank.core.models import PhageData, ExperimentData
+from PhageBank.core.models import PhageData, ExperimentData, IsolationData
 from crispy_forms.helper import FormHelper
 from django.core.urlresolvers import reverse
 from crispy_forms.bootstrap import Field, InlineRadios, TabHolder, Tab, Accordion, AccordionGroup
@@ -198,6 +198,46 @@ class Add_Experiment_Form(forms.ModelForm):
         model = ExperimentData
         fields = ("owner", "timestamp","category","short_name","full_name","methods","results")
 
+class Isolation_Form(forms.Form):
+    owner = forms.CharField(label='Owner',
+                            max_length=100,
+                            required=False,
+                            widget=forms.TextInput(attrs={'autofocus': 'autofocus',
+                                                          'autocomplete': 'off',
+                                                          'size': '100',
+                                                          'style': 'font-size: small',
+                                                          })
+                            )
+
+    location = forms.CharField(label='Location',
+                            max_length=100,
+                            required=False,
+                            widget=forms.TextInput(attrs={'autofocus': 'autofocus',
+                                                          'autocomplete': 'off',
+                                                          'size': '100',
+                                                          'style': 'font-size: small',
+                                                          })
+                            )
+
+    type = forms.CharField(label='Type',
+                            max_length=100,
+                            required=False,
+                            widget=forms.TextInput(attrs={'autofocus': 'autofocus',
+                                                          'autocomplete': 'off',
+                                                          'size': '100',
+                                                          'style': 'font-size: small',
+                                                          })
+                            )
+
+    timestamp = forms.DateField(label='Date of Experiment',
+                                    widget=forms.DateInput(attrs={'autofocus': 'autofocus',
+                                                                      'type': 'date'}))
+
+    class Meta:
+        model= IsolationData
+        fields = {'owner', 'location', 'type', 'timestamp'}
+
+
 class LinkForm(forms.Form):
     link = forms.CharField(label='URL',
                                       max_length=5000,
@@ -245,3 +285,8 @@ class Edit_ResearchForm(forms.ModelForm):
     class Meta:
         model = PhageData
         fields = ("phage_CPT_id", "phage_isolator_loc",)
+
+class Edit_IsolationDataForm(forms.ModelForm):
+    class Meta:
+        model = IsolationData
+        fields = ('owner', 'location', 'type', 'timestamp')

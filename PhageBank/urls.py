@@ -7,7 +7,6 @@ from PhageBank.core import views as core_views
 urlpatterns = [
     # Uncomment the next line to enable the admin:
     url(r'^$', core_views.new_index, name='index'),
-    url(r'^old_index/', core_views.index, name='old_index'),
     url(r'^welcome/', core_views.logged_in_index, name='index'),
     url(r'^add_phage/', core_views.add_phage, name='add_phage'),
     url(r'^home/', core_views.home, name='home'),
@@ -15,11 +14,8 @@ urlpatterns = [
     url(r'^mylogin/$', core_views.mylogin, name='mylogin'),
     url(r'^logout/$', auth_views.logout, {'next_page': 'login'}, name='logout'),
     url(r'^signup/$', core_views.signup, name='signup'),
-    url(r'^add/$', core_views.addphage, name='add'),
     url(r'^contact/$', core_views.contact, name='contact'),
-    url(r'^view/$', core_views.viewphages, name='view'),
     url(r'^view_phages/$', core_views.view_phages, name='view_phages'),
-    url(r'^phage/$', core_views.viewPhage, name='phage'),
     url(r'^view_phage/$', core_views.view_phage, name='phage'),
     url(r'^password_reset/$', auth_views.password_reset, name='password_reset'),
     url(r'^password_reset/done/$', auth_views.password_reset_done, name='password_reset_done'),
