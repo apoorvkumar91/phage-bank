@@ -14,6 +14,7 @@ class PhageData(models.Model):
     phage_all_links = models.CharField(max_length=5000, default='none')
     phage_lab =  models.CharField(max_length=30, default='A')
 
+
 class PreData(models.Model):
     testkey = models.ForeignKey(PhageData, related_name='PhageName')
     phagename = models.CharField(max_length=30, default='none')
