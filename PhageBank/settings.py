@@ -100,6 +100,15 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # Allow all host headers
 ALLOWED_HOSTS = ['*']
 
+#secure the cookies
+#this is only for now once in production
+#remove this
+if DEBUG:
+    SECURE_SSL_REDIRECT = False
+else:
+    SECURE_SSL_REDIRECT = True
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True
 
 # end - AK - more additions at the end of the file
 
@@ -110,14 +119,7 @@ DATABASES = {
     }
 }
 
-#DATABASES = {
-#    'default': dj_database_url.config()
-#    
-#}
-
-#DATABASES['default'] =  dj_database_url.config()
-#
-#DATABASES['default'].update(db_from_env)
+DATABASES['default'].update(db_from_env)
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
