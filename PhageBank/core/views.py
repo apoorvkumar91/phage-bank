@@ -36,6 +36,7 @@ def logged_in_index(request):
                                           })
 def mylogout(request):
     logout(request)
+    messages.success(request, 'You have successfully logged out.', extra_tags='alert')
     return render(request, 'new_index.html', {'login_status': request.user.is_authenticated(),
                                               'username': request.user.username
                                               })
@@ -387,7 +388,7 @@ def model_form_upload(request):
             paramFile = TextIOWrapper(request.FILES['file'].file, encoding=request.encoding)
             reader = csv.DictReader(paramFile,delimiter=';',skipinitialspace=True,)
             populate(reader, request)
-            return redirect('home')
+            return redirect('new_index')
     else:
         form = UploadFileForm()
     return render(request, 'model_form_upload.html', {'form': form})

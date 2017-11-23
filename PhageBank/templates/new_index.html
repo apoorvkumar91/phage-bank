@@ -45,8 +45,14 @@
             </ul>
         </div>
     </div>
-</nav>
 
+</nav>
+</br>
+<div class = "container">
+    {% include 'messages.html' %}
+        {% block content %}
+        {% endblock %}
+</div>
 
 <div class="modal fade" id="myModalSignup" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -174,7 +180,6 @@
 
 </div>
 <!-- /.container -->
-
 <!-- Footer -->
 <footer class="bg-maroon">
     <div class="container">
