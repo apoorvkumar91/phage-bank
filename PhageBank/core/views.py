@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -25,11 +25,6 @@ import datetime
 import sqlite3
 import pandas as pd
 
-def index(request):
-    return render(request, 'index.html',{'login_status': request.user.is_authenticated(),
-                                                'username': request.user.username
-                                                })
-
 def new_index(request):
     return render(request, 'new_index.html',{'login_status': request.user.is_authenticated(),
                                           'username': request.user.username
@@ -39,17 +34,14 @@ def logged_in_index(request):
     return render(request, 'logged_in_index.html',{'login_status': request.user.is_authenticated(),
                                                    'username': request.user.username
                                           })
-
+def mylogout(request):
+    logout(request)
+    return render(request, 'new_index.html', {'login_status': request.user.is_authenticated(),
+                                              'username': request.user.username
+                                              })
 @login_required
 def add_phage(request):
     return render(request, 'add_phage.html')
-
-@login_required
-def home(request):
-    return render(request, 'home.html', {'login_status': request.user.is_authenticated(),
-                                         'username': request.user.username
-                                                }
-                 )
 
 def signup(request):
     data = dict()
@@ -74,7 +66,6 @@ def signup(request):
 def mylogin(request):
     msg = dict()
     form = LoginForm()
-
     if request.method == 'POST':
         form = LoginForm(request.POST)
         username = request.POST['username']
@@ -227,6 +218,7 @@ def my_phages(request):
                                                })
 #this form shows all the phages
 def view_phages(request):
+
     query_results = PhageData.objects.all()
     return render(request, 'view_phages.html', {'query_results': query_results,
                                                 'edit_status':'false','add_status':'false',
