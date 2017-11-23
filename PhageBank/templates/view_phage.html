@@ -1,19 +1,6 @@
 {% extends "logged_in.html" %}
-
-
-
-
 {% block content %}
 
-<h2>Phage Details</h2>
- {#   <a href="{% url 'edit_details' name=item.phage_name %}"><u>(Edit the phage entry)</u></a>#}
-{#    <p><a href="{% url 'view' name=item.phage_name %}"><u>(Delete the phage entry)</u></a>#}
-    <button type="button" class="btn" data-toggle="modal" data-target="#myEditModal">
-        Edit Data
-    </button>
-    <button type="button" class="float-right btn btn-danger" data-toggle="modal" data-target="#myDeleteModal">
-        Delete
-    </button>
     {% if messages %}
     <ul class="messages">
         {% for message in messages %}
@@ -22,11 +9,8 @@
     </ul>
     {% endif %}
 
-    </p>
-<br>
-<br>
 
-<div class="modal fade" id="myDeleteModal">
+    <div class="modal fade" id="myDeleteModal">
   <div class="modal-dialog">
     <div class="modal-content">
 
@@ -51,7 +35,7 @@
   </div>
 </div>
 
-<div class="modal fade" id="myEditModal">
+    <div class="modal fade" id="myEditModal">
   <div class="modal-dialog">
     <div class="modal-content">
 
@@ -76,43 +60,122 @@
   </div>
 </div>
 
+    <body data-spy="scroll" data-target="#myScrollspy" data-offset="1">
+
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="well well-sm">
-                <div class="row">
-                    <div class="col-md-6">
-                        {% load staticfiles %}
-                        <img src="{% static 'images/phage.png' %}" alt="" class="img-rounded img-responsive" />
-                    </div>
-                    <div class="col-md-6">
-                        <p><span class="glyphicon glyphicon-leaf"></span><b>Phage Name:</b>  {{ item.phage_name }}</p>
-                        <p><b>Host Name:</b>  {{ item.phage_host_name }}</p>
-                        <p><b>Isolator Name:</b>  {{ item.phage_isolator_name }}</p>
-                        <p><b>Experimenter Name:</b>  {{ item.phage_experimenter_name }}</p>
-                        <p><b>CPT ID:</b>  {{ item.phage_CPT_id }}</p>
-                        <p><b>Isolator Location:</b>  {{ item.phage_isolator_loc }}</p>
-                        <p><b>URL:</b>  {{ item.phage_all_links }}</p>
-                        <p><b>Exp data: </b>
-                            {%for query in expdata %}
-                            {{  query.owner}}{{","}}
-                            {% endfor %}
-                        </p>
-                        <p><b>Previous names: </b>
-                            {%for query in previous_names %}
-                            {{  query.phagename}}{{","}}
-                            {% endfor %}
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="row">
+    <nav class="col-sm-3 col-4" id="myScrollspy">
+      <ul class="nav nav-pills flex-column">
+        <li class="nav-item">
+          <a class="nav-link active" href="#section1">Basic Details</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="#section3">Sequencing Information</a>
+        </li>
+          <li class="nav-item">
+          <a class="nav-link" href="#section42">Experimenter Data</a>
+        </li>
+          <li class="nav-item"><a class="nav-link"  href="#" data-toggle="modal" data-target="#myDeleteModal">Delete</a></li>
+        <li class="nav-item"><a class="nav-link"  href="#" data-toggle="modal" data-target="#myEditModal">Edit</a></li>
+      </ul>
+    </nav>
+    <div class="col-sm-9 col-8">
+ <div id="section1" class="container-fluid">
+      <h1>Phage Details:</h1>
+      <div class="row">
+                        <div class="col-md-6">
+                        <div id="demo" class="carousel slide" data-ride="carousel">
+
+  <!-- Indicators -->
+  <ul class="carousel-indicators">
+    <li data-target="#demo" data-slide-to="0" class="active"></li>
+    <li data-target="#demo" data-slide-to="1"></li>
+    <li data-target="#demo" data-slide-to="2"></li>
+  </ul>
+
+  <!-- The slideshow -->
+  <div class="carousel-inner">
+    <div class="carousel-item active" class="border">
+    {% load staticfiles %}
+    <img src="{% static 'images/phage.png' %}" alt="" width="1100" height="500" class="img-rounded img-responsive" />
+
     </div>
+    <div class="carousel-item">
+        {% load staticfiles %}
+        <img src="{% static 'images/phage.png' %}" alt="" width="1100" height="500" class="img-rounded img-responsive" />
+    </div>
+    <div class="carousel-item">
+        {% load staticfiles %}
+        <img src="{% static 'images/phage.png' %}" alt="" width="1100" height="500" class="img-rounded img-responsive" />
+    </div>
+  </div>
+
+  <!-- Left and right controls -->
+  <a class="carousel-control-prev" href="#demo" data-slide="prev">
+    <span class="carousel-control-prev-icon"></span>
+  </a>
+  <a class="carousel-control-next" href="#demo" data-slide="next">
+    <span class="carousel-control-next-icon"></span>
+  </a>
 </div>
+                        </div>
+                        <div class="col-md-6">
+                            <p><span class="glyphicon glyphicon-leaf"></span><b>Phage Name:</b>  {{ item.phage_name }}</p>
+                            <p><b>Host Name:</b>  {{ item.phage_host_name }}</p>
+                            <p><b>Isolator Name:</b>  {{ item.phage_isolator_name }}</p>
+                            <p><b>Experimenter Name:</b>  {{ item.phage_experimenter_name }}</p>
+                            <p><b>CPT ID:</b>  {{ item.phage_CPT_id }}</p>
+                            <p><b>Isolator Location:</b>  {{ item.phage_isolator_loc }}</p>
+                            <p><b>URL:</b>  {{ item.phage_all_links }}</p>
+                            <p><b>Previous names: </b>
+                                {%for query in previous_names %}
+                                {{  query.phagename}}{{","}}
+                                {% endfor %}
+                            </p>
+                        </div>
+                    </div>
+    </div>
+    <div id="section3" class="container-fluid ">
+      <h1>Sequencing Information for {{ item.phage_name }}</h1>
+        <table id="phageDetails" cellspacing="0" class="table table-striped">
+	<tbody>
+		<tr><td class="detailLabel">Sequencing Complete?</td><td class="detailValue">No</td></tr>
+		<tr><td class="detailLabel">Genome length (bp)</td><td class="detailValue">Unknown</td></tr>
+		<tr><td class="detailLabel">Character of genome ends</td><td class="detailValue">Unknown</td></tr>
+		<tr><td class="detailLabel">Fasta file available?</td><td class="detailValue">No</td></tr>
+	</tbody>
+	</table>
+    </div>
+    <div id="section42" class="container-fluid ">
+      <h1>Experimenter Data</h1>
+        <table id="phageDetails" cellspacing="0" class="table table-striped">
+	    <tbody>
+        {%for query in expdata %}
+		<tr><td class="detailLabel">Owner</td><td class="detailValue">{{query.owner}}</td></tr>
+		<tr><td class="detailLabel">Time Stamp</td><td class="detailValue">{{ query.timestamp }}</td></tr>
+		<tr><td class="detailLabel">catogeory</td><td class="detailValue">{{ query.category }}</td></tr>
+		<tr><td class="detailLabel">Full Name</td><td class="detailValue">{{ query.full_name }}</td></tr>
+        <tr><td class="detailLabel">Short Name</td><td class="detailValue">{{ query.short_name }}</td></tr>
+    <tr><td class="detailLabel">Methods</td><td class="detailValue">{{ query.methods }}</td></tr>
+    		<tr><td class="detailLabel">Results</td><td class="detailValue">{{ query.results }}</td></tr>
+        {%endfor %}
+	</tbody>
+
+	</table>
+    </div>
+    </div>
+  </div>
+</div>
+
+</body>
+
 
 {% endblock %}
 
-body{padding-top:20px;}
+body{padding-top:20px;
+position:relative;
+}
 
 .glyphicon {  margin-bottom: 10px;margin-right: 10px;}
 
@@ -121,7 +184,10 @@ display: block;
 line-height: 1.428571429;
 color: #999;
 }
-
+ul.nav-pills {
+      top: 20px;
+      position: fixed;
+  }
 
 
 
