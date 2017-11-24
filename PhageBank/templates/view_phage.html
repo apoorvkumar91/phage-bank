@@ -77,6 +77,10 @@
           <li class="nav-item">
           <a class="nav-link" href="#section42">Experimenter Data</a>
         </li>
+              </li>
+          <li class="nav-item">
+          <a class="nav-link" href="#IsolatorData">Isolator Data</a>
+        </li>
           {% if login_status %}
                         <li class="nav-item"><a class="nav-link"  href="#" data-toggle="modal" data-target="#myDeleteModal">Delete</a></li>
         <li class="nav-item"><a class="nav-link"  href="#" data-toggle="modal" data-target="#myEditModal">Edit</a></li>
@@ -95,26 +99,39 @@
 
   <!-- Indicators -->
   <ul class="carousel-indicators">
-    <li data-target="#demo" data-slide-to="0" class="active"></li>
-    <li data-target="#demo" data-slide-to="1"></li>
-    <li data-target="#demo" data-slide-to="2"></li>
+    {% if count %}
+
+    {% for x in dest_dir %}
+    <li data-target="#demo" data-slide-to=forloop.counter></li>
+
+      {% endfor %}
+  {% else %}
+         <li data-target="#demo" data-slide-to="0" class="active"></li>
+  {% endif %}
   </ul>
 
   <!-- The slideshow -->
   <div class="carousel-inner">
-    <div class="carousel-item active" class="border">
+  {% if count %}
+    {% for x in dest_dir %}
+        <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %}">
+            <img src="/media/images/{{ item.phage_name }}/{{ x }}" />
+            <div class="carousel-caption">
+                <h3>{{ item.phage_name }}</h3>
+            </div>
+        </div>
+    {% endfor %}
+  {% else%}
+   <div class="carousel-item active" class="border">
     {% load staticfiles %}
-    <img src="{% static 'images/phage.png' %}" alt="" width="1100" height="500" class="img-rounded img-responsive" />
+    <img src="{% static 'images/phage.png' %}" alt="Demo image" width="1100" height="500" class="img-rounded img-responsive" />
 
     </div>
     <div class="carousel-item">
         {% load staticfiles %}
-        <img src="{% static 'images/phage.png' %}" alt="" width="1100" height="500" class="img-rounded img-responsive" />
+        <img src="{% static 'images/phage.png' %}" alt="Demo image" width="1100" height="500" class="img-rounded img-responsive" />
     </div>
-    <div class="carousel-item">
-        {% load staticfiles %}
-        <img src="{% static 'images/phage.png' %}" alt="" width="1100" height="500" class="img-rounded img-responsive" />
-    </div>
+  {% endif %}
   </div>
 
   <!-- Left and right controls -->
@@ -170,10 +187,24 @@
 
 	</table>
     </div>
+
+      <div id="IsolatorData" class="container-fluid ">
+      <h1>Isolator Data</h1>
+        <table id="phageDetails" cellspacing="0" class="table table-striped">
+	    <tbody>
+        {%for query in isodata %}
+		<tr><td class="detailLabel">Owner</td><td class="detailValue">{{query.owner_name}}</td></tr>
+		<tr><td class="detailLabel">Time Stamp</td><td class="detailValue">{{ query.TimeStamp }}</td></tr>
+		<tr><td class="detailLabel">Location</td><td class="detailValue">{{ query.location }}</td></tr>
+		<tr><td class="detailLabel">Type</td><td class="detailValue">{{ query.type }}</td></tr>
+        {%endfor %}
+	</tbody>
+	</table>
     </div>
+
   </div>
 </div>
-
+</div>
 </body>
 
 
