@@ -23,50 +23,35 @@
 <body>
 
 <!-- Navigation -->
-<div class = "temp">
-<nav class="navbar navbar-expand-lg navbar-dark bg-maroon fixed-top">
+<div style="background-color: #fff8dc;" class = "temp">
+<nav class="navbar navbar-expand-lg navbar-dark bg-maroon fixed-top temp">
     <div class="container">
         <a class="navbar-brand" href="#"><h2>PhageBank</h2></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <button class = "btn btn-light js-create-signup" type="button" data-toggle="modal" data-target="#myModalSignup"> Register</button>
-                </li>
-                &nbsp;&nbsp;&nbsp;
-                <li class="nav-item">
-                    <button class = "btn btn-light js-create-login" type="button" data-toggle="modal" data-target="#myModalLogin"> Login</button>
-                </li>
-                &nbsp;&nbsp;&nbsp;
-                <li class="nav-item">
-                    <a class="nav-link text-light" href="#"><u style="font-size:smaller; color: #f9eff0;">Forgot Password?</u></a>
-                </li>
-            </ul>
-        </div>
-    </div>
 
-</nav>
-<nav class="navbar navbar-expand-lg navbar-dark bg-maroon">
-    <div class="container">
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
                     <a class="nav-link text-white" href="/welcome/" title="Home">Home
                     </a>
                 </li>&nbsp; &nbsp;
-
                 <li class="nav-item">
                     <a class="nav-link text-white" href="/view_phages/" title="View All Phages">View Phages</a>
                 </li>&nbsp; &nbsp;
-
             </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <button class = "nav-link btn btn-light js-create-signup" type="button" data-toggle="modal" data-target="#myModalSignup"> Register</button>
+                &nbsp;&nbsp;
+                <button class = "nav-link btn btn-light js-create-login" type="button" data-toggle="modal" data-target="#myModalLogin"> Login</button>
+                &nbsp;&nbsp;
+                <a class="nav-link text-light" href="#"><u style="font-size:smaller; color: #f9eff0;">Forgot Password?</u></a>
+            </form>
         </div>
     </div>
 </nav>
 </br>
-
 <div class="modal fade" id="myModalSignup" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
