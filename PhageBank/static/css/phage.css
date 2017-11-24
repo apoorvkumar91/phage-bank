@@ -5,9 +5,24 @@
  */
 
 body {
+ margin: 0;
+  padding: 0;
+  text-align: center;
+  /* this centers the container in IE 5* browsers. The text is then set to the left aligned default in the #container selector */
+  color: #212121;
+  background-color: #e0c1c4;
+  background: url('/static/images/wood.png') repeat;
   padding-top: 54px;
 }
-
+.temp{
+width: 60%;
+margin: 0 auto;
+align:center;
+text-align:left;
+}
+.page-content{
+background-color:#fff8dc;
+}
 @media (min-width: 992px) {
   body {
     padding-top: 56px;

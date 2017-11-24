@@ -40,10 +40,6 @@ def mylogout(request):
     return render(request, 'new_index.html', {'login_status': request.user.is_authenticated(),
                                               'username': request.user.username
                                               })
-@login_required
-def add_phage(request):
-    return render(request, 'add_phage.html')
-
 def signup(request):
     data = dict()
 
@@ -219,11 +215,6 @@ def add_phage(request):
                                                       'login_status': request.user.is_authenticated(),
                                                       'username': request.user.username,
                                                      })
-    else:
-        return render(request,'Login.html',
-                      {'login_status': request.user.is_authenticated()
-                       })
-
 #this form show the phages per user
 def my_phages(request):
     query_results = PhageData.objects.filter(phage_submitted_user=request.user.username)
@@ -437,7 +428,7 @@ def populate(reader, request):
             func(obj.phage_name)
 
 
-@user_passes_test(lambda u: u.is_superuser)
+@user_passes_test(lambda u: u.is_superuser, login_url='/admin/')
 def model_form_upload(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
