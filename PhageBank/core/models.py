@@ -21,7 +21,7 @@ class PreData(models.Model):
 class ExperimentData(models.Model):
     expkey = models.ForeignKey(PhageData, related_name='PName')
     owner = models.CharField(max_length=100, default='none')
-    timestamp = models.DateTimeField(default=datetime.now)
+    timestamp = models.DateField(null=True)
     category = models.CharField(max_length=100, default='none')
     short_name = models.CharField(max_length=100, default='none')
     full_name = models.CharField(max_length=5000, default='none')
@@ -30,9 +30,9 @@ class ExperimentData(models.Model):
 
 class IsolationData(models.Model):
     isokey = models.ForeignKey(PhageData, related_name='iso_phageName')
-    owner = models.CharField(max_length=100, default='none')
+    owner_name = models.CharField(max_length=100, default='none')
     location = models.CharField(max_length=100, default='none')
-    timestamp = models.DateField(null=True)
+    TimeStamp = models.DateField(null=True)
     type = models.CharField(max_length=100, default='none')
 
 

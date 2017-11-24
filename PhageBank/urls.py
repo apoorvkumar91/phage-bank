@@ -2,7 +2,8 @@ from django.conf.urls import url, include
 from django.contrib.auth import views as auth_views
 from django.contrib import admin
 from PhageBank.core import views as core_views
-
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     # Uncomment the next line to enable the admin:
@@ -26,4 +27,4 @@ urlpatterns = [
     url(r'^delete/$', core_views.deletephages, name='view'),
     url(r'^my_phages/$', core_views.my_phages, name='my_phages'),
 
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

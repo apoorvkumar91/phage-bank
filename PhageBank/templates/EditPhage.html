@@ -91,6 +91,41 @@
             </div>
         </div>
     </div>
+    <div class="card">
+        <div class="card-header">
+            <a class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#add_exp">
+                Experiment
+            </a>
+        </div>
+        <div id="add_exp" class="collapse">
+            <div class="card-body">
+                {% for field in expform %}
+                <div class="form-group{% if field.errors %} has-error{% endif %}">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {% if field.name == 'owner'%}
+                    {% render_field field class="form-control" value=exp.owner%}
+                    {% elif field.name == 'category'%}
+                    {% render_field field class="form-control" value=exp.category%}
+                    {% elif field.name == 'timestamp'%}
+                    {% render_field field class="form-control" value=exp.timestamp%}
+                    {% elif field.name == 'short_name'%}
+                    {% render_field field class="form-control" value=exp.short_name%}
+                    {% elif field.name == 'full_name'%}
+                    {% render_field field class="form-control" value=exp.full_name%}
+                    {% elif field.name == 'methods'%}
+                    {% render_field field class="form-control" value=exp.methods%}
+                    {% elif field.name == 'results'%}
+                    {% render_field field class="form-control" value=exp.results%}
+                    {% endif %}
+                    {% for error in field.errors %}
+                    <p class="help-block">{{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
 <div class="card">
         <div class="card-header">
             <a class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#add_iso">
@@ -102,14 +137,12 @@
                 {% for field in isoform %}
                 <div class="form-group{% if field.errors %} has-error{% endif %}">
                     <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                    {% if field.name == 'owner'%}
-                    {% render_field field class="form-control" value=iso.owner%}
-
+                    {% if field.name == 'owner_name'%}
+                    {% render_field field class="form-control" value=iso.owner_name%}
                     {% elif field.name == 'location'%}
                     {% render_field field class="form-control" value=iso.location%}
-
-                    {% elif field.name == 'timestamp'%}
-                    {% render_field field class="form-control" value=iso.timestamp%}
+                    {% elif field.name == 'TimeStamp'%}
+                    {% render_field field class="form-control" value=iso.TimeStamp%}
                     {% elif field.name == 'type'%}
                     {% render_field field class="form-control" value=iso.type%}
                     {% endif %}
