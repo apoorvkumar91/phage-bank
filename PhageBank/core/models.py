@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 from django.db import models
-from datetime import datetime
+from datetime import datetime,date
 
 class PhageData(models.Model):
     phage_name = models.CharField(max_length=30, default='none')
@@ -13,7 +13,6 @@ class PhageData(models.Model):
     phage_submitted_date = models.DateTimeField(default=datetime.now, blank=True)
     phage_all_links = models.CharField(max_length=5000, default='none')
     phage_lab =  models.CharField(max_length=30, default='A')
-
 
 class PreData(models.Model):
     testkey = models.ForeignKey(PhageData, related_name='PhageName')
@@ -33,7 +32,7 @@ class IsolationData(models.Model):
     isokey = models.ForeignKey(PhageData, related_name='iso_phageName')
     owner = models.CharField(max_length=100, default='none')
     location = models.CharField(max_length=100, default='none')
-    timestamp = models.DateTimeField(default=datetime.now)
+    timestamp = models.DateField(null=True)
     type = models.CharField(max_length=100, default='none')
 
 

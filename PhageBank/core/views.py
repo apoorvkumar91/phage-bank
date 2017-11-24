@@ -115,6 +115,14 @@ def fillIsoltionObject(isoform, phage):
     iso.timestamp = isoform.cleaned_data.get('timestamp')
     iso.save()
 
+def fillIsoltionObjectedit(isoform, iso):
+
+    iso.owner = isoform.cleaned_data.get('owner')
+    iso.location = isoform.cleaned_data.get('location')
+    iso.type = isoform.cleaned_data.get('type')
+    iso.timestamp = isoform.cleaned_data.get('timestamp')
+    iso.save()
+
 @login_required
 def add_phage(request):
     if request.user.is_authenticated():
@@ -138,7 +146,8 @@ def add_phage(request):
                 phage.phage_isolator_name = rrform.cleaned_data.get('phage_isolator_name')
                 phage.phage_experimenter_name = rrform.cleaned_data.get('phage_experimenter_name')
                 phage.phage_submitted_user = request.user.username
-                print(request.user.username)
+                phage.phage_lab = rrform.cleaned_data.get('phage_lab')
+                print(phage.phage_lab)
                 phage.save()
 
                 fillExpObject(expform, phage)
@@ -233,7 +242,8 @@ def view_phage(request):
     phage = PhageData.objects.get(phage_name=phageName)
     previous_names = phage.PhageName.all()
     expdata = phage.PName.all()
-    return render(request, 'view_phage.html', {'item': phage,'previous_names':previous_names,'expdata':expdata,
+    isodata = phage.iso_phageName.all()
+    return render(request, 'view_phage.html', {'item': phage,'previous_names':previous_names,'expdata':expdata,'isodata':isodata,
                                               'login_status': request.user.is_authenticated(),
                                               'username': request.user.username
                                               })
@@ -267,14 +277,17 @@ def editPhage(request):
     if request.user.is_authenticated():
         name = request.GET.get('name')
         phage = PhageData.objects.get(phage_name = name)
-        print(phage.phage_isolator_name)
+        isodata = IsolationData.objects.filter(isokey = phage)
+        last = isodata.earliest('owner')
+        print(last.owner)
         pform = Edit_Phage_DataForm(request.POST, instance=phage, initial = {'phage_name':phage.phage_name })
         rrform = Edit_ResearcherForm(request.POST, instance=phage)
         rform = Edit_ResearchForm(request.POST, instance=phage)
+        isoform = Edit_IsolationDataForm(request.POST)
         aform = AForm(request.POST, request.FILES)
         aiform = AIForm(request.POST)
         if request.method=="POST":
-            if pform.is_valid() and rrform.is_valid() and rform.is_valid() and aform.is_valid() and aiform.is_valid():
+            if pform.is_valid() and rrform.is_valid() and rform.is_valid() and aform.is_valid() and aiform.is_valid() and isoform.is_valid():
                 phage.phage_name = pform.cleaned_data.get('phage_name')
                 if(name!=phage.phage_name and PreData.objects.filter(phagename = name).count()==0):
                     obj = PreData.objects.create(testkey=phage)
@@ -289,8 +302,13 @@ def editPhage(request):
                 phage.phage_CPT_id = rform.cleaned_data.get('phage_CPT_id')
                 phage.phage_isolator_loc = rform.cleaned_data.get('phage_isolator_loc')
                 phage.phage_all_links = aiform.cleaned_data.get('link')
+                phage.phage_lab = rrform.cleaned_data.get('phage_lab')
+                print(phage.phage_lab)
+                #isolator_data = phage.iso_phageName.objects.latest(iso_phageName)
                 pform.save()
                 phage.save()
+                #last.delete()
+                fillIsoltionObjectedit(isoform, last)
                 phagedoc = aform.cleaned_data.get('doc')
                 phageimage = aform.cleaned_data.get('image')
                 dest_dir_old = os.path.join(settings.MEDIA_ROOT, "images", name)
@@ -326,6 +344,7 @@ def editPhage(request):
                                                           'rform': rform,
                                                           'aform': aform,
                                                           'aiform': aiform,
+                                                          'isoform':isoform,'iso':last,
                                                           'login_status': request.user.is_authenticated(),
                                                           'username': request.user.username,
                                                          })
@@ -333,6 +352,7 @@ def editPhage(request):
             pform = Edit_Phage_DataForm(request.POST, instance=phage)
             rrform = Edit_ResearcherForm(request.POST, instance=phage)
             rform = Edit_ResearchForm(request.POST, instance=phage)
+            isoform = Edit_IsolationDataForm(request.POST)
             aform = AForm()
             aiform = AIForm()
             return render(request, 'EditPhage.html', {'item': phage,
@@ -340,7 +360,7 @@ def editPhage(request):
                                                       'rrform': rrform,
                                                       'rform': rform,
                                                       'aform': aform,
-                                                      'aiform': aiform,
+                                                      'aiform': aiform, 'isoform' : isoform,'iso':last,
                                                       'login_status': request.user.is_authenticated(),
                                                       'username': request.user.username,
                                                      })

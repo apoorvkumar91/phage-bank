@@ -77,6 +77,10 @@
           <li class="nav-item">
           <a class="nav-link" href="#section42">Experimenter Data</a>
         </li>
+              </li>
+          <li class="nav-item">
+          <a class="nav-link" href="#IsolatorData">Isolator Data</a>
+        </li>
           {% if login_status %}
                         <li class="nav-item"><a class="nav-link"  href="#" data-toggle="modal" data-target="#myDeleteModal">Delete</a></li>
         <li class="nav-item"><a class="nav-link"  href="#" data-toggle="modal" data-target="#myEditModal">Edit</a></li>
@@ -170,10 +174,24 @@
 
 	</table>
     </div>
+
+      <div id="IsolatorData" class="container-fluid ">
+      <h1>Isolator Data</h1>
+        <table id="phageDetails" cellspacing="0" class="table table-striped">
+	    <tbody>
+        {%for query in isodata %}
+		<tr><td class="detailLabel">Owner</td><td class="detailValue">{{query.owner}}</td></tr>
+		<tr><td class="detailLabel">Time Stamp</td><td class="detailValue">{{ query.timestamp }}</td></tr>
+		<tr><td class="detailLabel">Location</td><td class="detailValue">{{ query.location }}</td></tr>
+		<tr><td class="detailLabel">Type</td><td class="detailValue">{{ query.type }}</td></tr>
+        {%endfor %}
+	</tbody>
+	</table>
     </div>
+
   </div>
 </div>
-
+</div>
 </body>
 
 
