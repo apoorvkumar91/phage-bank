@@ -174,7 +174,9 @@ def add_phage(request):
                 else:
                     handle_uploaded_file(phagedoc, docsdest)
                 query_results = PhageData.objects.all()
-                return render(request, 'view_phages.html', {'add_status':'true','query_results':query_results}  )
+                return render(request, 'view_phages.html', {'add_status':'true','query_results':query_results ,
+                                                            'login_status': request.user.is_authenticated(),
+                                                            'username': request.user.username})
             else:
                 pform = Add_Phage_DataForm()
                 rrform = Add_ResearcherForm()
