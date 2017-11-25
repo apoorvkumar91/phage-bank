@@ -11,12 +11,20 @@
     <title>PhageBank</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
-	<meta name="viewport" content = "width=device-width, initial-scale=1.0">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
+          integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
+            integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"
+            integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"
+            crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Custom styles for this template -->
     {% load staticfiles %}
     <link href="{% static 'css/phage.css' %}" rel="stylesheet">
@@ -25,207 +33,76 @@
 
 <body>
 <div style="background-color:#fff8dc;" class="temp">
-<!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-maroon fixed-top temp">
-    <div class="container">
-        <a class="navbar-brand" href="#"><h2>PhageBank</h2></a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-maroon fixed-top temp">
+        <div class="container">
+            <a class="navbar-brand" href="#"><h2>PhageBank</h2></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                    aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link text-white" href="/" title="Home">Home
-                    </a>
-                </li>&nbsp; &nbsp;
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="/add_phage/" title="Add New Phage">Add</a>
-                </li>&nbsp; &nbsp;
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="/view_phages/" title="View All Phages">View</a>
-                </li>&nbsp; &nbsp;
-                <li class="nav-item">
-                    {% if request.user.is_superuser %}
-                        <a class="nav-link text-white" href="/uploads/form/" title="Bulk Upload using Spreadsheet">Bulk Upload</a>
-                    {% endif %}
-                </li>
-            </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <div class="dropdown">
-                <a class="pull-right text-white dropdown-toggle" data-toggle="dropdown" title="User Profile">Welcome {{ username }}<i class="fa fa-2x fa-fw fa-user"></i></a>
-                <ul class ="dropdown-menu" role="menu" aria-labelledby="menu1">
-                    <li><a href="/my_phages/"class="btn btn-md">My Phages</a></li>
-                    <li><a href="#" class="btn btn-md">Edit Profile</a></li>
-                    <li><a href="/logout" class="btn btn-md">Log Out</a></li>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link text-white" href="/" title="Home">Home
+                        </a>
+                    </li>&nbsp; &nbsp;
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="/add_phage/" title="Add New Phage">Add</a>
+                    </li>&nbsp; &nbsp;
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="/view_phages/" title="View All Phages">View</a>
+                    </li>&nbsp; &nbsp;
+                    <li class="nav-item">
+                        {% if request.user.is_superuser %}
+                        <a class="nav-link text-white" href="/uploads/form/" title="Bulk Upload using Spreadsheet">Bulk
+                            Upload</a>
+                        {% endif %}
+                    </li>
                 </ul>
-                </div>
-            </form>
-        </div>
-    </div>
-</nav>
-
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class = "modal-header">
-                <ul class="nav nav-tabs">
-                    <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#signin">Login</a></li>
-                    <li class = "nav-item"><a class="nav-link" data-toggle="tab" href="#signup">Register</a></li>
-                </ul>
-            </div>
-
-            <div class="modal-body">
-                <div id="myTabContent" class="tab-content">
-                    <div class="tab-pane active container show" id="signin">
-                        <form class="form-horizontal">
-                            <fieldset>
-                                <div class="control-group">
-                                    <label class="control-label" for="userid">Email:</label>
-                                    <div class="controls">
-                                        <input required="" name="userid" type="text" class="form-control" placeholder="Enter your Email" class="input-medium" required="">
-                                    </div>
-                                </div>
-
-                                <!-- Password input-->
-                                <div class="control-group">
-                                    <label class="control-label" for="passwordinput">Password:</label>
-                                    <div class="controls">
-                                        <input required="" id="passwordinput" name="passwordinput" class="form-control" type="password" placeholder="********" class="input-medium">
-                                    </div>
-                                </div>
-
-                                <!-- Multiple Checkboxes (inline) -->
-                                <div class="control-group">
-                                    <label class="control-label" for="rememberme"></label>
-                                    <div class="controls">
-                                        <label class="checkbox inline" for="rememberme-0">
-                                            <input type="checkbox" name="rememberme" id="rememberme-0" value="Remember me">
-                                            Remember me
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <!-- Button -->
-                                <div class="control-group">
-                                    <label class="control-label" for="signin"></label>
-                                    <div class="controls">
-                                        <button name="signin" class="btn btn-success">Sign In</button>
-                                    </div>
-                                </div>
-                            </fieldset>
-                        </form>
+                <form class="form-inline my-2 my-lg-0">
+                    <div class="dropdown">
+                        <a class="pull-right text-white dropdown-toggle" data-toggle="dropdown"
+                           title="User Profile">Welcome {{ username }}<i class="fa fa-2x fa-fw fa-user"></i></a>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                            <li><a href="/my_phages/" class="btn btn-md">My Phages</a></li>
+                            <li><a href="#" class="btn btn-md">Edit Profile</a></li>
+                            <li><a href="/logout" class="btn btn-md">Log Out</a></li>
+                        </ul>
                     </div>
-                    <div class="tab-pane fade container" id="signup">
-                        <form class="form-horizontal">
-                            <fieldset>
-                                <!-- Sign Up Form -->
-                                <!-- Text input-->
-                                <div class="control-group">
-                                    <label class="control-label" for="Email">Email:</label>
-                                    <div class="controls">
-                                        <input id="Email" name="Email" class="form-control" type="text" placeholder="user@example.com" class="input-large" required="">
-                                    </div>
-                                </div>
-
-                                <!-- Text input-->
-                                <div class="control-group">
-                                    <label class="control-label" for="username">Username:</label>
-                                    <div class="controls">
-                                        <input name="username" class="form-control" type="text" placeholder="Username" class="input-large" required="">
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <label class="control-label" for="FirstName">Firstname:</label>
-                                    <div class="controls">
-                                        <input name="FirstName" class="form-control" type="text" placeholder="Firstname" class="input-large" required="">
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <label class="control-label" for="LastName">Lastname:</label>
-                                    <div class="controls">
-                                        <input name="LastName" class="form-control" type="text" placeholder="Lastname" class="input-large" required="">
-                                    </div>
-                                </div>
-                                <!-- Password input-->
-                                <div class="control-group">
-                                    <label class="control-label" for="password">Password:</label>
-                                    <div class="controls">
-                                        <input id="password" name="password" class="form-control" type="password" placeholder="********" class="input-large" required="">
-                                        <em>1-8 Characters</em>
-                                    </div>
-                                </div>
-
-                                <!-- Text input-->
-                                <div class="control-group">
-                                    <label class="control-label" for="reenterpassword">Re-Enter Password:</label>
-                                    <div class="controls">
-                                        <input id="reenterpassword" class="form-control" name="reenterpassword" type="password" placeholder="********" class="input-large" required="">
-                                    </div>
-                                </div>
-
-                                <!-- Multiple Radios (inline) -->
-                                <br>
-                                <div class="control-group">
-                                    <label class="control-label" for="humancheck">Humanity Check:</label>
-                                    <div class="controls">
-                                        <label class="radio inline" for="humancheck-0">
-                                            <input type="radio" name="humancheck" id="humancheck-0" value="robot" checked="checked">I'm a Robot</label>
-                                        <label class="radio inline" for="humancheck-1">
-                                            <input type="radio" name="humancheck" id="humancheck-1" value="human">I'm Human</label>
-                                    </div>
-                                </div>
-
-                                <!-- Button -->
-                                <div class="control-group">
-                                    <label class="control-label" for="confirmsignup"></label>
-                                    <div class="controls">
-                                        <button id="confirmsignup" name="confirmsignup" class="btn btn-success">Sign Up</button>
-                                    </div>
-                                </div>
-                            </fieldset>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <center>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </center>
+                </form>
             </div>
         </div>
-    </div>
-</div>
-<br>
+    </nav>
+    <br>
 
-<!-- Page Content -->
-<div class="container" style="">
-    {% block content %}
-    {% endblock %}
-
-
-</div>
-<!-- /.container -->
-
-<!-- Footer -->
-<footer class="bg-maroon">
-    <div class="container">
-        <p class="text-white float-left">PhageBank &copy; Centre for Phage Technology</p>
-        <div class="d-inline-block float-right">
-            <a href="https://www.facebook.com/" class="text-center text-white">
-                <i class="fa fa-2x fa-fw fa-facebook"></i></a>&nbsp;&nbsp;&nbsp;
-            <a href="https://twitter.com/" class="text-white">
-                <i class="fa fa-2x fa-fw fa-twitter"></i></a>&nbsp;&nbsp;&nbsp;
-            <a href="https://www.linkedin.com/company/" class="text-white">
-                <i class="fa fa-2x fa-fw fa-linkedin"></i></a>&nbsp;&nbsp;&nbsp;
-            <a href="https://plus.google.com/discover" class="text-white">
-                <i class="fa fa-2x fa-fw fa-google-plus"></i></a>
-        </div>
+    <!-- Page Content -->
+    <div class="container page-content" >
+        {% block content %}
+        {% endblock %}
     </div>
     <!-- /.container -->
-</footer>
 
-<!-- Bootstrap core JavaScript -->
+    <!-- Footer -->
+    <footer class="bg-maroon temp">
+        <div class="container">
+            <p class="text-white float-left">PhageBank &copy; Centre for Phage Technology</p>
+            <div class="d-inline-block float-right">
+                <a href="https://www.facebook.com/" class="text-center text-white">
+                    <i class="fa fa-2x fa-fw fa-facebook"></i></a>&nbsp;&nbsp;&nbsp;
+                <a href="https://twitter.com/" class="text-white">
+                    <i class="fa fa-2x fa-fw fa-twitter"></i></a>&nbsp;&nbsp;&nbsp;
+                <a href="https://www.linkedin.com/company/" class="text-white">
+                    <i class="fa fa-2x fa-fw fa-linkedin"></i></a>&nbsp;&nbsp;&nbsp;
+                <a href="https://plus.google.com/discover" class="text-white">
+                    <i class="fa fa-2x fa-fw fa-google-plus"></i></a>
+            </div>
+        </div>
+        <!-- /.container -->
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
 </div>
 </body>
 
