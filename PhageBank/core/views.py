@@ -25,7 +25,7 @@ import datetime
 import sqlite3
 import pandas as pd
 
-                                    
+
 def logged_in_index(request):
     return render(request, 'logged_in_index.html',{'login_status': request.user.is_authenticated(),
                                                    'username': request.user.username
@@ -344,7 +344,9 @@ def editPhage(request):
                 else:
                     handle_uploaded_file(phagedoc, docsdest)
                 query_results = PhageData.objects.all()
-                return render(request, 'view_phages.html', {'edit_status':'true','query_results':query_results}  )
+                return render(request, 'view_phages.html', {'edit_status':'true','query_results':query_results,
+                                                            'login_status': request.user.is_authenticated(),
+                                                            'username': request.user.username}  )
             else:
                 phage = PhageData.objects.get(phage_name=name)
                 print (phage.phage_host_name)
