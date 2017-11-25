@@ -25,11 +25,7 @@ import datetime
 import sqlite3
 import pandas as pd
 
-def new_index(request):
-    return render(request, 'new_index.html',{'login_status': request.user.is_authenticated(),
-                                          'username': request.user.username
-                                          })
-
+                                    
 def logged_in_index(request):
     return render(request, 'logged_in_index.html',{'login_status': request.user.is_authenticated(),
                                                    'username': request.user.username
@@ -37,7 +33,7 @@ def logged_in_index(request):
 def mylogout(request):
     logout(request)
     messages.success(request, 'You have successfully logged out.', extra_tags='alert')
-    return render(request, 'new_index.html', {'login_status': request.user.is_authenticated(),
+    return render(request, 'logged_in_index.html', {'login_status': request.user.is_authenticated(),
                                               'username': request.user.username
                                               })
 def signup(request):

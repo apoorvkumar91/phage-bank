@@ -7,8 +7,8 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     # Uncomment the next line to enable the admin:
-    url(r'^$', core_views.new_index, name='index'),
-    url(r'^welcome/', core_views.logged_in_index, name='index'),
+    # url(r'^$', core_views.new_index, name='index'),
+    url(r'^$', core_views.logged_in_index, name='index'),
     url(r'^add_phage/', core_views.add_phage, name='add_phage'),
     url(r'^admin/', admin.site.urls),
     url(r'^mylogin/$', core_views.mylogin, name='mylogin'),
