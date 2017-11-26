@@ -7,7 +7,7 @@
 <br>
   <form method="get">
     <div class="well">
-      <h4 style="margin-top: 0">Advanced Search </h4>
+      <h3 style="margin-top: 0">Advanced Search </h3>
       <br>
       <div class="row">
         <div class="form-group col-sm-4 col-md-3">
@@ -26,19 +26,31 @@
           {{ filter.form.phage_experimenter_name.label_tag }}
           {% render_field filter.form.phage_experimenter_name class="form-control" %}
         </div>
-        <div class="form-group col-sm-4 col-md-3">
-          {{ filter.form.phage_submitted_date.label_tag }}
-          {% render_field filter.form.phage_submitted_date class="form-control" %}
+      </div>
+      <br>
+      <div class="row">
+        <div class="col">
+        <br>
+        <h4 style="margin-top: 0; text-align:center; ">Based on Submission Date </h4>
+        <br>
         </div>
-        <div class="form-group col-sm-8 col-md-6">
-          {{ filter.form.group.label_tag }}
-          <div>
-            {% for choice in filter.form.groups %}
-              <label class="checkbox-inline">
-                {{ choice.tag }} {{ choice.choice_label }}
-              </label>
-            {% endfor %}
-          </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.submitted_year_gt.label_tag }}
+          {% render_field filter.form.submitted_year_gt class="form-control" %}
+        </div>
+        <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.submitted_month_gt.label_tag }}
+          {% render_field filter.form.submitted_month_gt class="form-control" %}
+        </div>
+        <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.submitted_year_lt.label_tag }}
+          {% render_field filter.form.submitted_year_lt class="form-control" %}
+        </div>
+        <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.submitted_month_lt.label_tag }}
+          {% render_field filter.form.submitted_month_lt class="form-control" %}
         </div>
       </div>
       <button type="submit" class="btn btn-primary">
@@ -79,21 +91,3 @@
 {% endblock %}
 
 
-
-<!--
-
-
-
-
-  <form method="get">
-    {{ filter.form.as_p }}
-    <button type="submit">Search</button>
-  </form>
-  <ul>
-  {% for phage in filter.qs %}
-    <li>{{ phage.phage_name }} - {{ phage.phage_host_name }}</li>
-  {% endfor %}
-  </ul>
-
-
--->
