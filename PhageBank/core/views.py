@@ -153,8 +153,9 @@ def add_phage(request):
                 #duplicatePhagesCPTid : list of CPT ids due to duplicates in phage names
                 #duplicateCPTidPhages : list of phages due to duplicates in CPT ids
                 #duplicateCPTidCPTid : list of duplicate CPT ids
-                
-                chkDuplicatesFlag = int(request.POST['flag'])
+
+                chkDuplicatesFlag = 0
+                #chkDuplicatesFlag = int(request.POST['flag'])
                 
                 msg = dict()
                 
