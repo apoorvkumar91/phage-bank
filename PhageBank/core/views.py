@@ -155,7 +155,7 @@ def add_phage(request):
                 #duplicateCPTidCPTid : list of duplicate CPT ids
 
                 chkDuplicatesFlag = 0
-                #chkDuplicatesFlag = int(request.POST['flag'])
+                chkDuplicatesFlag = int(request.POST['flag'])
                 
                 msg = dict()
                 
@@ -270,7 +270,8 @@ def my_phages(request):
                                                })
 #this form shows all the phages
 def view_phages(request):
-
+    #phage = PhageData.objects.all().delete()
+    #query_results = PhageData.objects.all()
     query_results = PhageData.objects.all()
     return render(request, 'view_phages.html', {'query_results': query_results,
                                                 'edit_status':'false','add_status':'false',
@@ -288,13 +289,16 @@ def view_phage(request):
     dest_dir = os.path.join(settings.MEDIA_ROOT, "images", phageName)
     list_path=[]
     count = 0;
-    for filename in os.listdir(dest_dir):
-        if filename.endswith(".png") or filename.endswith(".jpg") or filename.endswith(".jpeg"):
-            list_path.append(filename)
-            count=count+1;
-            continue
-        else:
-            continue
+    try:
+        for filename in os.listdir(dest_dir):
+            if filename.endswith(".png") or filename.endswith(".jpg") or filename.endswith(".jpeg"):
+                list_path.append(filename)
+                count=count+1;
+                continue
+            else:
+                continue
+    except:
+        pass
     print(list_path)
     return render(request, 'view_phage.html', {'item': phage,'previous_names':previous_names,'expdata':expdata,'isodata':isodata,
                                               'login_status': request.user.is_authenticated(),'dest_dir':list_path,'count':count,
@@ -329,7 +333,10 @@ def deletephages(request):
 def search_phage(request):
     phage_list = PhageData.objects.all()
     phage_filter = PhageFilter(request.GET, queryset=phage_list)
-    return render(request, 'search_phage.html', {'filter': phage_filter})
+    return render(request, 'search_phage.html', {'filter': phage_filter,
+                                                 'login_status': request.user.is_authenticated(),
+                                                 'username': request.user.username,
+                                                 })
 
 
 @login_required

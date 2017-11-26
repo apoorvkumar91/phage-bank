@@ -105,8 +105,8 @@ class Add_ResearcherForm(forms.ModelForm):
 class Add_ResearchForm(forms.ModelForm):
     phage_CPT_id = forms.CharField(label='CPT id',
                                    max_length=30,
-                                   required=False,
-                                   help_text='Optional.',
+                                   required=True,
+                                   help_text='Required.',
                                    widget=forms.TextInput(attrs={'autofocus': 'autofocus',
                                                                  'autocomplete': 'off',
                                                                  'size': '100',
@@ -235,7 +235,7 @@ class Isolation_Form(forms.Form):
 
     class Meta:
         model= IsolationData
-        fields = {'owner_name', 'location', 'type', 'timestamp'}
+        fields = {'owner_name', 'location', 'type1', 'timestamp'}
 
 
 class LinkForm(forms.Form):
