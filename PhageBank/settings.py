@@ -124,7 +124,7 @@ DATABASES = {
 DATABASES['default'].update(db_from_env)
 EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
 
-SENDGRID_API_KEY ="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"
+SENDGRID_API_KEY ="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"
 SENDGRID_SANDBOX_MODE_IN_DEBUG = False
 
 # Internationalization
