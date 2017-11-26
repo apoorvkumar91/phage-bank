@@ -243,7 +243,7 @@ def view_phage(request):
     list_path=[]
     count = 0;
     for filename in os.listdir(dest_dir):
-        if filename.endswith(".png") or filename.endswith(".jpg"):
+        if filename.endswith(".png") or filename.endswith(".jpg") or filename.endswith(".jpeg"):
             list_path.append(filename)
             count=count+1;
             continue
@@ -401,31 +401,73 @@ def populate(reader, request):
     for row in reader:
         flag = 0
         obj = PhageData.objects.create()
+        iso = IsolationData.objects.create(isokey = obj)
+        exp = ExperimentData.objects.create(expkey = obj)
         if 'phage_name' in fields:
-            obj.phage_name = row['phage_name']
+            name = row['phage_name']
+            if not name:
+                flag = 0
+            elif(PhageData.objects.filter(phage_name=name).count() == 0 and PreData.objects.filter(phagename=name).count() == 0):
+                obj.phage_name = name
+            else:
+                obj.delete()
+                exp.delete()
+                iso.delete()
+                if (PhageData.objects.filter(phage_name=name).count() > 0):
+                    obj = PhageData.objects.get(phage_name=name)
+                else:
+                    obj1 = PreData.objects.get(phagename=name)
+                    obj = obj1.testkey
+
+                isodata = IsolationData.objects.filter(isokey=obj)
+                expdata = ExperimentData.objects.filter(expkey=obj)
+                iso = isodata.latest('id')
+                exp = expdata.latest('id')
             flag = 1
         if 'phage_host_name' in fields:
             obj.phage_host_name = row['phage_host_name']
-            flag = 1
         if 'phage_isolator_name' in fields:
             obj.phage_isolator_name = row['phage_isolator_name']
-            flag = 1
         if 'phage_experimenter_name' in fields:
             obj.phage_experimenter_name = row['phage_experimenter_name']
-            flag = 1
         if 'phage_CPT_id' in fields:
             obj.phage_CPT_id = row['phage_CPT_id']
-            flag = 1
         if 'phage_isolator_loc' in fields:
-            flag = 1
             obj.phage_isolator_loc = row['phage_isolator_loc']
+        if 'owner_name' in fields:
+            iso.owner_name = row['owner_name']
+        if 'location' in fields:
+            iso.location = row['location']
+        if 'type' in fields:
+            iso.type = row['type']
+        if 'TimeStamp' in fields:
+            iso.TimeStamp = row['TimeStamp']
+        if 'owner' in fields:
+            exp.owner = row['owner']
+        if 'timestamp' in fields:
+            exp.timestamp = row['timestamp']
+        if 'methods' in fields:
+            exp.methods = row['methods']
+        if 'results' in fields:
+            exp.results = row['results']
+        if 'short_name' in fields:
+            exp.short_name = row['short_name']
+        if 'full_name' in fields:
+            exp.full_name = row['full_name']
+        if 'category' in fields:
+            exp.category = row['category']
         obj.phage_submitted_user = request.user.username
 
         if flag == 0:
             obj.delete()
+            exp.delete()
+            iso.delete()
         else:
             obj.save()
             func(obj.phage_name)
+            iso.save()
+            exp.save()
+
 
 
 @user_passes_test(lambda u: u.is_superuser, login_url='/admin/')
