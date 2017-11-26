@@ -17,6 +17,7 @@ urlpatterns = [
     url(r'^contact/$', core_views.contact, name='contact'),
     url(r'^view_phages/$', core_views.view_phages, name='view_phages'),
     url(r'^view_phage/$', core_views.view_phage, name='phage'),
+    url(r'^search_phage/$', core_views.search_phage, name='search_phage'),
     url(r'^password_reset/$', auth_views.password_reset, name='password_reset'),
     url(r'^password_reset/done/$', auth_views.password_reset_done, name='password_reset_done'),
     url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',

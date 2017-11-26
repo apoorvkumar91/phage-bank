@@ -16,6 +16,7 @@ django-sendgrid-v5==0.6.84
 django-sslserver==0.20
 django-taggit==0.22.1
 django-widget-tweaks==1.4.1
+django-filters
 Faker==0.8.7
 future==0.16.0
 gherkin-official==4.1.3
@@ -42,5 +43,6 @@ text-unidecode==1.1
 typing==3.6.2
 Unipath==1.1
 validators==0.12.0
+django-datetime-widget
 webencodings==0.5.1
 whitenoise==3.3.1

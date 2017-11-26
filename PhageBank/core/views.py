@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 import csv
 from django.conf import settings
+from .filters import PhageFilter
 from io import StringIO
 from io import TextIOWrapper
 from PhageBank.core.forms import Add_ResearchForm, AForm, AIForm, Edit_Phage_DataForm, Edit_ResearcherForm, Edit_ResearchForm, Edit_IsolationDataForm, Edit_Experiment_Form
@@ -18,7 +19,9 @@ from django.template.loader import render_to_string
 from django.http import JsonResponse
 from django.template import RequestContext
 from django.contrib.messages import get_messages
+from django.views.decorators.csrf import csrf_exempt
 
+import json
 import os
 from csvvalidator import *
 import datetime
@@ -124,21 +127,55 @@ def fillIsoltionObjectedit(isoform, iso):
     iso.TimeStamp = isoform.cleaned_data.get('TimeStamp')
     iso.save()
 
+
 @login_required
 def add_phage(request):
     if request.user.is_authenticated():
         if request.method == 'POST':
-            pform = Add_Phage_DataForm(request.POST)
+
+            pform = Add_Phage_DataForm(request.POST)    #phage_name
             rrform = Add_ResearcherForm(request.POST)
-            rform = Add_ResearchForm(request.POST)
+            rform = Add_ResearchForm(request.POST)      #CPT ID
             expform = Add_Experiment_Form(request.POST)
             isoform = Isolation_Form(request.POST)
             aform = AForm(request.POST, request.FILES)
             aiform = AIForm(request.POST)
+            
             if pform.is_valid() and rrform.is_valid() and rform.is_valid() and expform.is_valid() and isoform.is_valid() \
                     and aform.is_valid() and aiform.is_valid():
-                pform.save()
+
                 phagename = pform.cleaned_data.get('phage_name')
+                CPTid = rform.cleaned_data.get('phage_CPT_id')
+                
+                #approvePhage = 1 if no duplicates in phage_name. 0 otherwise
+                #approveCPTid = 1 if no duplicates in CPT id
+                #duplicatePhagesPhages : list of phages due to duplicates in phage names
+                #duplicatePhagesCPTid : list of CPT ids due to duplicates in phage names
+                #duplicateCPTidPhages : list of phages due to duplicates in CPT ids
+                #duplicateCPTidCPTid : list of duplicate CPT ids
+
+                chkDuplicatesFlag = 0
+                #chkDuplicatesFlag = int(request.POST['flag'])
+                
+                msg = dict()
+                
+                if chkDuplicatesFlag==1:
+                    approvePhage, approveCPTid, duplicatePhagesPhages, duplicatePhagesCPTid, duplicateCPTidPhages\
+                    , duplicateCPTidCPTid = checkDuplicatesInAddPhage(phagename, CPTid)
+                    
+                    msg['approvePhage']=approvePhage
+                    msg['approveCPTid']=approveCPTid
+                    
+                    if (approvePhage==0 or approveCPTid==0):
+                        msg['duplicatePhagesPhages']=json.dumps(duplicatePhagesPhages)
+                        msg['duplicatePhagesCPTid']=json.dumps(duplicatePhagesCPTid)
+                        msg['duplicateCPTidPhages']=json.dumps(duplicateCPTidPhages)
+                        msg['duplicateCPTidCPTid']=json.dumps(duplicateCPTidCPTid)
+                        
+                        return JsonResponse(msg)
+                            
+                pform.save()
+                
                 phage = PhageData.objects.get(phage_name=phagename)
                 phage.phage_CPT_id = rform.cleaned_data.get('phage_CPT_id')
                 phage.phage_isolator_loc = rform.cleaned_data.get('phage_isolator_loc')
@@ -148,9 +185,11 @@ def add_phage(request):
                 phage.phage_submitted_user = request.user.username
                 phage.phage_lab = rrform.cleaned_data.get('phage_lab')
                 print(phage.phage_lab)
+
                 phage.save()
                 fillIsoltionObject(isoform, phage)
                 print(phage.iso_phageName.all().values())
+
                 fillExpObject(expform, phage)
                 print (phage.PName.all().values())
                 # print(phage.phage_submitted_user)
@@ -173,10 +212,17 @@ def add_phage(request):
                     pass
                 else:
                     handle_uploaded_file(phagedoc, docsdest)
-                query_results = PhageData.objects.all()
-                return render(request, 'view_phages.html', {'add_status':'true','query_results':query_results ,
-                                                            'login_status': request.user.is_authenticated(),
-                                                            'username': request.user.username})
+
+                #query_results = PhageData.objects.all()
+                
+                return JsonResponse(msg)        #if the data is valid
+                
+                #return render(request, 'view_phages.html', {'add_status':'true','query_results':query_results}  )
+
+                #return render(request, 'view_phages.html', {'add_status':'true','query_results':query_results ,
+                #                                            'login_status': request.user.is_authenticated(),
+                #                                            'username': request.user.username})
+
             else:
                 pform = Add_Phage_DataForm()
                 rrform = Add_ResearcherForm()
@@ -278,6 +324,13 @@ def deletephages(request):
         return render(request,'login.html',
                       {'login_status': request.user.is_authenticated()
                        })
+
+
+def search_phage(request):
+    phage_list = PhageData.objects.all()
+    phage_filter = PhageFilter(request.GET, queryset=phage_list)
+    return render(request, 'search_phage.html', {'filter': phage_filter})
+
 
 @login_required
 def editPhage(request):
@@ -387,6 +440,7 @@ def editPhage(request):
                       {'login_status': request.user.is_authenticated()
                        })
 
+
 def func(phagename):
     dest_dir = os.path.join(settings.MEDIA_ROOT, "images", phagename)
     docs_dest_dir = os.path.join(settings.MEDIA_ROOT, "docs", phagename)
@@ -396,6 +450,8 @@ def func(phagename):
     except:
         pass
     print(dest_dir)
+
+
 def populate(reader, request):
     fields = reader.fieldnames
     for row in reader:
@@ -498,3 +554,64 @@ def contact(request):
 
 def header(request):
     return render(request, 'header.html')
+
+
+def checkDuplicatesInAddPhage(phage_name, phage_CPT_id):
+    db=sqlite3.connect('db.sqlite3')
+    
+    params={'phage_name':phage_name, 'phage_CPT_id':phage_CPT_id}
+    
+    q1="SELECT phage_name, phage_CPT_id FROM core_phagedata WHERE phage_name='{phage_name}'"
+    rowsPhage = pd.read_sql_query(q1.format(**params), db)
+    
+    q2="SELECT phage_name, phage_CPT_id FROM core_phagedata WHERE phage_CPT_id={phage_CPT_id}"
+    rowsCPTid = pd.read_sql_query(q2.format(**params), db)
+    
+    duplicatePhagesPhages = rowsPhage["phage_name"].values.tolist()
+    duplicatePhagesCPTid = rowsPhage["phage_CPT_id"].values.tolist()
+
+    duplicateCPTidPhages = rowsCPTid["phage_name"].values.tolist()    
+    duplicateCPTidCPTid = rowsCPTid["phage_CPT_id"].values.tolist()
+    
+    approvePhage=1
+    approveCPTid=1
+    if len(duplicatePhagesPhages)>0:
+        approvePhage=0
+        
+    if len(duplicateCPTidPhages)>0:
+        approveCPTid=0
+        
+    return approvePhage, approveCPTid, duplicatePhagesPhages, duplicatePhagesCPTid, duplicateCPTidPhages\
+    , duplicateCPTidCPTid
+
+#def checkDuplicatesInFile(decoded_file):
+#    db=sqlite3.connect('db.sqlite3')
+#    io_string = io.StringIO(decoded_file)
+#    
+#    phage_names=[]
+#    
+#    for line in csv.reader(io_string, delimiter=','):
+#        phage_names.append(line[0])
+#    
+#    df=pd.read_sql_query('SELECT phage_name FROM core_phagedata',db)
+#    
+#    stored_phages = df["phage_name"].values.tolist()
+#    
+#    common_phages = set(phage_names).intersection(stored_phages)
+#    
+#    approveFlag=1
+#    if len(common_phages)>0:
+#        approveFlag=0
+#        
+#    #print(common_phages)
+#    return common_phages, approveFlag
+
+
+
+
+
+
+
+
+
+
