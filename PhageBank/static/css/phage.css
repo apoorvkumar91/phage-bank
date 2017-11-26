@@ -56,12 +56,6 @@ min-height: 120vh;
   height: 100%;
 }
 
-.carousel-inner .carousel-item img {
-    width: 90%;
-    height: 100%;
-    text-align: center;
-    margin-left: 5%;
-}
 
 .bg-maroon {
     background-color: #800000;
@@ -78,4 +72,14 @@ footer{
     padding-top: 1rem;
     padding-bottom: 0.5rem;
     flex: 0 0 auto;
+}
+.center-class{
+	width: 100px;
+	height: 100px;
+	position: absolute;
+	top:0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
 }

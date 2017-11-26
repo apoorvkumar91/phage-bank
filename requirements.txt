@@ -17,6 +17,9 @@ django-sslserver==0.20
 django-taggit==0.22.1
 django-widget-tweaks==1.4.1
 django-filters
+django-filter
+django_filter
+django_filters
 Faker==0.8.7
 future==0.16.0
 gherkin-official==4.1.3

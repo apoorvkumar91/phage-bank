@@ -26,7 +26,33 @@
         {% endif %}
 <h2>Phages</h2>
 
-<table id="phages" class="table table-bordered table-responsive">
+<style>
+#phage {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#phage td, #phage th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#phage tr:nth-child(even){background-color: #f2f2f2;}
+
+#phage tr:hover {background-color: #ddd;}
+
+#phage th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #800000;
+    color: white;
+}
+</style>
+
+<div id="phage">
+<table class="table table-bordered table-responsive" id="phages"  >
     <thead>
     <tr class="m-0">
         <th style="padding: 10px;"class="w-20">Phage Name</th>
@@ -42,14 +68,15 @@
     <tr>
         <td style="padding: 8px;"><a href='/view_phage/?name={{ item.phage_name }}'>{{ item.phage_name }}</a></td>
         <td style="padding: 8px;">{{ item.phage_host_name }}</td>
+        <td style="padding: 8px;">{{ item.phage_CPT_id}}</td>
         <td style="padding: 8px;">{{ item.phage_isolator_name }}</td>
-        <td style="padding: 8px;">{{ item.phage_experimenter_name }}</td>
-        <td style="padding: 8px;">{{ item.phage_CPT_id }}</td>
+        <td style="padding: 8px;">{{ item.phage_experimenter_name}}</td>
         <td style="padding: 8px;">{{ item.phage_isolator_loc }}</td>
     </tr>
     {% endfor %}
     </tbody>
 </table>
+</div>
 
 <script type="text/javascript">
 $(document).ready(function(){
