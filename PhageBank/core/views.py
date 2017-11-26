@@ -155,7 +155,7 @@ def add_phage(request):
                 #duplicateCPTidCPTid : list of duplicate CPT ids
 
                 chkDuplicatesFlag = 0
-                #chkDuplicatesFlag = int(request.POST['flag'])
+                chkDuplicatesFlag = int(request.POST['flag'])
                 
                 msg = dict()
                 
@@ -329,7 +329,10 @@ def deletephages(request):
 def search_phage(request):
     phage_list = PhageData.objects.all()
     phage_filter = PhageFilter(request.GET, queryset=phage_list)
-    return render(request, 'search_phage.html', {'filter': phage_filter})
+    return render(request, 'search_phage.html', {'filter': phage_filter,
+                                                 'login_status': request.user.is_authenticated(),
+                                                 'username': request.user.username,
+                                                 })
 
 
 @login_required
