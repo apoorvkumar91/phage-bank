@@ -33,7 +33,7 @@ class IsolationData(models.Model):
     owner_name = models.CharField(max_length=100, default='none')
     location = models.CharField(max_length=100, default='none')
     TimeStamp = models.DateField(null=True)
-    type = models.CharField(max_length=100, default='none')
+    type1 = models.CharField(max_length=100, default='none')
 
 
 

@@ -219,7 +219,7 @@ class Isolation_Form(forms.Form):
                                                           })
                             )
 
-    type = forms.CharField(label='Type',
+    type1 = forms.CharField(label='Type',
                             max_length=100,
                             required=False,
                             widget=forms.TextInput(attrs={'autofocus': 'autofocus',
