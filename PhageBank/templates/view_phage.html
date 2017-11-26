@@ -91,8 +91,11 @@
       </ul>
     </nav>
     <div class="col-sm-9 col-8">
- <div id="section1" class="container-fluid">
-      <h1>Phage Details:</h1>
+ <div id="section1">
+     <br>
+     <br>
+     <br>
+      <h3>Phage Details:</h3>
       <div class="row">
                         <div class="col-md-6">
                         <div id="demo" class="carousel slide" data-ride="carousel">
@@ -114,22 +117,19 @@
   <div class="carousel-inner">
   {% if count %}
     {% for x in dest_dir %}
-        <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %}">
-            <img src="/media/images/{{ item.phage_name }}/{{ x }}" />
-            <div class="carousel-caption">
-                <h3>{{ item.phage_name }}</h3>
-            </div>
+        <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %}" class="border">
+            <img src="/media/images/{{ item.phage_name }}/{{ x }}" width="300" height="300" class="img-rounded img-responsive"/>
         </div>
     {% endfor %}
   {% else%}
    <div class="carousel-item active" class="border">
     {% load staticfiles %}
-    <img src="{% static 'images/phage.png' %}" alt="Demo image" width="1100" height="500" class="img-rounded img-responsive" />
+    <img src="{% static 'images/phage.png' %}" alt="Demo image" width="300" height="300" class="img-rounded img-responsive" />
 
     </div>
     <div class="carousel-item">
         {% load staticfiles %}
-        <img src="{% static 'images/phage.png' %}" alt="Demo image" width="1100" height="500" class="img-rounded img-responsive" />
+        <img src="{% static 'images/phage.png' %}" alt="Demo image" width="300" height="300" class="img-rounded img-responsive" />
     </div>
   {% endif %}
   </div>
@@ -160,7 +160,10 @@
                     </div>
     </div>
     <div id="section3" class="container-fluid ">
-      <h1>Sequencing Information for {{ item.phage_name }}</h1>
+        <br>
+        <br>
+        <br>
+      <h3>Sequencing Information for {{ item.phage_name }}</h3>
         <table id="phageDetails" cellspacing="0" class="table table-striped">
 	<tbody>
 		<tr><td class="detailLabel">Sequencing Complete?</td><td class="detailValue">No</td></tr>
@@ -171,7 +174,10 @@
 	</table>
     </div>
     <div id="section42" class="container-fluid ">
-      <h1>Experimenter Data</h1>
+        <br>
+        <br>
+        <br>
+      <h3>Experimenter Data</h3>
         <table id="phageDetails" cellspacing="0" class="table table-striped">
 	    <tbody>
         {%for query in expdata %}
@@ -189,7 +195,10 @@
     </div>
 
       <div id="IsolatorData" class="container-fluid ">
-      <h1>Isolator Data</h1>
+          <br>
+          <br>
+          <br>
+      <h3>Isolator Data</h3>
         <table id="phageDetails" cellspacing="0" class="table table-striped">
 	    <tbody>
         {%for query in isodata %}
@@ -207,10 +216,9 @@
 </div>
 </body>
 
-
-{% endblock %}
-
-body{padding-top:20px;
+<style>
+body{
+padding-top:54px;
 position:relative;
 }
 
@@ -222,9 +230,18 @@ line-height: 1.428571429;
 color: #999;
 }
 ul.nav-pills {
-      top: 20px;
+      top: 100px;
       position: fixed;
-  }
+}
+div.col-8 div {
+    height: 600px;
+}
+#demo {
+  heigth: 50%;
+}
 
-
-
+.carousel-caption {
+    color: black;
+}
+</style>
+{% endblock %}
