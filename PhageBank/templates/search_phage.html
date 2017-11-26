@@ -75,7 +75,32 @@
   </form>
   <br>
 
-  <table class="table table-bordered">
+<style>
+#phage {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#phage td, #phage th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#phage tr:nth-child(even){background-color: #f2f2f2;}
+
+#phage tr:hover {background-color: #ddd;}
+
+#phage th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+}
+</style>
+
+  <table class="table table-bordered" id="phage">
     <thead>
       <tr>
         <th>Phage Name</th>
