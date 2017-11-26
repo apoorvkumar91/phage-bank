@@ -162,18 +162,18 @@ def add_phage(request):
                 if chkDuplicatesFlag==1:
                     approvePhage, approveCPTid, duplicatePhagesPhages, duplicatePhagesCPTid, duplicateCPTidPhages\
                     , duplicateCPTidCPTid = checkDuplicatesInAddPhage(phagename, CPTid)
-                    
+
                     msg['approvePhage']=approvePhage
                     msg['approveCPTid']=approveCPTid
-                    
+
                     if (approvePhage==0 or approveCPTid==0):
                         msg['duplicatePhagesPhages']=json.dumps(duplicatePhagesPhages)
                         msg['duplicatePhagesCPTid']=json.dumps(duplicatePhagesCPTid)
                         msg['duplicateCPTidPhages']=json.dumps(duplicateCPTidPhages)
                         msg['duplicateCPTidCPTid']=json.dumps(duplicateCPTidCPTid)
-                        
+
                         return JsonResponse(msg)
-                            
+
                 pform.save()
                 
                 phage = PhageData.objects.get(phage_name=phagename)
@@ -215,13 +215,13 @@ def add_phage(request):
 
                 query_results = PhageData.objects.all()
                 
-                #return JsonResponse(msg)        #if the data is valid
+                return JsonResponse(msg)        #if the data is valid
                 
                 #render(request, 'view_phages.html', {'add_status':'true','query_results':query_results}  )
 
-                render(request, 'view_phages.html', {'add_status':'true','query_results':query_results ,
-                                                            'login_status': request.user.is_authenticated(),
-                                                            'username': request.user.username})
+                #render(request, 'view_phages.html', {'add_status':'true','query_results':query_results ,
+                #                                            'login_status': request.user.is_authenticated(),
+                #                                            'username': request.user.username})
     
                 #return JsonResponse(msg)
 
@@ -573,7 +573,7 @@ def checkDuplicatesInAddPhage(phage_name, phage_CPT_id):
     q1="SELECT phage_name, phage_CPT_id FROM core_phagedata WHERE phage_name='{phage_name}'"
     rowsPhage = pd.read_sql_query(q1.format(**params), db)
     
-    q2="SELECT phage_name, phage_CPT_id FROM core_phagedata WHERE phage_CPT_id={phage_CPT_id}"
+    q2="SELECT phage_name, phage_CPT_id FROM core_phagedata WHERE phage_CPT_id='{phage_CPT_id}'"
     rowsCPTid = pd.read_sql_query(q2.format(**params), db)
     
     duplicatePhagesPhages = rowsPhage["phage_name"].values.tolist()
