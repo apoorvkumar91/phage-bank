@@ -235,7 +235,7 @@ class Isolation_Form(forms.Form):
 
     class Meta:
         model= IsolationData
-        fields = {'owner_name', 'location', 'type', 'timestamp'}
+        fields = {'owner_name', 'location', 'type1', 'timestamp'}
 
 
 class LinkForm(forms.Form):
