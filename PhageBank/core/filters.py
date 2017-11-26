@@ -12,9 +12,12 @@ class PhageFilter(django_filters.FilterSet):
     submitted_month_gt = django_filters.NumberFilter(label='Month Submitted After', name='phage_submitted_date', lookup_expr='month__gt')
     submitted_year_lt = django_filters.NumberFilter(label='Year Submitted Before', name='phage_submitted_date', lookup_expr='year__lt')
     submitted_month_lt = django_filters.NumberFilter(label='Month Submitted Before', name='phage_submitted_date', lookup_expr='month__lt')
-
-
-    #from_date = django_filters.DateFilter(label='From ',required=False, widget=forms.DateInput(attrs={'type': 'date'}))
+    #submitted_month_lt = django_filters.NumberFilter(label='Month Submitted Before', name='phage_submitted_date',lookup_expr='month__lt')
+    INCIDENT_LIVE = (
+        ('0', 'Lab-A'),
+        ('1', 'Lab-B'),
+    )
+    phage_lab = django_filters.ChoiceFilter(label='Phage Lab', choices=INCIDENT_LIVE)
 
     class Meta:
         model = PhageData
@@ -26,11 +29,11 @@ class PhageFilter(django_filters.FilterSet):
                   'phage_isolator_loc',
                   'phage_submitted_user',
                   'phage_submitted_date',
-                  'phage_lab',
                   'submitted_year_gt',
                   'submitted_month_gt',
                   'submitted_year_lt',
                   'submitted_month_lt',
+                  'phage_lab',
                   ]
         filter_overrides = {
             models.DateField: {
