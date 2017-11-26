@@ -140,7 +140,7 @@ class Add_Experiment_Form(forms.ModelForm):
                                                                })
                                  )
 
-    timestamp = forms.DateField(label='Date of Experiment',required=False,
+    TimeStamp = forms.DateField(label='Date of Experiment',required=False,
                                     widget=forms.DateInput(attrs={'autofocus': 'autofocus',
                                                                       'type': 'date'}))
 
@@ -196,7 +196,7 @@ class Add_Experiment_Form(forms.ModelForm):
 
     class Meta:
         model = ExperimentData
-        fields = ("owner", "timestamp","category","short_name","full_name","methods","results")
+        fields = ("owner", "TimeStamp","category","short_name","full_name","methods","results")
 
 class Isolation_Form(forms.Form):
     owner_name = forms.CharField(label='Owner',

@@ -93,7 +93,7 @@ def fillExpObject(expform, phage):
     exp =  ExperimentData.objects.create(expkey=phage)
     exp.expkey = phage
     exp.owner = expform.cleaned_data.get('owner')
-    exp.timestamp = expform.cleaned_data.get('timestamp')
+    exp.timestamp = expform.cleaned_data.get('TimeStamp')
     exp.category = expform.cleaned_data.get('category')
     exp.short_name = expform.cleaned_data.get('short_name')
     exp.full_name = expform.cleaned_data.get('full_name')
@@ -103,7 +103,7 @@ def fillExpObject(expform, phage):
 
 def fillExpObjectedit(expform, exp):
     exp.owner = expform.cleaned_data.get('owner')
-    exp.timestamp = expform.cleaned_data.get('timestamp')
+    exp.timestamp = expform.cleaned_data.get('TimeStamp')
     exp.category = expform.cleaned_data.get('category')
     exp.short_name = expform.cleaned_data.get('short_name')
     exp.full_name = expform.cleaned_data.get('full_name')
@@ -116,14 +116,14 @@ def fillIsoltionObject(isoform, phage):
     iso.isokey = phage
     iso.owner_name = isoform.cleaned_data.get('owner_name')
     iso.location = isoform.cleaned_data.get('location')
-    iso.type = isoform.cleaned_data.get('type')
+    iso.type1 = isoform.cleaned_data.get('type1')
     iso.TimeStamp = isoform.cleaned_data.get('timestamp')
     iso.save()
 
 def fillIsoltionObjectedit(isoform, iso):
     iso.owner_name = isoform.cleaned_data.get('owner_name')
     iso.location = isoform.cleaned_data.get('location')
-    iso.type = isoform.cleaned_data.get('type')
+    iso.type1 = isoform.cleaned_data.get('type')
     iso.TimeStamp = isoform.cleaned_data.get('TimeStamp')
     iso.save()
 
