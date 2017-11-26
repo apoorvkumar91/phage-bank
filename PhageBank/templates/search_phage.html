@@ -62,7 +62,7 @@
     <tbody>
       {% for phage in filter.qs %}
         <tr>
-          <td>{{ phage.phage_name }}</td>
+          <td style="padding: 8px;"><a href='/view_phage/?name={{ phage.phage_name }}'>{{ phage.phage_name }}</a></td>
           <td>{{ phage.phage_host_name }}</td>
           <td>{{ phage.phage_CPT_id }}</td>
           <td>{{ phage.phage_isolator_name }}</td>
