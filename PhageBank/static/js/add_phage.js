@@ -56,7 +56,7 @@ function showDuplicates(){
                 alert(s);
                 
             } else {
-                window.location='/view_phages/';
+                window.location='/view_phages/';       //?add_status=true
             }
             
         }
