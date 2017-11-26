@@ -2,7 +2,11 @@
 
 
 {% block content %}
- {% if edit_status == 'true' %}
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.16/datatables.min.css"/>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.16/datatables.min.js"></script>
+
+{% if edit_status == 'true' %}
     <div class="alert alert-success alert-dismissable">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
         <strong>Success!</strong> The phage entry is updated successfully.
@@ -24,13 +28,13 @@
 
 <table id="phages" class="table table-bordered table-responsive">
     <thead>
-    <tr>
-        <th style="padding: 10px;">Phage Name</th>
-        <th style="padding: 10px;">Host Name</th>
-        <th style="padding: 10px;">Isolator Name</th>
-        <th style="padding: 10px;">Experimenter Name</th>
-        <th style="padding: 10px;">CPT Id</th>
-        <th style="padding: 10px;">Isolator Location</th>
+    <tr class="m-0">
+        <th style="padding: 10px;"class="w-20">Phage Name</th>
+        <th style="padding: 10px;"class="w-20">Host Name</th>
+        <th style="padding: 10px;"class="w-20">CPT-Index</th>
+        <th style="padding: 10px;"class="w-20">Isolator Name</th>
+        <th style="padding: 10px;"class="w-20">Experimenter Name</th>
+        <th style="padding: 10px;"class="w-20">Isolator Location</th>
     </tr>
     </thead>
     <tbody>
@@ -46,7 +50,6 @@
     {% endfor %}
     </tbody>
 </table>
-
 
 <script type="text/javascript">
 $(document).ready(function(){

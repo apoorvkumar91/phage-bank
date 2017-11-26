@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_filters',
     'PhageBank.core',
     'django_extensions',
     'aloe',
@@ -111,7 +112,6 @@ else:
     SECURE_SSL_REDIRECT = True
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True
-
 # end - AK - more additions at the end of the file
 
 DATABASES = {
@@ -122,6 +122,9 @@ DATABASES = {
 }
 
 DATABASES['default'].update(db_from_env)
+EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
+SENDGRID_API_KEY ="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"
+SENDGRID_SANDBOX_MODE_IN_DEBUG = False
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
@@ -160,9 +163,8 @@ STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, 'static'),
 )
 
-LOGIN_URL = 'mylogin'
-LOGOUT_URL = 'mylogout'
-LOGIN_REDIRECT_URL = 'new_index'
+LOGIN_URL = 'index'
+LOGIN_REDIRECT_URL = ''
 
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'

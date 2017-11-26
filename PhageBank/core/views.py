@@ -5,9 +5,10 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 import csv
 from django.conf import settings
+from .filters import PhageFilter
 from io import StringIO
 from io import TextIOWrapper
-from PhageBank.core.forms import Add_ResearchForm, AForm, AIForm, Edit_Phage_DataForm, Edit_ResearcherForm, Edit_ResearchForm, Edit_IsolationDataForm
+from PhageBank.core.forms import Add_ResearchForm, AForm, AIForm, Edit_Phage_DataForm, Edit_ResearcherForm, Edit_ResearchForm, Edit_IsolationDataForm, Edit_Experiment_Form
 from PhageBank.core.forms import SignUpForm, UploadFileForm, LinkForm, LoginForm, Add_Phage_DataForm, Add_ResearcherForm, Add_Experiment_Form,Isolation_Form
 from PhageBank.core.models import PhageData, PreData, ExperimentData, IsolationData
 from django.forms.formsets import BaseFormSet
@@ -27,10 +28,6 @@ import datetime
 import sqlite3
 import pandas as pd
 
-def new_index(request):
-    return render(request, 'new_index.html',{'login_status': request.user.is_authenticated(),
-                                          'username': request.user.username
-                                          })
 
 def logged_in_index(request):
     return render(request, 'logged_in_index.html',{'login_status': request.user.is_authenticated(),
@@ -39,13 +36,9 @@ def logged_in_index(request):
 def mylogout(request):
     logout(request)
     messages.success(request, 'You have successfully logged out.', extra_tags='alert')
-    return render(request, 'new_index.html', {'login_status': request.user.is_authenticated(),
+    return render(request, 'logged_in_index.html', {'login_status': request.user.is_authenticated(),
                                               'username': request.user.username
                                               })
-@login_required
-def add_phage(request):
-    return render(request, 'add_phage.html')
-
 def signup(request):
     data = dict()
 
@@ -91,7 +84,7 @@ def mylogin(request):
 
 
 def handle_uploaded_file(f, dest):
-    with open(dest, 'w') as destination:
+    with open(dest, 'wb') as destination:
         for chunk in f.chunks():
             destination.write(chunk)
 
@@ -100,7 +93,17 @@ def fillExpObject(expform, phage):
     exp =  ExperimentData.objects.create(expkey=phage)
     exp.expkey = phage
     exp.owner = expform.cleaned_data.get('owner')
-    # exp.timestamp = expform.cleaned_data.get('timestamp')
+    exp.timestamp = expform.cleaned_data.get('timestamp')
+    exp.category = expform.cleaned_data.get('category')
+    exp.short_name = expform.cleaned_data.get('short_name')
+    exp.full_name = expform.cleaned_data.get('full_name')
+    exp.methods = expform.cleaned_data.get('methods')
+    exp.results = expform.cleaned_data.get('results')
+    exp.save()
+
+def fillExpObjectedit(expform, exp):
+    exp.owner = expform.cleaned_data.get('owner')
+    exp.timestamp = expform.cleaned_data.get('timestamp')
     exp.category = expform.cleaned_data.get('category')
     exp.short_name = expform.cleaned_data.get('short_name')
     exp.full_name = expform.cleaned_data.get('full_name')
@@ -111,18 +114,17 @@ def fillExpObject(expform, phage):
 def fillIsoltionObject(isoform, phage):
     iso = IsolationData.objects.create(isokey=phage)
     iso.isokey = phage
-    iso.owner = isoform.cleaned_data.get('owner')
+    iso.owner_name = isoform.cleaned_data.get('owner_name')
     iso.location = isoform.cleaned_data.get('location')
     iso.type = isoform.cleaned_data.get('type')
-    iso.timestamp = isoform.cleaned_data.get('timestamp')
+    iso.TimeStamp = isoform.cleaned_data.get('timestamp')
     iso.save()
 
 def fillIsoltionObjectedit(isoform, iso):
-
-    iso.owner = isoform.cleaned_data.get('owner')
+    iso.owner_name = isoform.cleaned_data.get('owner_name')
     iso.location = isoform.cleaned_data.get('location')
     iso.type = isoform.cleaned_data.get('type')
-    iso.timestamp = isoform.cleaned_data.get('timestamp')
+    iso.TimeStamp = isoform.cleaned_data.get('TimeStamp')
     iso.save()
 
 
@@ -174,7 +176,6 @@ def add_phage(request):
                 pform.save()
                 
                 phage = PhageData.objects.get(phage_name=phagename)
-
                 phage.phage_CPT_id = rform.cleaned_data.get('phage_CPT_id')
                 phage.phage_isolator_loc = rform.cleaned_data.get('phage_isolator_loc')
                 phage.phage_all_links = aiform.cleaned_data.get('link')
@@ -185,12 +186,12 @@ def add_phage(request):
                 print(phage.phage_lab)
 
                 phage.save()
-                
-                fillExpObject(expform, phage)
-                # print (phage.PName.all().values())
-                # print(phage.phage_submitted_user)
                 fillIsoltionObject(isoform, phage)
+                print(phage.iso_phageName.all().values())
 
+                fillExpObject(expform, phage)
+                print (phage.PName.all().values())
+                # print(phage.phage_submitted_user)
                 phagedoc = aform.cleaned_data.get('doc')
                 phageimage = aform.cleaned_data.get('image')
                 dest_dir = os.path.join(settings.MEDIA_ROOT, "images", phagename)
@@ -210,11 +211,17 @@ def add_phage(request):
                     pass
                 else:
                     handle_uploaded_file(phagedoc, docsdest)
+
                 #query_results = PhageData.objects.all()
                 
                 return JsonResponse(msg)        #if the data is valid
                 
                 #return render(request, 'view_phages.html', {'add_status':'true','query_results':query_results}  )
+
+                #return render(request, 'view_phages.html', {'add_status':'true','query_results':query_results ,
+                #                                            'login_status': request.user.is_authenticated(),
+                #                                            'username': request.user.username})
+
             else:
                 pform = Add_Phage_DataForm()
                 rrform = Add_ResearcherForm()
@@ -251,11 +258,6 @@ def add_phage(request):
                                                       'login_status': request.user.is_authenticated(),
                                                       'username': request.user.username,
                                                      })
-    else:
-        return render(request,'Login.html',
-                      {'login_status': request.user.is_authenticated()
-                       })
-
 #this form show the phages per user
 def my_phages(request):
     query_results = PhageData.objects.filter(phage_submitted_user=request.user.username)
@@ -282,8 +284,19 @@ def view_phage(request):
     previous_names = phage.PhageName.all()
     expdata = phage.PName.all()
     isodata = phage.iso_phageName.all()
+    dest_dir = os.path.join(settings.MEDIA_ROOT, "images", phageName)
+    list_path=[]
+    count = 0;
+    for filename in os.listdir(dest_dir):
+        if filename.endswith(".png") or filename.endswith(".jpg") or filename.endswith(".jpeg"):
+            list_path.append(filename)
+            count=count+1;
+            continue
+        else:
+            continue
+    print(list_path)
     return render(request, 'view_phage.html', {'item': phage,'previous_names':previous_names,'expdata':expdata,'isodata':isodata,
-                                              'login_status': request.user.is_authenticated(),
+                                              'login_status': request.user.is_authenticated(),'dest_dir':list_path,'count':count,
                                               'username': request.user.username
                                               })
 
@@ -311,22 +324,34 @@ def deletephages(request):
                       {'login_status': request.user.is_authenticated()
                        })
 
+
+def search_phage(request):
+    phage_list = PhageData.objects.all()
+    phage_filter = PhageFilter(request.GET, queryset=phage_list)
+    return render(request, 'search_phage.html', {'filter': phage_filter})
+
+
 @login_required
 def editPhage(request):
     if request.user.is_authenticated():
         name = request.GET.get('name')
         phage = PhageData.objects.get(phage_name = name)
         isodata = IsolationData.objects.filter(isokey = phage)
-        last = isodata.earliest('owner')
-        print(last.owner)
+        expdata = ExperimentData.objects.filter(expkey = phage)
+        last = isodata.latest('id')
+        last_exp = expdata.latest('id')
+        print(last_exp.owner)
+        print(last.owner_name)
         pform = Edit_Phage_DataForm(request.POST, instance=phage, initial = {'phage_name':phage.phage_name })
         rrform = Edit_ResearcherForm(request.POST, instance=phage)
         rform = Edit_ResearchForm(request.POST, instance=phage)
         isoform = Edit_IsolationDataForm(request.POST)
+        expform = Edit_Experiment_Form(request.POST)
         aform = AForm(request.POST, request.FILES)
         aiform = AIForm(request.POST)
         if request.method=="POST":
-            if pform.is_valid() and rrform.is_valid() and rform.is_valid() and aform.is_valid() and aiform.is_valid() and isoform.is_valid():
+            if pform.is_valid() and rrform.is_valid() and rform.is_valid() and aform.is_valid() and aiform.is_valid()\
+                    and isoform.is_valid() and expform.is_valid():
                 phage.phage_name = pform.cleaned_data.get('phage_name')
                 if(name!=phage.phage_name and PreData.objects.filter(phagename = name).count()==0):
                     obj = PreData.objects.create(testkey=phage)
@@ -347,6 +372,7 @@ def editPhage(request):
                 pform.save()
                 phage.save()
                 #last.delete()
+                fillExpObjectedit(expform, last_exp)
                 fillIsoltionObjectedit(isoform, last)
                 phagedoc = aform.cleaned_data.get('doc')
                 phageimage = aform.cleaned_data.get('image')
@@ -355,13 +381,13 @@ def editPhage(request):
                 dest_dir = os.path.join(settings.MEDIA_ROOT, "images", phage.phage_name)
                 docs_dest_dir = os.path.join(settings.MEDIA_ROOT, "docs", phage.phage_name)
                 print(dest_dir_old)
-                print(dest_dir)
+                print(dest_dir and name!=phage.phage_name)
                 try:
                     os.rename(dest_dir_old,dest_dir)
                     os.rename(docs_dest_dir_old,docs_dest_dir)
                 except:
                    pass
-                dest = os.path.join(dest_dir, str(phage.phage_name))
+                dest = os.path.join(dest_dir, str(phageimage))
                 docsdest = os.path.join(docs_dest_dir, str(phagedoc))
                 if phageimage is None:
                     pass
@@ -372,18 +398,20 @@ def editPhage(request):
                 else:
                     handle_uploaded_file(phagedoc, docsdest)
                 query_results = PhageData.objects.all()
-                return render(request, 'view_phages.html', {'edit_status':'true','query_results':query_results}  )
+                return render(request, 'view_phages.html', {'edit_status':'true','query_results':query_results,
+                                                            'login_status': request.user.is_authenticated(),
+                                                            'username': request.user.username}  )
             else:
                 phage = PhageData.objects.get(phage_name=name)
                 print (phage.phage_host_name)
                 phage.save()
                 return render(request, 'EditPhage.html', {'item': phage,
                                                           'pform': pform,
-                                                          'rrform': rrform,
+                                                          'rrform': rrform,'expform':expform,
                                                           'rform': rform,
                                                           'aform': aform,
                                                           'aiform': aiform,
-                                                          'isoform':isoform,'iso':last,
+                                                          'isoform':isoform,'iso':last,'exp':last_exp,
                                                           'login_status': request.user.is_authenticated(),
                                                           'username': request.user.username,
                                                          })
@@ -392,6 +420,7 @@ def editPhage(request):
             rrform = Edit_ResearcherForm(request.POST, instance=phage)
             rform = Edit_ResearchForm(request.POST, instance=phage)
             isoform = Edit_IsolationDataForm(request.POST)
+            expform = Edit_Experiment_Form(request.POST)
             aform = AForm()
             aiform = AIForm()
             return render(request, 'EditPhage.html', {'item': phage,
@@ -399,7 +428,9 @@ def editPhage(request):
                                                       'rrform': rrform,
                                                       'rform': rform,
                                                       'aform': aform,
-                                                      'aiform': aiform, 'isoform' : isoform,'iso':last,
+                                                      'aiform': aiform, 'isoform' : isoform,'expform':expform,
+                                                      'iso':last,
+                                                      'exp': last_exp,
                                                       'login_status': request.user.is_authenticated(),
                                                       'username': request.user.username,
                                                      })
@@ -409,37 +440,92 @@ def editPhage(request):
                        })
 
 
+def func(phagename):
+    dest_dir = os.path.join(settings.MEDIA_ROOT, "images", phagename)
+    docs_dest_dir = os.path.join(settings.MEDIA_ROOT, "docs", phagename)
+    try:
+        os.mkdir(dest_dir)
+        os.mkdir(docs_dest_dir)
+    except:
+        pass
+    print(dest_dir)
+
+
 def populate(reader, request):
     fields = reader.fieldnames
     for row in reader:
         flag = 0
         obj = PhageData.objects.create()
+        iso = IsolationData.objects.create(isokey = obj)
+        exp = ExperimentData.objects.create(expkey = obj)
         if 'phage_name' in fields:
-            obj.phage_name = row['phage_name']
+            name = row['phage_name']
+            if not name:
+                flag = 0
+            elif(PhageData.objects.filter(phage_name=name).count() == 0 and PreData.objects.filter(phagename=name).count() == 0):
+                obj.phage_name = name
+            else:
+                obj.delete()
+                exp.delete()
+                iso.delete()
+                if (PhageData.objects.filter(phage_name=name).count() > 0):
+                    obj = PhageData.objects.get(phage_name=name)
+                else:
+                    obj1 = PreData.objects.get(phagename=name)
+                    obj = obj1.testkey
+
+                isodata = IsolationData.objects.filter(isokey=obj)
+                expdata = ExperimentData.objects.filter(expkey=obj)
+                iso = isodata.latest('id')
+                exp = expdata.latest('id')
             flag = 1
         if 'phage_host_name' in fields:
             obj.phage_host_name = row['phage_host_name']
-            flag = 1
         if 'phage_isolator_name' in fields:
             obj.phage_isolator_name = row['phage_isolator_name']
-            flag = 1
         if 'phage_experimenter_name' in fields:
             obj.phage_experimenter_name = row['phage_experimenter_name']
-            flag = 1
         if 'phage_CPT_id' in fields:
             obj.phage_CPT_id = row['phage_CPT_id']
-            flag = 1
         if 'phage_isolator_loc' in fields:
-            flag = 1
             obj.phage_isolator_loc = row['phage_isolator_loc']
+        if 'owner_name' in fields:
+            iso.owner_name = row['owner_name']
+        if 'location' in fields:
+            iso.location = row['location']
+        if 'type' in fields:
+            iso.type = row['type']
+        if 'TimeStamp' in fields:
+            iso.TimeStamp = row['TimeStamp']
+        if 'owner' in fields:
+            exp.owner = row['owner']
+        if 'timestamp' in fields:
+            exp.timestamp = row['timestamp']
+        if 'methods' in fields:
+            exp.methods = row['methods']
+        if 'results' in fields:
+            exp.results = row['results']
+        if 'short_name' in fields:
+            exp.short_name = row['short_name']
+        if 'full_name' in fields:
+            exp.full_name = row['full_name']
+        if 'category' in fields:
+            exp.category = row['category']
         obj.phage_submitted_user = request.user.username
 
         if flag == 0:
             obj.delete()
+            exp.delete()
+            iso.delete()
         else:
             obj.save()
+            func(obj.phage_name)
+            iso.save()
+            exp.save()
 
-@user_passes_test(lambda u: u.is_superuser)
+
+
+@user_passes_test(lambda u: u.is_superuser, login_url='/admin/')
 def model_form_upload(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
@@ -447,7 +533,13 @@ def model_form_upload(request):
             paramFile = TextIOWrapper(request.FILES['file'].file, encoding=request.encoding)
             reader = csv.DictReader(paramFile,delimiter=';',skipinitialspace=True,)
             populate(reader, request)
-            return redirect('new_index')
+            query_results = PhageData.objects.all()
+            return render(request, 'view_phages.html', {'query_results': query_results,
+                                                        'edit_status': 'false', 'add_status': 'false',
+                                                        'delete_status': 'false',
+                                                        'login_status': request.user.is_authenticated(),
+                                                        'username': request.user.username
+                                                        })
     else:
         form = UploadFileForm()
     return render(request, 'model_form_upload.html', {'form': form})

@@ -199,7 +199,7 @@ class Add_Experiment_Form(forms.ModelForm):
         fields = ("owner", "timestamp","category","short_name","full_name","methods","results")
 
 class Isolation_Form(forms.Form):
-    owner = forms.CharField(label='Owner',
+    owner_name = forms.CharField(label='Owner',
                             max_length=100,
                             required=False,
                             widget=forms.TextInput(attrs={'autofocus': 'autofocus',
@@ -219,7 +219,7 @@ class Isolation_Form(forms.Form):
                                                           })
                             )
 
-    type = forms.CharField(label='Type',
+    type1 = forms.CharField(label='Type',
                             max_length=100,
                             required=False,
                             widget=forms.TextInput(attrs={'autofocus': 'autofocus',
@@ -235,7 +235,7 @@ class Isolation_Form(forms.Form):
 
     class Meta:
         model= IsolationData
-        fields = {'owner', 'location', 'type', 'timestamp'}
+        fields = {'owner_name', 'location', 'type', 'timestamp'}
 
 
 class LinkForm(forms.Form):
@@ -299,13 +299,40 @@ class Edit_ResearchForm(forms.ModelForm):
         fields = ("phage_CPT_id", "phage_isolator_loc",)
 
 class Edit_IsolationDataForm(forms.ModelForm):
-    timestamp = forms.DateField(label='Date of Experiment',required=False,
+    TimeStamp = forms.DateField(label='Date of Experiment',required=False,
                                     widget=forms.DateInput(attrs={'autofocus': 'autofocus',
                                                                       'type': 'date'}))
-    owner = forms.CharField(required=False,)
+    owner_name = forms.CharField(required=False,)
     location = forms.CharField(required=False,)
     type = forms.CharField(required=False,)
 
     class Meta:
         model = IsolationData
-        fields = ('owner', 'location', 'type', 'timestamp')
+        fields = ('owner_name', 'location', 'type', 'TimeStamp')
+
+class Edit_Experiment_Form(forms.ModelForm):
+    owner = forms.CharField(label='Owner',
+                                 max_length=100,
+                                 required=False,)
+
+    timestamp = forms.DateField(label='Date of Experiment',required=False,
+                                    widget=forms.DateInput(attrs={'autofocus': 'autofocus',
+                                                                      'type': 'date'}))
+
+    category = forms.CharField(required=False,)
+
+    short_name = forms.CharField(required=False,)
+
+    full_name = forms.CharField(required=False,)
+
+    methods = forms.CharField(label='Methods',
+                               max_length=5000,
+                               required=False,)
+
+    results = forms.CharField(label='Results',
+                               max_length=5000,
+                               required=False,)
+
+    class Meta:
+        model = ExperimentData
+        fields = ("owner", "timestamp","category","short_name","full_name","methods","results")

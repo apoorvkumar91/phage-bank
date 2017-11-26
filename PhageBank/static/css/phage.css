@@ -3,11 +3,38 @@
  * Copyright 2013-2017 Start Bootstrap
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-business-frontpage/blob/master/LICENSE)
  */
-
-body {
-  padding-top: 54px;
+html {
+  box-sizing: border-box;
 }
-
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+body {
+   display: flex;
+   flex-direction: column;
+   position: relative;
+   margin:0;
+   text-align: center;
+  /* this centers the container in IE 5* browsers. The text is then set to the left aligned default in the #container selector */
+  color: #212121;
+  background-color: #e0c1c4;
+  background: url('/static/images/wood.png') repeat;
+  padding-top: 54px;
+  min-height: 100%;
+  padding-bottom: 2rem;
+}
+.temp{
+width: 80%;
+margin: 0 auto;
+align:center;
+text-align:left;
+}
+.page-content{
+background-color:#fff8dc;
+min-height: 120vh;
+}
 @media (min-width: 992px) {
   body {
     padding-top: 56px;
@@ -22,6 +49,7 @@ body {
   -moz-background-size: cover;
   background-size: cover;
   -o-background-size: cover;
+  flex: 1 0 auto;
 }
 
 .card {
@@ -42,9 +70,12 @@ body {
 .text-maroon{
     color: #800000;
 }
-
 footer{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
     padding-top: 1rem;
-    padding-bottom: 2.5rem;
+    padding-bottom: 0.5rem;
+    flex: 0 0 auto;
 }
-

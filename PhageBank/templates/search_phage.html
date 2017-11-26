@@ -1,0 +1,99 @@
+{% extends "logged_in.html" %}
+
+{% load widget_tweaks %}
+
+
+{% block content %}
+<br>
+  <form method="get">
+    <div class="well">
+      <h4 style="margin-top: 0">Advanced Search </h4>
+      <br>
+      <div class="row">
+        <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.phage_name.label_tag }}
+          {% render_field filter.form.phage_name class="form-control" %}
+        </div>
+        <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.phage_host_name.label_tag }}
+          {% render_field filter.form.phage_host_name class="form-control" %}
+        </div>
+        <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.phage_isolator_name.label_tag }}
+          {% render_field filter.form.phage_isolator_name class="form-control" %}
+        </div>
+        <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.phage_experimenter_name.label_tag }}
+          {% render_field filter.form.phage_experimenter_name class="form-control" %}
+        </div>
+        <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.phage_submitted_date.label_tag }}
+          {% render_field filter.form.phage_submitted_date class="form-control" %}
+        </div>
+        <div class="form-group col-sm-8 col-md-6">
+          {{ filter.form.group.label_tag }}
+          <div>
+            {% for choice in filter.form.groups %}
+              <label class="checkbox-inline">
+                {{ choice.tag }} {{ choice.choice_label }}
+              </label>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">
+        <span class="glyphicon glyphicon-search"></span> Search
+      </button>
+    </div>
+  </form>
+  <br>
+
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Phage Name</th>
+        <th>Host Name</th>
+        <th>CPT-Index</th>
+        <th>Isolator Name</th>
+        <th>Experimenter Name</th>
+        <th>Isolator Location</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for phage in filter.qs %}
+        <tr>
+          <td>{{ phage.phage_name }}</td>
+          <td>{{ phage.phage_host_name }}</td>
+          <td>{{ phage.phage_CPT_id }}</td>
+          <td>{{ phage.phage_isolator_name }}</td>
+          <td>{{ phage.phage_experimenter_name }}</td>
+          <td>{{ phage.phage_isolator_loc }}</td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="5">No data</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
+
+
+
+<!--
+
+
+
+
+  <form method="get">
+    {{ filter.form.as_p }}
+    <button type="submit">Search</button>
+  </form>
+  <ul>
+  {% for phage in filter.qs %}
+    <li>{{ phage.phage_name }} - {{ phage.phage_host_name }}</li>
+  {% endfor %}
+  </ul>
+
+
+-->
