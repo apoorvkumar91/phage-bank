@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 import csv
 from django.conf import settings
+from .filters import PhageFilter
 from io import StringIO
 from io import TextIOWrapper
 from PhageBank.core.forms import Add_ResearchForm, AForm, AIForm, Edit_Phage_DataForm, Edit_ResearcherForm, Edit_ResearchForm, Edit_IsolationDataForm, Edit_Experiment_Form
@@ -279,6 +280,13 @@ def deletephages(request):
                       {'login_status': request.user.is_authenticated()
                        })
 
+
+def search_phage(request):
+    phage_list = PhageData.objects.all()
+    phage_filter = PhageFilter(request.GET, queryset=phage_list)
+    return render(request, 'search_phage.html', {'filter': phage_filter})
+
+
 @login_required
 def editPhage(request):
     if request.user.is_authenticated():
@@ -387,6 +395,7 @@ def editPhage(request):
                       {'login_status': request.user.is_authenticated()
                        })
 
+
 def func(phagename):
     dest_dir = os.path.join(settings.MEDIA_ROOT, "images", phagename)
     docs_dest_dir = os.path.join(settings.MEDIA_ROOT, "docs", phagename)
@@ -396,6 +405,8 @@ def func(phagename):
     except:
         pass
     print(dest_dir)
+
+
 def populate(reader, request):
     fields = reader.fieldnames
     for row in reader:
