@@ -408,7 +408,7 @@ def view_phages(request):
 def delele_all_phages(request):
     phage = PhageData.objects.all().delete()
     query_results = PhageData.objects.all()
-    return render(request, 'admin.html', {'query_results': query_results,
+    return render(request, 'view_phages.html', {'query_results': query_results,
                                                 'edit_status':'false','add_status':'false',
                                                 'delete_status':'false',
                                                'login_status': request.user.is_authenticated(),
