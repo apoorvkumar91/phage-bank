@@ -359,9 +359,10 @@ def view_phages(request):
     #phage = PhageData.objects.all().delete()
     #query_results = PhageData.objects.all()
     query_results = PhageData.objects.all()
+    latest = query_results.latest('id')
     return render(request, 'view_phages.html', {'query_results': query_results,
                                                 'edit_status':'false','add_status':'false',
-                                                'delete_status':'false',
+                                                'delete_status':'false','latest':latest.phage_name,
                                                'login_status': request.user.is_authenticated(),
                                                'username': request.user.username
                                                })
@@ -492,7 +493,8 @@ def editPhage(request):
                 else:
                     handle_uploaded_file(phagedoc, docsdest)
                 query_results = PhageData.objects.all()
-                return render(request, 'view_phages.html', {'edit_status':'true','query_results':query_results,
+                latest = query_results.latest('id')
+                return render(request, 'view_phages.html', {'edit_status':'true','query_results':query_results,'latest':latest.phage_name,
                                                             'login_status': request.user.is_authenticated(),
                                                             'username': request.user.username}  )
             else:
@@ -628,9 +630,10 @@ def model_form_upload(request):
             reader = csv.DictReader(paramFile,delimiter=';',skipinitialspace=True,)
             populate(reader, request)
             query_results = PhageData.objects.all()
+            latest = query_results.latest('id')
             return render(request, 'view_phages.html', {'query_results': query_results,
                                                         'edit_status': 'false', 'add_status': 'false',
-                                                        'delete_status': 'false',
+                                                        'delete_status': 'false','latest':latest.phage_name,
                                                         'login_status': request.user.is_authenticated(),
                                                         'username': request.user.username
                                                         })
