@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^$', core_views.logged_in_index, name='index'),
     url(r'^add_phage/', core_views.add_phage, name='add_phage'),
     url(r'^admin/', admin.site.urls),
+    url(r'^delete_all/$', core_views.delele_all_phages, name='delete_all'),
     url(r'^mylogin/$', core_views.mylogin, name='mylogin'),
     url(r'^logout/$', core_views.mylogout, name='logout'),
     url(r'^signup/$', core_views.signup, name='signup'),

@@ -367,6 +367,17 @@ def view_phages(request):
                                                'login_status': request.user.is_authenticated(),
                                                'username': request.user.username
                                                })
+
+@user_passes_test(lambda u: u.is_superuser, login_url='/admin/')
+def delele_all_phages(request):
+    phage = PhageData.objects.all().delete()
+    query_results = PhageData.objects.all()
+    return render(request, 'admin.html', {'query_results': query_results,
+                                                'edit_status':'false','add_status':'false',
+                                                'delete_status':'false',
+                                               'login_status': request.user.is_authenticated(),
+                                               'username': request.user.username
+                                               })
 #this form shows a particular phage
 def view_phage(request):
     phageName = request.GET.get('name')
