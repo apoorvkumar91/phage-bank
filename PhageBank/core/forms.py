@@ -277,7 +277,7 @@ class AIForm(forms.Form):
                                       )
 
 class Edit_Phage_DataForm(forms.ModelForm):
-    phage_name = forms.CharField(required=False,)
+    phage_name = forms.CharField(required=True,)
     phage_host_name = forms.CharField(required=False,)
     class Meta:
         model = PhageData
@@ -297,7 +297,7 @@ class Edit_ResearcherForm(forms.ModelForm):
         fields = ("phage_isolator_name", "phage_experimenter_name","phage_lab")
 
 class Edit_ResearchForm(forms.ModelForm):
-    phage_CPT_id = forms.CharField(required=False,)
+    phage_CPT_id = forms.CharField(required=True,)
     phage_isolator_loc = forms.CharField(required=False,)
     class Meta:
         model = PhageData

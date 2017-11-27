@@ -257,7 +257,6 @@ def validate_latest_phage(query_results):
 def add_phage(request):
     if request.user.is_authenticated():
         if request.method == 'POST':
-
             pform = Add_Phage_DataForm(request.POST)    #phage_name
             rrform = Add_ResearcherForm(request.POST)
             rform = Add_ResearchForm(request.POST)      #CPT ID
@@ -268,7 +267,6 @@ def add_phage(request):
 
             if pform.is_valid() and rrform.is_valid() and rform.is_valid() and expform.is_valid() and isoform.is_valid() \
                     and aform.is_valid() and aiform.is_valid():
-
                 phagename = pform.cleaned_data.get('phage_name')
                 CPTid = rform.cleaned_data.get('phage_CPT_id')
 
@@ -338,24 +336,19 @@ def add_phage(request):
                 else:
                     handle_uploaded_file(phagedoc, docsdest)
 
-                query_results = PhageData.objects.all()
+                # query_results = PhageData.objects.all()
 
-                return JsonResponse(msg)        #if the data is valid
+                return JsonResponse(msg)
 
+                #if the data is valid
                 #render(request, 'view_phages.html', {'add_status':'true','query_results':query_results}  )
-
                 #render(request, 'view_phages.html', {'add_status':'true','query_results':query_results ,
                 #                                            'login_status': request.user.is_authenticated(),
                 #                                            'username': request.user.username})
 
             else:
-                pform = Add_Phage_DataForm()
-                rrform = Add_ResearcherForm()
-                rform = Add_ResearchForm()
-                expform = Add_Experiment_Form()
-                isoform = Isolation_Form()
-                aform = AForm()
-                aiform = AIForm()
+                pform.add_error("phage_name","This field is required.")
+                rform.add_error("phage_CPT_id","This field is required.")
                 return render(request, 'add_phage.html', {'pform': pform,
                                                           'rrform': rrform,
                                                           'rform': rform,
