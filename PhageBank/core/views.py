@@ -420,6 +420,24 @@ def deletephages(request):
 
 def search_phage(request):
     phage_list = PhageData.objects.all()
+    request.GET._mutable = True
+    print("$$$$")
+    if request.GET.get('submitted_year_gt'):
+        #print(request.GET['submitted_year_gt'])
+        if int(request.GET.get('submitted_year_gt')) < 0:
+            request.GET['submitted_year_gt'] = 1
+        #print(request.GET['submitted_year_gt'])
+    if request.GET.get('submitted_year_lt'):
+        if int(request.GET.get('submitted_year_lt')) < 0:
+            request.GET['submitted_year_lt'] = 1
+    if request.GET.get('submitted_month_gt'):
+        if int(request.GET.get('submitted_month_gt')) < 0:
+            request.GET['submitted_month_gt'] = 1
+    if request.GET.get('submitted_month_lt'):
+        if int(request.GET.get('submitted_month_lt')) < 0:
+            request.GET['submitted_month_lt'] = 1
+    print("####")
+
     phage_filter = PhageFilter(request.GET, queryset=phage_list)
     return render(request, 'search_phage.html', {'filter': phage_filter,
                                                  'login_status': request.user.is_authenticated(),
