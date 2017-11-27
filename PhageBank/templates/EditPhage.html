@@ -144,7 +144,7 @@
                     {% elif field.name == 'TimeStamp'%}
                     {% render_field field class="form-control" value=iso.TimeStamp%}
                     {% elif field.name == 'type'%}
-                    {% render_field field class="form-control" value=iso.type%}
+                    {% render_field field class="form-control" value=iso.type1%}
                     {% endif %}
                     {% for error in field.errors %}
                     <p class="help-block">{{ error }}</p>
