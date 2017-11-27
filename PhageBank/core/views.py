@@ -417,9 +417,9 @@ def deletephages(request):
             pass
         phage = PhageData.objects.get(phage_name=x).delete()
         query_results = PhageData.objects.all()
-
+        latest = query_results.latest('id')
         return render(request, 'view_phages.html', {'query_results': query_results,'delete_status':'true',
-                                               'login_status': request.user.is_authenticated(),
+                                               'login_status': request.user.is_authenticated(),'latest':latest.phage_name,
                                                'username': request.user.username
                                                })
     else:
@@ -431,6 +431,27 @@ def deletephages(request):
 
 def search_phage(request):
     phage_list = PhageData.objects.all()
+    request.GET._mutable = True
+    print("$$$$")
+    if request.GET.get('submitted_year_gt'):
+        #print(request.GET['submitted_year_gt'])
+        if int(request.GET.get('submitted_year_gt')) < 0:
+            messages.error(request, 'Invalid value for "Year Submitted After" entered. Setting it to 1')
+            request.GET['submitted_year_gt'] = 1
+        #print(request.GET['submitted_year_gt'])
+    if request.GET.get('submitted_year_lt'):
+        if int(request.GET.get('submitted_year_lt')) < 0:
+            messages.error(request, 'Invalid value for "Year Submitted Before" entered. Setting it to 1')
+            request.GET['submitted_year_lt'] = 1
+    if request.GET.get('submitted_month_gt'):
+        if int(request.GET.get('submitted_month_gt')) < 0:
+            messages.error(request, 'Invalid value for "Month Submitted After" entered. Setting it to 1')
+            request.GET['submitted_month_gt'] = 1
+    if request.GET.get('submitted_month_lt'):
+        if int(request.GET.get('submitted_month_lt')) < 0:
+            messages.error(request, 'Invalid value for "Month Submitted Before" entered. Setting it to 1')
+            request.GET['submitted_month_lt'] = 1
+
     phage_filter = PhageFilter(request.GET, queryset=phage_list)
     return render(request, 'search_phage.html', {'filter': phage_filter,
                                                  'login_status': request.user.is_authenticated(),
