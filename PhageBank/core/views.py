@@ -53,26 +53,32 @@ def list_path(dest_dir):
     return list_path
 
 def logged_in_index(request):
-    last_three = PhageData.objects.all().order_by('-id')[:3]
-    dest_dir1 = list_path(os.path.join(settings.MEDIA_ROOT, "images", last_three[0].phage_name))
-    dest_dir2 = list_path(os.path.join(settings.MEDIA_ROOT, "images", last_three[1].phage_name))
-    dest_dir3 = list_path(os.path.join(settings.MEDIA_ROOT, "images", last_three[2].phage_name))
-    count1 = count(os.path.join(settings.MEDIA_ROOT, "images", last_three[0].phage_name))
-    count2 = count(os.path.join(settings.MEDIA_ROOT, "images", last_three[1].phage_name))
-    count3 = count(os.path.join(settings.MEDIA_ROOT, "images", last_three[2].phage_name))
+    try:
+        last_three = PhageData.objects.all().order_by('-id')[:3]
+        dest_dir1 = list_path(os.path.join(settings.MEDIA_ROOT, "images", last_three[0].phage_name))
+        dest_dir2 = list_path(os.path.join(settings.MEDIA_ROOT, "images", last_three[1].phage_name))
+        dest_dir3 = list_path(os.path.join(settings.MEDIA_ROOT, "images", last_three[2].phage_name))
+        count1 = count(os.path.join(settings.MEDIA_ROOT, "images", last_three[0].phage_name))
+        count2 = count(os.path.join(settings.MEDIA_ROOT, "images", last_three[1].phage_name))
+        count3 = count(os.path.join(settings.MEDIA_ROOT, "images", last_three[2].phage_name))
 
+        return render(request, 'logged_in_index.html',{'login_status': request.user.is_authenticated(),
+                                                       'username': request.user.username,
+                                                       'phage1': last_three[0],
+                                                       'phage2': last_three[1],
+                                                       'phage3': last_three[2],
+                                                       'dest_dir1': dest_dir1,
+                                                       'dest_dir2': dest_dir2,
+                                                       'dest_dir3': dest_dir3,
+                                                       'count1': count1,
+                                                       'count2': count2,
+                                                       'count3': count3
+                                                       })
+    except:
+        pass
     return render(request, 'logged_in_index.html',{'login_status': request.user.is_authenticated(),
-                                                   'username': request.user.username,
-                                                   'phage1': last_three[0],
-                                                   'phage2': last_three[1],
-                                                   'phage3': last_three[2],
-                                                   'dest_dir1': dest_dir1,
-                                                   'dest_dir2': dest_dir2,
-                                                   'dest_dir3': dest_dir3,
-                                                   'count1': count1,
-                                                   'count2': count2,
-                                                   'count3': count3
-                                                   })
+                                                       'username': request.user.username,
+                                                       })
 
 def mylogout(request):
     logout(request)
@@ -359,11 +365,20 @@ def my_phages(request):
 def view_phages(request):
     #phage = PhageData.objects.all().delete()
     #query_results = PhageData.objects.all()
-    query_results = PhageData.objects.all()
-    latest = query_results.latest('id')
-    return render(request, 'view_phages.html', {'query_results': query_results,
+    try:
+        query_results = PhageData.objects.all()
+        latest = query_results.latest('id')
+        return render(request, 'view_phages.html', {'query_results': query_results,
                                                 'edit_status':'false','add_status':'false',
                                                 'delete_status':'false','latest':latest.phage_name,
+                                               'login_status': request.user.is_authenticated(),
+                                               'username': request.user.username
+                                               })
+    except:
+        pass
+    return render(request, 'view_phages.html', {
+                                                'edit_status':'false','add_status':'false',
+                                                'delete_status':'false',
                                                'login_status': request.user.is_authenticated(),
                                                'username': request.user.username
                                                })
