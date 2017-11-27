@@ -72,7 +72,7 @@
         </li>
           <br>
         <li class="nav-item">
-            <a class="btn btn-outline-info nav-link text-maroon" href="#section3">Sequencing Information</a>
+            <a class="btn btn-outline-info nav-link text-maroon" href="#section3">Researcher Information</a>
         </li>
           <br>
           <li class="nav-item">
@@ -150,14 +150,12 @@
 </div>
                         </div>
                         <div class="col-md-6">
-                            <p><b>Phage Name:</b>  {{ item.phage_name }}</p>
-                            <p><b>Host Name:</b>  {{ item.phage_host_name }}</p>
-                            <p><b>Isolator Name:</b>  {{ item.phage_isolator_name }}</p>
-                            <p><b>Experimenter Name:</b>  {{ item.phage_experimenter_name }}</p>
-                            <p><b>CPT ID:</b>  {{ item.phage_CPT_id }}</p>
-                            <p><b>Isolator Location:</b>  {{ item.phage_isolator_loc }}</p>
-                            <p><b>URL:</b>  {{ item.phage_all_links }}</p>
-                            <p><b>Previous names: </b>
+                            <p><b>Phage Name       : </b>  {{ item.phage_name }}</p>
+                            <p><b>Host Name        : </b>  {{ item.phage_host_name }}</p>
+                            <p><b>Isolator Name    : </b>  {{ item.phage_isolator_name }}</p>
+                            <p><b>Experimenter Name: </b>  {{ item.phage_experimenter_name }}</p>
+                            <p><b>CPT ID           : </b>  {{ item.phage_CPT_id }}</p>
+                            <p><b>Previous names   : </b>
                                 {%for query in previous_names %}
                                 {{  query.phagename}}{{","}}
                                 {% endfor %}
@@ -170,14 +168,21 @@
         <br>
         <br>
         <br>
-        <h4 class="text-maroon">Sequencing Information for {{ item.phage_name }}</h4>
+        <h4 class="text-maroon">Researcher Information</h4>
         <br>
         <table id="phageDetails" cellspacing="0" class="table table-striped">
 	<tbody>
-		<tr><td class="detailLabel">Sequencing Complete?</td><td class="detailValue">No</td></tr>
-		<tr><td class="detailLabel">Genome length (bp)</td><td class="detailValue">Unknown</td></tr>
-		<tr><td class="detailLabel">Character of genome ends</td><td class="detailValue">Unknown</td></tr>
-		<tr><td class="detailLabel">Fasta file available?</td><td class="detailValue">No</td></tr>
+		<tr><td class="detailLabel">Phage experimenter name</td><td class="detailValue">{{ item.phage_experimenter_name }}</td></tr>
+		<tr><td class="detailLabel">Phage isolator name</td><td class="detailValue">{{ item.phage_isolator_name }}</td></tr>
+		<tr><td class="detailLabel">Phage lab</td><td class="detailValue">
+            {%  if item.phage_lab == '0' %}
+            Lab - A
+            {% endif %}
+            {%  if item.phage_lab == '1' %}
+            Lab - B
+            {% endif %}
+        </td></tr>
+		<tr><td class="detailLabel">CPT Id</td><td class="detailValue"> {{ item.phage_CPT_id }}</td></tr>
 	</tbody>
 	</table>
     </div>
@@ -255,7 +260,11 @@ div.col-8 div {
 .carousel-caption {
     color: black;
 }
-
+td{
+    word-wrap: break-word;
+    min-width: 160px;
+    max-width: 160px;
+}
 .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
     color: #fff;
     background-color: #800000;
