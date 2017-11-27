@@ -21,6 +21,9 @@ from django.http import JsonResponse
 from django.template import RequestContext
 from django.contrib.messages import get_messages
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 
 import json
 import os
@@ -29,17 +32,71 @@ import datetime
 import sqlite3
 import pandas as pd
 
+def count(dest_dir):
+    count = 0;
+    for filename in os.listdir(dest_dir):
+        if filename.endswith(".png") or filename.endswith(".jpg") or filename.endswith(".jpeg"):
+            count=count+1;
+            continue
+        else:
+            continue
+    return count
+
+def list_path(dest_dir):
+    list_path = [];
+    for filename in os.listdir(dest_dir):
+        if filename.endswith(".png") or filename.endswith(".jpg") or filename.endswith(".jpeg"):
+            list_path.append(filename)
+            continue
+        else:
+            continue
+    return list_path
 
 def logged_in_index(request):
+    last_three = PhageData.objects.all().order_by('-id')[:3]
+    dest_dir1 = list_path(os.path.join(settings.MEDIA_ROOT, "images", last_three[0].phage_name))
+    dest_dir2 = list_path(os.path.join(settings.MEDIA_ROOT, "images", last_three[1].phage_name))
+    dest_dir3 = list_path(os.path.join(settings.MEDIA_ROOT, "images", last_three[2].phage_name))
+    count1 = count(os.path.join(settings.MEDIA_ROOT, "images", last_three[0].phage_name))
+    count2 = count(os.path.join(settings.MEDIA_ROOT, "images", last_three[1].phage_name))
+    count3 = count(os.path.join(settings.MEDIA_ROOT, "images", last_three[2].phage_name))
+
     return render(request, 'logged_in_index.html',{'login_status': request.user.is_authenticated(),
-                                                   'username': request.user.username
-                                          })
+                                                   'username': request.user.username,
+                                                   'phage1': last_three[0],
+                                                   'phage2': last_three[1],
+                                                   'phage3': last_three[2],
+                                                   'dest_dir1': dest_dir1,
+                                                   'dest_dir2': dest_dir2,
+                                                   'dest_dir3': dest_dir3,
+                                                   'count1': count1,
+                                                   'count2': count2,
+                                                   'count3': count3
+                                                   })
+
 def mylogout(request):
     logout(request)
+    last_three = PhageData.objects.all().order_by('-id')[:3]
+    dest_dir1 = list_path(os.path.join(settings.MEDIA_ROOT, "images", last_three[0].phage_name))
+    dest_dir2 = list_path(os.path.join(settings.MEDIA_ROOT, "images", last_three[1].phage_name))
+    dest_dir3 = list_path(os.path.join(settings.MEDIA_ROOT, "images", last_three[2].phage_name))
+    count1 = count(os.path.join(settings.MEDIA_ROOT, "images", last_three[0].phage_name))
+    count2 = count(os.path.join(settings.MEDIA_ROOT, "images", last_three[1].phage_name))
+    count3 = count(os.path.join(settings.MEDIA_ROOT, "images", last_three[2].phage_name))
     messages.success(request, 'You have successfully logged out.', extra_tags='alert')
     return render(request, 'logged_in_index.html', {'login_status': request.user.is_authenticated(),
-                                              'username': request.user.username
-                                              })
+                                                    'username': request.user.username,
+                                                    'phage1': last_three[0],
+                                                    'phage2': last_three[1],
+                                                    'phage3': last_three[2],
+                                                    'dest_dir1': dest_dir1,
+                                                    'dest_dir2': dest_dir2,
+                                                    'dest_dir3': dest_dir3,
+                                                    'count1': count1,
+                                                    'count2': count2,
+                                                    'count3': count3
+                                                    })
+
 def signup(request):
     data = dict()
 
@@ -91,10 +148,28 @@ def mylogin(request):
     return JsonResponse(msg)
 
 
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('logout')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'change_password.html', {'form': form,
+                                                    'login_status': request.user.is_authenticated(),
+                                                    'username': request.user.username,
+                                                    })
+
+
 def handle_uploaded_file(f, dest):
     with open(dest, 'wb') as destination:
         for chunk in f.chunks():
             destination.write(chunk)
+
 
 #Fill the model object in similar fashion
 def fillExpObject(expform, phage):
