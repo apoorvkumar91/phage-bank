@@ -21,6 +21,9 @@ from django.http import JsonResponse
 from django.template import RequestContext
 from django.contrib.messages import get_messages
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 
 import json
 import os
@@ -91,10 +94,28 @@ def mylogin(request):
     return JsonResponse(msg)
 
 
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('logout')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'change_password.html', {'form': form,
+                                                    'login_status': request.user.is_authenticated(),
+                                                    'username': request.user.username,
+                                                    })
+
+
 def handle_uploaded_file(f, dest):
     with open(dest, 'wb') as destination:
         for chunk in f.chunks():
             destination.write(chunk)
+
 
 #Fill the model object in similar fashion
 def fillExpObject(expform, phage):
