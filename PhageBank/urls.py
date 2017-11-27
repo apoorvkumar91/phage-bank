@@ -14,6 +14,7 @@ urlpatterns = [
     url(r'^mylogin/$', core_views.mylogin, name='mylogin'),
     url(r'^logout/$', core_views.mylogout, name='logout'),
     url(r'^signup/$', core_views.signup, name='signup'),
+    url(r'^change_password/$', core_views.change_password, name='change_password'),
     url(r'^contact/$', core_views.contact, name='contact'),
     url(r'^view_phages/$', core_views.view_phages, name='view_phages'),
     url(r'^view_phage/$', core_views.view_phage, name='phage'),
