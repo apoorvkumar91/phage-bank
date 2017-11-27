@@ -155,15 +155,19 @@
                         <img src="{% static 'images/phage.png' %}" alt="Demo image" width="200" height="200" class="image img-rounded img-responsive"/>
                         {% else %}
                         {% for x in dest_dir1|slice:":1" %}
-                        <img class="card-img-top" src="/media/images/{{ phage1.phage_name }}/{{ x }}" width="200" height="200" class="image img-rounded img-responsive"/>
+                        <img class="card-img-top" src="/media/images/{{ phage1 }}/{{ x }}" width="200" height="200" class="image img-rounded img-responsive"/>
                         {% endfor %}
                         {% endif %}
                         <div class="overlay">
-                            <div class="text">{{ phage1.phage_name }}</div>
+                            <div class="text">{{ phage1 }}</div>
                         </div>
                     </div>
                     <div class="card-footer">
-                        <a href="/view_phage/?name={{ phage1.phage_name }}" class="btn btn-default">Read more...</a>
+                        {% if phage1 == "" %}
+                            <a class="btn btn-default">Data Not Found</a>
+                            {% else %}
+                        <a href="/view_phage/?name={{ phage1 }}" class="btn btn-default">Read more...</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -175,15 +179,19 @@
                         <img src="{% static 'images/phage.png' %}" alt="Demo image" width="200" height="200" class="image img-rounded img-responsive"/>
                         {% else%}
                         {% for x in dest_dir2|slice:":1" %}
-                        <img class="card-img-top" src="/media/images/{{ phage2.phage_name }}/{{ x }}" width="200" height="200" class="image img-rounded img-responsive"/>
+                        <img class="card-img-top" src="/media/images/{{ phage2 }}/{{ x }}" width="200" height="200" class="image img-rounded img-responsive"/>
                         {% endfor %}
                         {% endif %}
                         <div class="overlay">
-                            <div class="text">{{ phage2.phage_name }}</div>
+                            <div class="text">{{ phage2 }}</div>
                         </div>
                     </div>
                     <div class="card-footer">
-                        <a href="/view_phage/?name={{ phage2.phage_name }}" class="btn btn-default">Read more...</a>
+                        {% if phage2 == "" %}
+                            <a class="btn btn-default">Data Not Found</a>
+                            {% else %}
+                        <a href="/view_phage/?name={{ phage2 }}" class="btn btn-default">Read more...</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -195,15 +203,19 @@
                         <img src="{% static 'images/phage.png' %}" alt="Demo image" width="200" height="200" class="image img-rounded img-responsive"/>
                         {% else %}
                         {% for x in dest_dir3|slice:":1" %}
-                        <img class="card-img-top" src="/media/images/{{ phage3.phage_name }}/{{ x }}" width="200" height="200" class="image img-rounded img-responsive"/>
+                        <img class="card-img-top" src="/media/images/{{ phage3 }}/{{ x }}" width="200" height="200" class="image img-rounded img-responsive"/>
                         {% endfor %}
                         {% endif %}
                         <div class="overlay">
-                            <div class="text">{{ phage3.phage_name }}</div>
+                            <div class="text">{{ phage3 }}</div>
                         </div>
                     </div>
                     <div class="card-footer">
-                        <a href="/view_phage/?name={{ phage3.phage_name }}" class="btn btn-default">Read more...</a>
+                        {% if phage3 == "" %}
+                            <a class="btn btn-default">Data Not Found</a>
+                            {% else %}
+                        <a href="/view_phage/?name={{ phage3 }}" class="btn btn-default">Read more...</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
