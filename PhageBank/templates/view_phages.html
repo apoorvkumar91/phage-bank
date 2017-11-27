@@ -66,7 +66,12 @@
     <tbody>
     {% for item in query_results %}
     <tr>
-        <td style="padding: 8px;"><a href='/view_phage/?name={{ item.phage_name }}'>{{ item.phage_name }}</a></td>
+        <td style="padding: 8px;"><a href='/view_phage/?name={{ item.phage_name }}'>{{ item.phage_name }}</a>
+                {% if latest == item.phage_name %}
+            {% load staticfiles %}
+                <img src="{% static 'images/new3.gif' %}" alt="Demo image"  class="img-rounded img-responsive" />
+        {% endif %}
+        </td>
         <td style="padding: 8px;">{{ item.phage_host_name }}</td>
         <td style="padding: 8px;">{{ item.phage_CPT_id}}</td>
         <td style="padding: 8px;">{{ item.phage_isolator_name }}</td>
