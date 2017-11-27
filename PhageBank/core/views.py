@@ -93,7 +93,7 @@ def fillExpObject(expform, phage):
     exp =  ExperimentData.objects.create(expkey=phage)
     exp.expkey = phage
     exp.owner = expform.cleaned_data.get('owner')
-    exp.timestamp = expform.cleaned_data.get('timestamp')
+    exp.timestamp = expform.cleaned_data.get('TimeStamp')
     exp.category = expform.cleaned_data.get('category')
     exp.short_name = expform.cleaned_data.get('short_name')
     exp.full_name = expform.cleaned_data.get('full_name')
@@ -103,7 +103,7 @@ def fillExpObject(expform, phage):
 
 def fillExpObjectedit(expform, exp):
     exp.owner = expform.cleaned_data.get('owner')
-    exp.timestamp = expform.cleaned_data.get('timestamp')
+    exp.timestamp = expform.cleaned_data.get('TimeStamp')
     exp.category = expform.cleaned_data.get('category')
     exp.short_name = expform.cleaned_data.get('short_name')
     exp.full_name = expform.cleaned_data.get('full_name')
@@ -116,14 +116,14 @@ def fillIsoltionObject(isoform, phage):
     iso.isokey = phage
     iso.owner_name = isoform.cleaned_data.get('owner_name')
     iso.location = isoform.cleaned_data.get('location')
-    iso.type = isoform.cleaned_data.get('type')
+    iso.type1 = isoform.cleaned_data.get('type1')
     iso.TimeStamp = isoform.cleaned_data.get('timestamp')
     iso.save()
 
 def fillIsoltionObjectedit(isoform, iso):
     iso.owner_name = isoform.cleaned_data.get('owner_name')
     iso.location = isoform.cleaned_data.get('location')
-    iso.type = isoform.cleaned_data.get('type')
+    iso.type1 = isoform.cleaned_data.get('type')
     iso.TimeStamp = isoform.cleaned_data.get('TimeStamp')
     iso.save()
 
@@ -154,8 +154,9 @@ def add_phage(request):
                 #duplicateCPTidPhages : list of phages due to duplicates in CPT ids
                 #duplicateCPTidCPTid : list of duplicate CPT ids
 
-                chkDuplicatesFlag = 0
+                #chkDuplicatesFlag = 0
                 chkDuplicatesFlag = int(request.POST['flag'])
+                #chkDuplicatesFlag = 1
                 
                 msg = dict()
                 
@@ -163,9 +164,11 @@ def add_phage(request):
                     approvePhage, approveCPTid, duplicatePhagesPhages, duplicatePhagesCPTid, duplicateCPTidPhages\
                     , duplicateCPTidCPTid = checkDuplicatesInAddPhage(phagename, CPTid)
 
+                    print(approvePhage, approveCPTid)
+
                     msg['approvePhage']=approvePhage
                     msg['approveCPTid']=approveCPTid
-
+                    
                     if (approvePhage==0 or approveCPTid==0):
                         msg['duplicatePhagesPhages']=json.dumps(duplicatePhagesPhages)
                         msg['duplicatePhagesCPTid']=json.dumps(duplicatePhagesCPTid)
@@ -222,8 +225,6 @@ def add_phage(request):
                 #render(request, 'view_phages.html', {'add_status':'true','query_results':query_results ,
                 #                                            'login_status': request.user.is_authenticated(),
                 #                                            'username': request.user.username})
-    
-                #return JsonResponse(msg)
 
             else:
                 pform = Add_Phage_DataForm()
@@ -566,28 +567,30 @@ def header(request):
 
 
 def checkDuplicatesInAddPhage(phage_name, phage_CPT_id):
-    db=sqlite3.connect('db.sqlite3')
+    #db=sqlite3.connect('db.sqlite3')
+    #params={'phage_name':phage_name, 'phage_CPT_id':phage_CPT_id}
+    #q1="SELECT phage_name, phage_CPT_id FROM core_phagedata WHERE phage_name='{phage_name}'"    
+    #rowsPhage = pd.read_sql_query(q1.format(**params), db)
     
-    params={'phage_name':phage_name, 'phage_CPT_id':phage_CPT_id}
+    rowsPhage = PhageData.objects.filter(phage_name = phage_name).values('phage_name','phage_CPT_id')
+    #.values() is a list of dict
     
-    q1="SELECT phage_name, phage_CPT_id FROM core_phagedata WHERE phage_name='{phage_name}'"
-    rowsPhage = pd.read_sql_query(q1.format(**params), db)
+    rowsCPTid = PhageData.objects.filter(phage_CPT_id = phage_CPT_id).values('phage_name','phage_CPT_id')
     
-    q2="SELECT phage_name, phage_CPT_id FROM core_phagedata WHERE phage_CPT_id='{phage_CPT_id}'"
-    rowsCPTid = pd.read_sql_query(q2.format(**params), db)
+    duplicatePhagesPhages = [d['phage_name'] for d in rowsPhage] # rowsPhage["phage_name"].values.tolist()
+    #print(duplicatePhagesPhages)
     
-    duplicatePhagesPhages = rowsPhage["phage_name"].values.tolist()
-    duplicatePhagesCPTid = rowsPhage["phage_CPT_id"].values.tolist()
+    duplicatePhagesCPTid = [d['phage_CPT_id'] for d in rowsPhage]
 
-    duplicateCPTidPhages = rowsCPTid["phage_name"].values.tolist()    
-    duplicateCPTidCPTid = rowsCPTid["phage_CPT_id"].values.tolist()
+    duplicateCPTidPhages = [d['phage_name'] for d in rowsCPTid]
+    duplicateCPTidCPTid = [d['phage_CPT_id'] for d in rowsCPTid]
     
     approvePhage=1
     approveCPTid=1
-    if len(duplicatePhagesPhages)>0:
+    if len(rowsPhage)>0:
         approvePhage=0
         
-    if len(duplicateCPTidPhages)>0:
+    if len(rowsCPTid)>0:
         approveCPTid=0
         
     return approvePhage, approveCPTid, duplicatePhagesPhages, duplicatePhagesCPTid, duplicateCPTidPhages\
