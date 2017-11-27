@@ -102,8 +102,6 @@ def mylogout(request):
         name1 = last_three[0].phage_name
         dest_dir1 = list_path(os.path.join(settings.MEDIA_ROOT, "images", last_three[0].phage_name))
         count1 = count(os.path.join(settings.MEDIA_ROOT, "images", last_three[0].phage_name))
-        print("manish heret")
-        print(count1)
     except:
         pass
 
@@ -314,14 +312,11 @@ def add_phage(request):
                 phage.phage_experimenter_name = rrform.cleaned_data.get('phage_experimenter_name')
                 phage.phage_submitted_user = request.user.username
                 phage.phage_lab = rrform.cleaned_data.get('phage_lab')
-                print(phage.phage_lab)
 
                 phage.save()
                 fillIsoltionObject(isoform, phage)
-                print(phage.iso_phageName.all().values())
 
                 fillExpObject(expform, phage)
-                print (phage.PName.all().values())
                 # print(phage.phage_submitted_user)
                 phagedoc = aform.cleaned_data.get('doc')
                 phageimage = aform.cleaned_data.get('image')
@@ -431,7 +426,6 @@ def view_phage(request):
                 continue
     except:
         pass
-    print(list_path)
     return render(request, 'view_phage.html', {'item': phage,'previous_names':previous_names,'expdata':expdata,'isodata':isodata,
                                               'login_status': request.user.is_authenticated(),'dest_dir':list_path,'count':count,
                                               'username': request.user.username
@@ -501,8 +495,6 @@ def editPhage(request):
         expdata = ExperimentData.objects.filter(expkey = phage)
         last = isodata.latest('id')
         last_exp = expdata.latest('id')
-        print(last_exp.owner)
-        print(last.owner_name)
         pform = Edit_Phage_DataForm(request.POST, instance=phage, initial = {'phage_name':phage.phage_name })
         rrform = Edit_ResearcherForm(request.POST, instance=phage)
         rform = Edit_ResearchForm(request.POST, instance=phage)
@@ -528,7 +520,6 @@ def editPhage(request):
                 phage.phage_isolator_loc = rform.cleaned_data.get('phage_isolator_loc')
                 phage.phage_all_links = aiform.cleaned_data.get('link')
                 phage.phage_lab = rrform.cleaned_data.get('phage_lab')
-                print(phage.phage_lab)
                 #isolator_data = phage.iso_phageName.objects.latest(iso_phageName)
                 pform.save()
                 phage.save()
@@ -541,8 +532,6 @@ def editPhage(request):
                 docs_dest_dir_old = os.path.join(settings.MEDIA_ROOT, "docs", name)
                 dest_dir = os.path.join(settings.MEDIA_ROOT, "images", phage.phage_name)
                 docs_dest_dir = os.path.join(settings.MEDIA_ROOT, "docs", phage.phage_name)
-                print(dest_dir_old)
-                print(dest_dir and name!=phage.phage_name)
                 try:
                     os.rename(dest_dir_old,dest_dir)
                     os.rename(docs_dest_dir_old,docs_dest_dir)
@@ -565,7 +554,6 @@ def editPhage(request):
                                                             'username': request.user.username}  )
             else:
                 phage = PhageData.objects.get(phage_name=name)
-                print (phage.phage_host_name)
                 phage.save()
                 return render(request, 'EditPhage.html', {'item': phage,
                                                           'pform': pform,
@@ -610,7 +598,6 @@ def func(phagename):
         os.mkdir(docs_dest_dir)
     except:
         pass
-    print(dest_dir)
 
 
 def populate(reader, request):
