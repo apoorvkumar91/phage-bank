@@ -425,18 +425,21 @@ def search_phage(request):
     if request.GET.get('submitted_year_gt'):
         #print(request.GET['submitted_year_gt'])
         if int(request.GET.get('submitted_year_gt')) < 0:
+            messages.error(request, 'Invalid value for "Year Submitted After" entered. Setting it to 1')
             request.GET['submitted_year_gt'] = 1
         #print(request.GET['submitted_year_gt'])
     if request.GET.get('submitted_year_lt'):
         if int(request.GET.get('submitted_year_lt')) < 0:
+            messages.error(request, 'Invalid value for "Year Submitted Before" entered. Setting it to 1')
             request.GET['submitted_year_lt'] = 1
     if request.GET.get('submitted_month_gt'):
         if int(request.GET.get('submitted_month_gt')) < 0:
+            messages.error(request, 'Invalid value for "Month Submitted After" entered. Setting it to 1')
             request.GET['submitted_month_gt'] = 1
     if request.GET.get('submitted_month_lt'):
         if int(request.GET.get('submitted_month_lt')) < 0:
+            messages.error(request, 'Invalid value for "Month Submitted Before" entered. Setting it to 1')
             request.GET['submitted_month_lt'] = 1
-    print("####")
 
     phage_filter = PhageFilter(request.GET, queryset=phage_list)
     return render(request, 'search_phage.html', {'filter': phage_filter,
