@@ -32,17 +32,71 @@ import datetime
 import sqlite3
 import pandas as pd
 
+def count(dest_dir):
+    count = 0;
+    for filename in os.listdir(dest_dir):
+        if filename.endswith(".png") or filename.endswith(".jpg") or filename.endswith(".jpeg"):
+            count=count+1;
+            continue
+        else:
+            continue
+    return count
+
+def list_path(dest_dir):
+    list_path = [];
+    for filename in os.listdir(dest_dir):
+        if filename.endswith(".png") or filename.endswith(".jpg") or filename.endswith(".jpeg"):
+            list_path.append(filename)
+            continue
+        else:
+            continue
+    return list_path
 
 def logged_in_index(request):
+    last_three = PhageData.objects.all().order_by('-id')[:3]
+    dest_dir1 = list_path(os.path.join(settings.MEDIA_ROOT, "images", last_three[0].phage_name))
+    dest_dir2 = list_path(os.path.join(settings.MEDIA_ROOT, "images", last_three[1].phage_name))
+    dest_dir3 = list_path(os.path.join(settings.MEDIA_ROOT, "images", last_three[2].phage_name))
+    count1 = count(os.path.join(settings.MEDIA_ROOT, "images", last_three[0].phage_name))
+    count2 = count(os.path.join(settings.MEDIA_ROOT, "images", last_three[1].phage_name))
+    count3 = count(os.path.join(settings.MEDIA_ROOT, "images", last_three[2].phage_name))
+
     return render(request, 'logged_in_index.html',{'login_status': request.user.is_authenticated(),
-                                                   'username': request.user.username
-                                          })
+                                                   'username': request.user.username,
+                                                   'phage1': last_three[0],
+                                                   'phage2': last_three[1],
+                                                   'phage3': last_three[2],
+                                                   'dest_dir1': dest_dir1,
+                                                   'dest_dir2': dest_dir2,
+                                                   'dest_dir3': dest_dir3,
+                                                   'count1': count1,
+                                                   'count2': count2,
+                                                   'count3': count3
+                                                   })
+
 def mylogout(request):
     logout(request)
+    last_three = PhageData.objects.all().order_by('-id')[:3]
+    dest_dir1 = list_path(os.path.join(settings.MEDIA_ROOT, "images", last_three[0].phage_name))
+    dest_dir2 = list_path(os.path.join(settings.MEDIA_ROOT, "images", last_three[1].phage_name))
+    dest_dir3 = list_path(os.path.join(settings.MEDIA_ROOT, "images", last_three[2].phage_name))
+    count1 = count(os.path.join(settings.MEDIA_ROOT, "images", last_three[0].phage_name))
+    count2 = count(os.path.join(settings.MEDIA_ROOT, "images", last_three[1].phage_name))
+    count3 = count(os.path.join(settings.MEDIA_ROOT, "images", last_three[2].phage_name))
     messages.success(request, 'You have successfully logged out.', extra_tags='alert')
     return render(request, 'logged_in_index.html', {'login_status': request.user.is_authenticated(),
-                                              'username': request.user.username
-                                              })
+                                                    'username': request.user.username,
+                                                    'phage1': last_three[0],
+                                                    'phage2': last_three[1],
+                                                    'phage3': last_three[2],
+                                                    'dest_dir1': dest_dir1,
+                                                    'dest_dir2': dest_dir2,
+                                                    'dest_dir3': dest_dir3,
+                                                    'count1': count1,
+                                                    'count2': count2,
+                                                    'count3': count3
+                                                    })
+
 def signup(request):
     data = dict()
 

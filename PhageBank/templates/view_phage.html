@@ -68,25 +68,30 @@
     <nav class="col-sm-3 col-4" id="myScrollspy">
       <ul class="nav nav-pills flex-column">
         <li class="nav-item">
-          <a class="nav-link active" href="#section1">Basic Details</a>
+            <a class="btn btn-outline-info nav-link active text-maroon" href="#section1">Basic Details</a>
         </li>
-
+          <br>
         <li class="nav-item">
-          <a class="nav-link" href="#section3">Sequencing Information</a>
+            <a class="btn btn-outline-info nav-link text-maroon" href="#section3">Sequencing Information</a>
         </li>
+          <br>
           <li class="nav-item">
-          <a class="nav-link" href="#section42">Experimenter Data</a>
+              <a class="btn btn-outline-info nav-link text-maroon" href="#section42">Experimenter Data</a>
         </li>
+          <br>
               </li>
           <li class="nav-item">
-          <a class="nav-link" href="#IsolatorData">Isolator Data</a>
+              <a class="btn btn-outline-info nav-link text-maroon    " href="#IsolatorData">Isolator Data</a>
         </li>
+          <div class="divider"></div>
           {% if login_status %}
-                        <li class="nav-item"><a class="nav-link"  href="#" data-toggle="modal" data-target="#myDeleteModal">Delete</a></li>
-        <li class="nav-item"><a class="nav-link"  href="#" data-toggle="modal" data-target="#myEditModal">Edit</a></li>
+          <li class="nav-item"><a class="btn btn-outline-info nav-link"  href="#" data-toggle="modal" data-target="#myDeleteModal">Delete    <i class="fa fa-fw fa-trash"></i></a></li>
+          <br>
+          <li class="nav-item"><a class="btn btn-outline-info nav-link"  href="#" data-toggle="modal" data-target="#myEditModal">Edit    <i class="fa fa-fw fa-edit"></i></a></li>
           {% else %}
-              <li class="nav-item"><a class="nav-link disabled"  href="#" >Delete</a></li>
-              <li class="nav-item"><a class="nav-link disabled"  href="#" >Edit Phage Details</a></li>
+          <li class="nav-item"><a class="btn btn-outline-info nav-link disabled"  href="#" >Delete    <i class="fa fa-fw fa-trash"></i></a></li>
+          <br>
+          <li class="nav-item"><a class=" btn btn-outline-info nav-link disabled"  href="#" >Edit Phage Details    <i class="fa fa-fw fa-edit"></i></a></li>
           {% endif %}
       </ul>
     </nav>
@@ -95,7 +100,8 @@
      <br>
      <br>
      <br>
-      <h3>Phage Details:</h3>
+     <br>
+     <h4 class="text-maroon">Phage Details:</h4>
       <div class="row">
                         <div class="col-md-6">
                         <div id="demo" class="carousel slide" data-ride="carousel">
@@ -144,7 +150,7 @@
 </div>
                         </div>
                         <div class="col-md-6">
-                            <p><span class="glyphicon glyphicon-leaf"></span><b>Phage Name:</b>  {{ item.phage_name }}</p>
+                            <p><b>Phage Name:</b>  {{ item.phage_name }}</p>
                             <p><b>Host Name:</b>  {{ item.phage_host_name }}</p>
                             <p><b>Isolator Name:</b>  {{ item.phage_isolator_name }}</p>
                             <p><b>Experimenter Name:</b>  {{ item.phage_experimenter_name }}</p>
@@ -163,7 +169,9 @@
         <br>
         <br>
         <br>
-      <h3>Sequencing Information for {{ item.phage_name }}</h3>
+        <br>
+        <h4 class="text-maroon">Sequencing Information for {{ item.phage_name }}</h4>
+        <br>
         <table id="phageDetails" cellspacing="0" class="table table-striped">
 	<tbody>
 		<tr><td class="detailLabel">Sequencing Complete?</td><td class="detailValue">No</td></tr>
@@ -177,7 +185,9 @@
         <br>
         <br>
         <br>
-      <h3>Experimenter Data</h3>
+        <br>
+        <h4 class="text-maroon">Experimenter Data</h4>
+        <br>
         <table id="phageDetails" cellspacing="0" class="table table-striped">
 	    <tbody>
         {%for query in expdata %}
@@ -198,7 +208,9 @@
           <br>
           <br>
           <br>
-      <h3>Isolator Data</h3>
+          <br>
+          <h4 class="text-maroon">Isolator Data</h4>
+          <br>
         <table id="phageDetails" cellspacing="0" class="table table-striped">
 	    <tbody>
         {%for query in isodata %}
@@ -242,6 +254,58 @@ div.col-8 div {
 
 .carousel-caption {
     color: black;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+    color: #fff;
+    background-color: #800000;
+}
+
+.btn-outline-info {
+    color: #800000;
+    background-color: transparent;
+    background-image: none;
+    border-color: #800000;
+}
+
+.btn-outline-info:hover {
+    color: #fff;
+    background-color: #800000;
+    background-image: none;
+    border-color: #800000;
+}
+
+.btn-outline-info:not([disabled]):not(.disabled).active, .btn-outline-info:not([disabled]):not(.disabled):active, .show>.btn-outline-info.dropdown-toggle {
+    color: #fff;
+    background-color: #800000;
+    border-color: #800000;
+    box-shadow: 0 0 0 0.2rem #800000;
+}
+
+
+.divider{
+    position: relative;
+    width: 100%;
+    height: 3px;
+    background: #800000;
+    margin: 30px auto;
+}
+.divider:after{
+  width: 10px;
+  height: 10px;
+  line-height: 30px;
+  border-radius: 5px;
+  font-size: 12px;
+  color: #800000;
+  background: #fff;
+  border:3px solid #fff;
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -15px;
+  margin-left: -15px;
+  text-align: center;
 }
 </style>
 {% endblock %}
