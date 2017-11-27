@@ -53,20 +53,38 @@ def list_path(dest_dir):
     return list_path
 
 def logged_in_index(request):
+    last_three = PhageData.objects.all().order_by('-id')[:3]
+    dest_dir1=dest_dir2=dest_dir3= name1=name2=name3=""
+    count1 = count2 = count3 = -1
     try:
-        last_three = PhageData.objects.all().order_by('-id')[:3]
+        name1 = last_three[0].phage_name
         dest_dir1 = list_path(os.path.join(settings.MEDIA_ROOT, "images", last_three[0].phage_name))
-        dest_dir2 = list_path(os.path.join(settings.MEDIA_ROOT, "images", last_three[1].phage_name))
-        dest_dir3 = list_path(os.path.join(settings.MEDIA_ROOT, "images", last_three[2].phage_name))
         count1 = count(os.path.join(settings.MEDIA_ROOT, "images", last_three[0].phage_name))
+        print("manish heret")
+        print(count1)
+    except:
+        pass
+
+    try:
+        name2 = last_three[1].phage_name
+        dest_dir2 = list_path(os.path.join(settings.MEDIA_ROOT, "images", last_three[1].phage_name))
         count2 = count(os.path.join(settings.MEDIA_ROOT, "images", last_three[1].phage_name))
+
+    except:
+        pass
+
+    try:
+        name3 = last_three[2].phage_name
+        dest_dir3 = list_path(os.path.join(settings.MEDIA_ROOT, "images", last_three[2].phage_name))
         count3 = count(os.path.join(settings.MEDIA_ROOT, "images", last_three[2].phage_name))
 
-        return render(request, 'logged_in_index.html',{'login_status': request.user.is_authenticated(),
+    except:
+        pass
+    return render(request, 'logged_in_index.html',{'login_status': request.user.is_authenticated(),
                                                        'username': request.user.username,
-                                                       'phage1': last_three[0],
-                                                       'phage2': last_three[1],
-                                                       'phage3': last_three[2],
+                                                       'phage1': name1,
+                                                       'phage2': name2,
+                                                       'phage3': name3,
                                                        'dest_dir1': dest_dir1,
                                                        'dest_dir2': dest_dir2,
                                                        'dest_dir3': dest_dir3,
@@ -74,35 +92,47 @@ def logged_in_index(request):
                                                        'count2': count2,
                                                        'count3': count3
                                                        })
-    except:
-        pass
-    return render(request, 'logged_in_index.html',{'login_status': request.user.is_authenticated(),
-                                                       'username': request.user.username,
-                                                       })
 
 def mylogout(request):
     logout(request)
     last_three = PhageData.objects.all().order_by('-id')[:3]
-    dest_dir1 = list_path(os.path.join(settings.MEDIA_ROOT, "images", last_three[0].phage_name))
-    dest_dir2 = list_path(os.path.join(settings.MEDIA_ROOT, "images", last_three[1].phage_name))
-    dest_dir3 = list_path(os.path.join(settings.MEDIA_ROOT, "images", last_three[2].phage_name))
-    count1 = count(os.path.join(settings.MEDIA_ROOT, "images", last_three[0].phage_name))
-    count2 = count(os.path.join(settings.MEDIA_ROOT, "images", last_three[1].phage_name))
-    count3 = count(os.path.join(settings.MEDIA_ROOT, "images", last_three[2].phage_name))
-    messages.success(request, 'You have successfully logged out.', extra_tags='alert')
-    return render(request, 'logged_in_index.html', {'login_status': request.user.is_authenticated(),
-                                                    'username': request.user.username,
-                                                    'phage1': last_three[0],
-                                                    'phage2': last_three[1],
-                                                    'phage3': last_three[2],
-                                                    'dest_dir1': dest_dir1,
-                                                    'dest_dir2': dest_dir2,
-                                                    'dest_dir3': dest_dir3,
-                                                    'count1': count1,
-                                                    'count2': count2,
-                                                    'count3': count3
-                                                    })
+    dest_dir1 = dest_dir2 = dest_dir3 = name1 = name2 = name3 = ""
+    count1 = count2 = count3 = -1
+    try:
+        name1 = last_three[0].phage_name
+        dest_dir1 = list_path(os.path.join(settings.MEDIA_ROOT, "images", last_three[0].phage_name))
+        count1 = count(os.path.join(settings.MEDIA_ROOT, "images", last_three[0].phage_name))
+    except:
+        pass
 
+    try:
+        name2 = last_three[1].phage_name
+        dest_dir2 = list_path(os.path.join(settings.MEDIA_ROOT, "images", last_three[1].phage_name))
+        count2 = count(os.path.join(settings.MEDIA_ROOT, "images", last_three[1].phage_name))
+
+    except:
+        pass
+
+    try:
+        name3 = last_three[2].phage_name
+        dest_dir3 = list_path(os.path.join(settings.MEDIA_ROOT, "images", last_three[2].phage_name))
+        count3 = count(os.path.join(settings.MEDIA_ROOT, "images", last_three[2].phage_name))
+
+    except:
+        pass
+    messages.success(request, 'You have successfully logged out.', extra_tags='alert')
+    return render(request, 'logged_in_index.html',{'login_status': request.user.is_authenticated(),
+                                                       'username': request.user.username,
+                                                       'phage1': name1,
+                                                       'phage2': name2,
+                                                       'phage3': name3,
+                                                       'dest_dir1': dest_dir1,
+                                                       'dest_dir2': dest_dir2,
+                                                       'dest_dir3': dest_dir3,
+                                                       'count1': count1,
+                                                       'count2': count2,
+                                                       'count3': count3
+                                                       })
 def signup(request):
     data = dict()
 
@@ -216,6 +246,12 @@ def fillIsoltionObjectedit(isoform, iso):
     iso.TimeStamp = isoform.cleaned_data.get('TimeStamp')
     iso.save()
 
+def validate_latest_phage(query_results):
+    if(query_results.count()>0):
+        latest = query_results.latest('id')
+        return latest.phage_name
+    else:
+        return ""
 
 @login_required
 def add_phage(request):
@@ -276,14 +312,11 @@ def add_phage(request):
                 phage.phage_experimenter_name = rrform.cleaned_data.get('phage_experimenter_name')
                 phage.phage_submitted_user = request.user.username
                 phage.phage_lab = rrform.cleaned_data.get('phage_lab')
-                print(phage.phage_lab)
 
                 phage.save()
                 fillIsoltionObject(isoform, phage)
-                print(phage.iso_phageName.all().values())
 
                 fillExpObject(expform, phage)
-                print (phage.PName.all().values())
                 # print(phage.phage_submitted_user)
                 phagedoc = aform.cleaned_data.get('doc')
                 phageimage = aform.cleaned_data.get('image')
@@ -354,35 +387,23 @@ def add_phage(request):
 #this form show the phages per user
 def my_phages(request):
     query_results = PhageData.objects.filter(phage_submitted_user=request.user.username)
-    latest = query_results.latest('id')
+    name = validate_latest_phage(query_results)
     return render(request, 'view_phages.html', {'query_results': query_results,
                                                 'edit_status':'false','add_status':'false',
-                                                'delete_status':'false','latest':latest.phage_name,
+                                                'delete_status':'false','latest':name,
                                                'login_status': request.user.is_authenticated(),
                                                'username': request.user.username
                                                })
 #this form shows all the phages
 def view_phages(request):
-    #phage = PhageData.objects.all().delete()
-    #query_results = PhageData.objects.all()
-    try:
-        query_results = PhageData.objects.all()
-        latest = query_results.latest('id')
-        return render(request, 'view_phages.html', {'query_results': query_results,
-                                                'edit_status':'false','add_status':'false',
-                                                'delete_status':'false','latest':latest.phage_name,
-                                               'login_status': request.user.is_authenticated(),
-                                               'username': request.user.username
-                                               })
-    except:
-        pass
-    return render(request, 'view_phages.html', {
-                                                'edit_status':'false','add_status':'false',
-                                                'delete_status':'false',
-                                               'login_status': request.user.is_authenticated(),
-                                               'username': request.user.username
-                                               })
-
+    query_results = PhageData.objects.all()
+    name = validate_latest_phage(query_results)
+    return render(request, 'view_phages.html', {'query_results': query_results,
+                                                'edit_status': 'false', 'add_status': 'false',
+                                                'delete_status': 'false', 'latest': name,
+                                                'login_status': request.user.is_authenticated(),
+                                                'username': request.user.username
+                                                })
 @user_passes_test(lambda u: u.is_superuser, login_url='/admin/')
 def delele_all_phages(request):
     phage = PhageData.objects.all().delete()
@@ -413,7 +434,6 @@ def view_phage(request):
                 continue
     except:
         pass
-    print(list_path)
     return render(request, 'view_phage.html', {'item': phage,'previous_names':previous_names,'expdata':expdata,'isodata':isodata,
                                               'login_status': request.user.is_authenticated(),'dest_dir':list_path,'count':count,
                                               'username': request.user.username
@@ -432,9 +452,9 @@ def deletephages(request):
             pass
         phage = PhageData.objects.get(phage_name=x).delete()
         query_results = PhageData.objects.all()
-        latest = query_results.latest('id')
+        name = validate_latest_phage(query_results)
         return render(request, 'view_phages.html', {'query_results': query_results,'delete_status':'true',
-                                               'login_status': request.user.is_authenticated(),'latest':latest.phage_name,
+                                               'login_status': request.user.is_authenticated(),'latest':name,
                                                'username': request.user.username
                                                })
     else:
@@ -483,8 +503,6 @@ def editPhage(request):
         expdata = ExperimentData.objects.filter(expkey = phage)
         last = isodata.latest('id')
         last_exp = expdata.latest('id')
-        print(last_exp.owner)
-        print(last.owner_name)
         pform = Edit_Phage_DataForm(request.POST, instance=phage, initial = {'phage_name':phage.phage_name })
         rrform = Edit_ResearcherForm(request.POST, instance=phage)
         rform = Edit_ResearchForm(request.POST, instance=phage)
@@ -510,7 +528,6 @@ def editPhage(request):
                 phage.phage_isolator_loc = rform.cleaned_data.get('phage_isolator_loc')
                 phage.phage_all_links = aiform.cleaned_data.get('link')
                 phage.phage_lab = rrform.cleaned_data.get('phage_lab')
-                print(phage.phage_lab)
                 #isolator_data = phage.iso_phageName.objects.latest(iso_phageName)
                 pform.save()
                 phage.save()
@@ -523,8 +540,6 @@ def editPhage(request):
                 docs_dest_dir_old = os.path.join(settings.MEDIA_ROOT, "docs", name)
                 dest_dir = os.path.join(settings.MEDIA_ROOT, "images", phage.phage_name)
                 docs_dest_dir = os.path.join(settings.MEDIA_ROOT, "docs", phage.phage_name)
-                print(dest_dir_old)
-                print(dest_dir and name!=phage.phage_name)
                 try:
                     os.rename(dest_dir_old,dest_dir)
                     os.rename(docs_dest_dir_old,docs_dest_dir)
@@ -541,13 +556,12 @@ def editPhage(request):
                 else:
                     handle_uploaded_file(phagedoc, docsdest)
                 query_results = PhageData.objects.all()
-                latest = query_results.latest('id')
-                return render(request, 'view_phages.html', {'edit_status':'true','query_results':query_results,'latest':latest.phage_name,
+                lname = validate_latest_phage(query_results)
+                return render(request, 'view_phages.html', {'edit_status':'true','query_results':query_results,'latest':lname,
                                                             'login_status': request.user.is_authenticated(),
                                                             'username': request.user.username}  )
             else:
                 phage = PhageData.objects.get(phage_name=name)
-                print (phage.phage_host_name)
                 phage.save()
                 return render(request, 'EditPhage.html', {'item': phage,
                                                           'pform': pform,
@@ -592,7 +606,6 @@ def func(phagename):
         os.mkdir(docs_dest_dir)
     except:
         pass
-    print(dest_dir)
 
 
 def populate(reader, request):
@@ -678,10 +691,10 @@ def model_form_upload(request):
             reader = csv.DictReader(paramFile,delimiter=';',skipinitialspace=True,)
             populate(reader, request)
             query_results = PhageData.objects.all()
-            latest = query_results.latest('id')
+            lname = validate_latest_phage(query_results)
             return render(request, 'view_phages.html', {'query_results': query_results,
                                                         'edit_status': 'false', 'add_status': 'false',
-                                                        'delete_status': 'false','latest':latest.phage_name,
+                                                        'delete_status': 'false','latest':lname,
                                                         'login_status': request.user.is_authenticated(),
                                                         'username': request.user.username
                                                         })
