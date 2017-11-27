@@ -406,9 +406,9 @@ def deletephages(request):
             pass
         phage = PhageData.objects.get(phage_name=x).delete()
         query_results = PhageData.objects.all()
-
+        latest = query_results.latest('id')
         return render(request, 'view_phages.html', {'query_results': query_results,'delete_status':'true',
-                                               'login_status': request.user.is_authenticated(),
+                                               'login_status': request.user.is_authenticated(),'latest':latest.phage_name,
                                                'username': request.user.username
                                                })
     else:
