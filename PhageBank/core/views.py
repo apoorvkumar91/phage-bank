@@ -348,9 +348,10 @@ def add_phage(request):
 #this form show the phages per user
 def my_phages(request):
     query_results = PhageData.objects.filter(phage_submitted_user=request.user.username)
+    latest = query_results.latest('id')
     return render(request, 'view_phages.html', {'query_results': query_results,
                                                 'edit_status':'false','add_status':'false',
-                                                'delete_status':'false',
+                                                'delete_status':'false','latest':latest.phage_name,
                                                'login_status': request.user.is_authenticated(),
                                                'username': request.user.username
                                                })
