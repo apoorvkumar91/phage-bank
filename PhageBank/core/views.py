@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, authenticate, logout
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -61,20 +62,27 @@ def signup(request):
 
 def mylogin(request):
     msg = dict()
-    form = LoginForm()
     if request.method == 'POST':
-        form = LoginForm(request.POST)
+        form = AuthenticationForm(data=request.POST)
+        print (form.errors)
         username = request.POST['username']
         password = request.POST['password']
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                msg['form_is_valid'] = True
-            else:
-                msg['form_is_valid'] = False
+        if form.is_valid():
+            msg['form_is_valid'] = True
         else:
-            form = LoginForm()
+            form.add_error('password', 'Please enter a correct username and password. Note that both fields are case-sensitive.')
+            msg['form_is_valid'] = False
+
+        if username and password:
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+                    msg['form_is_valid'] = True
+                else:
+                    msg['form_is_valid'] = False
+    else:
+        form = AuthenticationForm()
     context = {'form': form}
     msg['html_form'] = render_to_string('partial_login.html',
                                          context,
@@ -140,13 +148,13 @@ def add_phage(request):
             isoform = Isolation_Form(request.POST)
             aform = AForm(request.POST, request.FILES)
             aiform = AIForm(request.POST)
-            
+
             if pform.is_valid() and rrform.is_valid() and rform.is_valid() and expform.is_valid() and isoform.is_valid() \
                     and aform.is_valid() and aiform.is_valid():
 
                 phagename = pform.cleaned_data.get('phage_name')
                 CPTid = rform.cleaned_data.get('phage_CPT_id')
-                
+
                 #approvePhage = 1 if no duplicates in phage_name. 0 otherwise
                 #approveCPTid = 1 if no duplicates in CPT id
                 #duplicatePhagesPhages : list of phages due to duplicates in phage names
@@ -157,9 +165,9 @@ def add_phage(request):
                 #chkDuplicatesFlag = 0
                 chkDuplicatesFlag = int(request.POST['flag'])
                 #chkDuplicatesFlag = 1
-                
+
                 msg = dict()
-                
+
                 if chkDuplicatesFlag==1:
                     approvePhage, approveCPTid, duplicatePhagesPhages, duplicatePhagesCPTid, duplicateCPTidPhages\
                     , duplicateCPTidCPTid = checkDuplicatesInAddPhage(phagename, CPTid)
@@ -168,7 +176,7 @@ def add_phage(request):
 
                     msg['approvePhage']=approvePhage
                     msg['approveCPTid']=approveCPTid
-                    
+
                     if (approvePhage==0 or approveCPTid==0):
                         msg['duplicatePhagesPhages']=json.dumps(duplicatePhagesPhages)
                         msg['duplicatePhagesCPTid']=json.dumps(duplicatePhagesCPTid)
@@ -178,7 +186,7 @@ def add_phage(request):
                         return JsonResponse(msg)
 
                 pform.save()
-                
+
                 phage = PhageData.objects.get(phage_name=phagename)
                 phage.phage_CPT_id = rform.cleaned_data.get('phage_CPT_id')
                 phage.phage_isolator_loc = rform.cleaned_data.get('phage_isolator_loc')
@@ -217,9 +225,9 @@ def add_phage(request):
                     handle_uploaded_file(phagedoc, docsdest)
 
                 query_results = PhageData.objects.all()
-                
+
                 return JsonResponse(msg)        #if the data is valid
-                
+
                 #render(request, 'view_phages.html', {'add_status':'true','query_results':query_results}  )
 
                 #render(request, 'view_phages.html', {'add_status':'true','query_results':query_results ,
@@ -569,30 +577,30 @@ def header(request):
 def checkDuplicatesInAddPhage(phage_name, phage_CPT_id):
     #db=sqlite3.connect('db.sqlite3')
     #params={'phage_name':phage_name, 'phage_CPT_id':phage_CPT_id}
-    #q1="SELECT phage_name, phage_CPT_id FROM core_phagedata WHERE phage_name='{phage_name}'"    
+    #q1="SELECT phage_name, phage_CPT_id FROM core_phagedata WHERE phage_name='{phage_name}'"
     #rowsPhage = pd.read_sql_query(q1.format(**params), db)
-    
+
     rowsPhage = PhageData.objects.filter(phage_name = phage_name).values('phage_name','phage_CPT_id')
     #.values() is a list of dict
-    
+
     rowsCPTid = PhageData.objects.filter(phage_CPT_id = phage_CPT_id).values('phage_name','phage_CPT_id')
-    
+
     duplicatePhagesPhages = [d['phage_name'] for d in rowsPhage] # rowsPhage["phage_name"].values.tolist()
     #print(duplicatePhagesPhages)
-    
+
     duplicatePhagesCPTid = [d['phage_CPT_id'] for d in rowsPhage]
 
     duplicateCPTidPhages = [d['phage_name'] for d in rowsCPTid]
     duplicateCPTidCPTid = [d['phage_CPT_id'] for d in rowsCPTid]
-    
+
     approvePhage=1
     approveCPTid=1
     if len(rowsPhage)>0:
         approvePhage=0
-        
+
     if len(rowsCPTid)>0:
         approveCPTid=0
-        
+
     return approvePhage, approveCPTid, duplicatePhagesPhages, duplicatePhagesCPTid, duplicateCPTidPhages\
     , duplicateCPTidCPTid
 

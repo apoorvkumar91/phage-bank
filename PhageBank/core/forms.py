@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.utils.safestring import mark_safe
 from django.contrib.auth.models import User
 from PhageBank.core.models import PhageData, ExperimentData, IsolationData
@@ -32,14 +32,8 @@ class SignUpForm(UserCreationForm):
         fields = ("username", 'first_name', 'last_name', 'email', 'password1', 'password2',)
 
 
-class LoginForm(forms.ModelForm):
+class LoginForm(AuthenticationForm):
 
-    username = forms.CharField(max_length=30, required=False)
-    password = forms.CharField(
-        label=("Password"),
-        strip=False,
-        widget=forms.PasswordInput,
-    )
     class Meta:
         model = User
         fields = ("username", "password",)
