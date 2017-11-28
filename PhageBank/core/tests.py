@@ -12,7 +12,7 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from PhageBank.core.models import PhageData, PreData
 from PhageBank.core.forms import Add_ResearchForm, AForm, AIForm, Edit_Phage_DataForm, Edit_ResearcherForm, Edit_ResearchForm, Edit_IsolationDataForm, Edit_Experiment_Form
-
+from django.http.response import  HttpResponse
 from faker import Faker
 from django.conf import settings
 
@@ -154,7 +154,7 @@ class RenewBookFormTest(TestCase):
         #                               'password2': 'foo'})
         # self.failUnless(form.is_valid())
 
-    def test_validates_password_success(self):
+    def test_validates_password(self):
         user = User.objects.create_user(username='testclient', password='sekret')
         data = {
             'old_password': 'sekret',
@@ -237,6 +237,37 @@ class PhageViewTest(TestCase):
         self.client.login(username='admin1', password='admin1')
         response = self.client.post('/delete_all/',follow=True)
         self.assertEqual(response.status_code, 200)
+        user.delete()
+
+    @override_settings(MEDIA_ROOT ='temp')
+    def test_func(self):
+        pname = 'A'
+        print(settings.MEDIA_ROOT)
+        os.mkdir(os.path.join(os.curdir,settings.MEDIA_ROOT ))
+        dest_dir = os.path.join(os.curdir, settings.MEDIA_ROOT, "images")
+        print (dest_dir)
+        os.mkdir(dest_dir)
+        docs_dest_dir = os.path.join(os.curdir, settings.MEDIA_ROOT, "docs")
+        print(docs_dest_dir)
+        os.mkdir(docs_dest_dir)
+        func(pname)
+        func(pname)
+        shutil.rmtree(os.path.join(os.curdir,settings.MEDIA_ROOT ))
+
+    def test_model_form_upload(self):
+        user = User.objects.create_superuser(username='admin2', password='admin2', email="admin2@gmail.com")
+        self.client.login(username='admin2', password='admin2')
+        response2 = self.client.get('/uploads/form/', follow=True)
+        self.assertEqual(response2.status_code, 200)
+
+        response = self.client.post('/uploads/form/', follow=True, FILES='test2.csv')
+        response.FILES = 'test2.csv'
+        response.method ='POST'
+        response.POST = True
+        response.user = user
+        # print(response)
+        self.assertEqual(response.status_code, 200)
+        model_form_upload(response)
         user.delete()
 
 class ModelTest(TestCase):
