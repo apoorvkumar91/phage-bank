@@ -454,3 +454,93 @@ class ModelTest(TestCase):
 #         arg = "python manage.py show_urls"
 #         cmd = "deactivate.bat %s" % arg
 #         os.system(cmd)
+
+class PhageDataTest(TestCase):
+    def create_PhageData(self, title="only a test", body="yes, this is only a test"):
+        return PhageData.objects.create(phage_name='test_pname', phage_CPT_id='123')
+
+
+    def test_PhageData_adv_search_name(self):
+        user = User.objects.create_user(username='testclient', password='sekret')
+        p1 = PhageData.objects.create(phage_name='test_pname', phage_CPT_id='123')
+        data = {
+            'phage_name': 'test_pname'
+        }
+        self.client.login(username='testclient', password='sekret')
+        response = self.client.get('/search_phage/', data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        user.delete()
+
+
+    def test_PhageData_adv_search_host_name(self):
+        user = User.objects.create_user(username='testclient', password='sekret')
+        p1 = PhageData.objects.create(phage_name='test_pname', phage_CPT_id='123', phage_host_name='hostA')
+        data = {
+            'phage_host_name': 'hostA'
+        }
+        self.client.login(username='testclient', password='sekret')
+        response = self.client.post('/search_phage/', data, follow=True)
+        response = self.client.get('/search_phage/', data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        user.delete()
+
+
+    def test_PhageData_adv_search_iso_name(self):
+        user = User.objects.create_user(username='testclient', password='sekret')
+        p1 = PhageData.objects.create(phage_name='test_pname', phage_CPT_id='123', phage_isolator_name='IsolatorA')
+        data = {
+            'phage_isolator_name': 'IsolatorA'
+        }
+        self.client.login(username='testclient', password='sekret')
+        response = self.client.post('/search_phage/', data, follow=True)
+        response = self.client.get('/search_phage/', data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        user.delete()
+
+    def test_PhageData_adv_search_start_year(self):
+        user = User.objects.create_user(username='testclient', password='sekret')
+        p1 = PhageData.objects.create(phage_name='test_pname', phage_CPT_id='123', phage_isolator_name='IsolatorA')
+        data = {
+            'submitted_year_gt': '-10'
+        }
+        self.client.login(username='testclient', password='sekret')
+        response = self.client.post('/search_phage/', data, follow=True)
+        response = self.client.get('/search_phage/', data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        user.delete()
+
+    def test_PhageData_adv_search_end_year(self):
+        user = User.objects.create_user(username='testclient', password='sekret')
+        p1 = PhageData.objects.create(phage_name='test_pname', phage_CPT_id='123', phage_isolator_name='IsolatorA')
+        data = {
+            'submitted_year_lt': '-10'
+        }
+        self.client.login(username='testclient', password='sekret')
+        response = self.client.post('/search_phage/', data, follow=True)
+        response = self.client.get('/search_phage/', data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        user.delete()
+
+    def test_PhageData_adv_search_start_month(self):
+        user = User.objects.create_user(username='testclient', password='sekret')
+        p1 = PhageData.objects.create(phage_name='test_pname', phage_CPT_id='123', phage_isolator_name='IsolatorA')
+        data = {
+            'submitted_month_gt': '-10'
+        }
+        self.client.login(username='testclient', password='sekret')
+        response = self.client.post('/search_phage/', data, follow=True)
+        response = self.client.get('/search_phage/', data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        user.delete()
+
+    def test_PhageData_adv_search_end_month(self):
+        user = User.objects.create_user(username='testclient', password='sekret')
+        p1 = PhageData.objects.create(phage_name='test_pname', phage_CPT_id='123', phage_isolator_name='IsolatorA')
+        data = {
+            'submitted_month_lt': '-10'
+        }
+        self.client.login(username='testclient', password='sekret')
+        response = self.client.post('/search_phage/', data, follow=True)
+        response = self.client.get('/search_phage/', data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        user.delete()
