@@ -4,6 +4,15 @@ from django.test import Client
 from django.core.management import call_command
 from PhageBank.core.views import *
 from PhageBank.core.forms import *
+import tempfile
+from django.conf import settings
+from django.core.files import File
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.urls import reverse
+from django.contrib.auth.models import User
+from PhageBank.core.models import PhageData, PreData
+from PhageBank.core.forms import Add_ResearchForm, AForm, AIForm, Edit_Phage_DataForm, Edit_ResearcherForm, Edit_ResearchForm, Edit_IsolationDataForm, Edit_Experiment_Form
+
 from faker import Faker
 from django.conf import settings
 
@@ -37,7 +46,7 @@ class SimpleTest(TestCase):    #unittest.TestCase
         # Check that login is successful with valid user
         response = self.client.post('/mylogin/', self.valid_credentials, follow=True)
         #self.assertEqual(response.status_code,200)
-        
+
         form_is_valid = response.json()['form_is_valid']
         self.assertEqual(form_is_valid,True)
 
@@ -45,9 +54,9 @@ class SimpleTest(TestCase):    #unittest.TestCase
         # Check that login is unsuccessful with invalid user
         response = self.client.post('/mylogin/', self.invalid_credentials, follow=True)
         #index = response.content.find(b"Your username and password didn\'t match. Please try again.")
-        
+
         form_is_valid = response.json()['form_is_valid']
-        
+
         self.assertEqual(form_is_valid,False)
 # Create your tests here.
 
@@ -55,13 +64,12 @@ class SimpleTest(TestCase):    #unittest.TestCase
         phage_desc = {"phage_name" : "test_newphage", "phage_CPT_id" : "test_123", "phage_lab": "Lab-A", "flag":1}
         self.client.login(username = "test_user", password= 'pass@123')
         response = self.client.post('/add_phage/', phage_desc, follow=True)
-        
+
         approvePhage = response.json()['approvePhage']
         approveCPTid = response.json()['approveCPTid']
-        
+
         self.assertEqual(approvePhage,1)
         self.assertEqual(approveCPTid,1)
-
 
 class URLGETTest(unittest.TestCase):
     client = Client()
@@ -151,6 +159,23 @@ class RenewBookFormTest(TestCase):
         data = {
             'old_password': 'sekret',
             'new_password1': 'testclient',
+            'new_password2': 'testclient2',
+        }
+        self.client.login(username='testclient', password='sekret')
+        response = self.client.post('/change_password', data, follow=True)
+        # form = PasswordChangeForm(user, data)
+        # self.assertFalse(form.is_valid())
+        # self.assertEqual(len(form["new_password2"].errors), 1)
+        # self.assertEqual(response.status_code, 302)
+        index = response.content.find(b"The two password fields didn\'t match.")
+        user.delete()
+        self.assertEqual(index,-1)
+
+    def test_validates_password_success(self):
+        user = User.objects.create_user(username='testclient', password='sekret')
+        data = {
+            'old_password': 'sekret',
+            'new_password1': 'testclient',
             'new_password2': 'testclient',
         }
         self.client.login(username='testclient', password='sekret')
@@ -214,4 +239,58 @@ class PhageViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         user.delete()
 
+class ModelTest(TestCase):
 
+    def test_validate_latest(self):
+        phage = PhageData.objects.create(phage_name='TestPhage', phage_CPT_id='123456')
+        phage.save()
+        q = PhageData.objects.all()
+        val = validate_latest_phage(q)
+        self.assertEqual(val, phage.phage_name)
+        phage.delete()
+
+    # def test_my_phages(self):
+    #     user = User.objects.create_user(username='testclient', password='sekret')
+    #     phage = PhageData.objects.create(phage_name='TestPhage', phage_CPT_id='123456',phage_submitted_user='testclient')
+    #     phage.save()
+    #     self.client.login(username='testclient', password='sekret')
+    #     response = self.client.get('/my_phages')
+    #     # q = PhageData.objects.filter(phage_submitted_user=user.username)
+    #     # val = validate_latest_phage(q)
+    #     # self.assertEqual(q, phage)
+    #     # self.assertTrue(form.is_valid())
+    #     self.assertEqual(response.status_code, 301)
+    #     user.delete()
+    #     phage.delete()
+
+   # def test_isodata(self):
+        #isoform = Isolation_Form.objects.create(owner_name='testowner', location='testloc')
+
+
+    def test_count(self):
+        p1= PhageData.objects.create(phage_name='test',phage_CPT_id='123')
+        p2 = PhageData.objects.create(phage_name='test123',phage_CPT_id='12345')
+        p3 = PreData.objects.create(phagename='test12', testkey=p1)
+        name='manish'
+        val = check_entry(name)
+        self.assertEqual(val, False)
+
+        name='test'
+        val2 = check_entry(name)
+        self.assertEqual(val2, True)
+        p1.delete()
+        p2.delete()
+        p3.delete()
+
+    # def test_delete(self):
+    #     user = User.objects.create_user(username='testclient', password='sekret')
+    #     p1= PhageData.objects.create(phage_name='test22',phage_CPT_id='123')
+    #     dest_dir = os.path.join(settings.MEDIA_ROOT, "images", p1.phage_name)
+    #     docs_dest_dir = os.path.join(settings.MEDIA_ROOT, "docs", p1.phage_name)
+    #     os.mkdir(dest_dir)
+    #     os.mkdir(docs_dest_dir)
+    #     self.client.login(username='testclient', password='sekret')
+    #     data = {"name":"test22"}
+    #     response = self.client.post('/delete/',str(data), follow=True)
+    #     self.assertEqual(response.status_code, 200)
+    #     user.delete()
