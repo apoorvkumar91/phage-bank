@@ -20,8 +20,8 @@ from django.contrib.messages import constants as messages
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
 
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
-
+#STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+# https://stackoverflow.com/questions/26829435/collectstatic-command-fails-when-whitenoise-is-enabled/32347324#32347324
 # End AK
 
 
@@ -156,7 +156,7 @@ MESSAGE_TAGS = {
 # Static asset configuration
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
-STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 
 # Extra places for collectstatic to find static files.
