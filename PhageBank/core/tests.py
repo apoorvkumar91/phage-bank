@@ -323,3 +323,33 @@ class ModelTest(TestCase):
         user.delete()
         os.rmdir(dest_dir)
         os.rmdir(docs_dest_dir)
+
+
+class PhageDataTest(TestCase):
+    def create_PhageData(self, title="only a test", body="yes, this is only a test"):
+        return PhageData.objects.create(phage_name='test_pname', phage_CPT_id='123')
+
+
+    def test_PhageData_adv_search_name(self):
+        user = User.objects.create_user(username='testclient', password='sekret')
+        p1 = PhageData.objects.create(phage_name='test_pname', phage_CPT_id='123')
+        data = {
+            'phage_name': 'test_pname'
+        }
+        self.client.login(username='testclient', password='sekret')
+        response = self.client.get('/search_phage/', data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        user.delete()
+
+
+    def test_PhageData_adv_search_host_name(self):
+        user = User.objects.create_user(username='testclient', password='sekret')
+        p1 = PhageData.objects.create(phage_name='test_pname', phage_CPT_id='123', phage_host_name='hostA')
+        data = {
+            'phage_host_name': 'hostA'
+        }
+        self.client.login(username='testclient', password='sekret')
+        response = self.client.post('/search_phage/', data, follow=True)
+        response = self.client.get('/search_phage/', data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        user.delete()
