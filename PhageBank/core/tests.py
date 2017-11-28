@@ -414,3 +414,18 @@ class PhageDataTest(TestCase):
         response = self.client.get('/search_phage/', data, follow=True)
         self.assertEqual(response.status_code, 200)
         user.delete()
+
+
+class PhageDataLoginTest(TestCase):
+    def create_PhageDataLogin(self, title="only a test", body="yes, this is only a test"):
+        return PhageData.objects.create(phage_name='test_pname', phage_CPT_id='123')
+
+    def test_login1(self):
+        user = User.objects.create_user(username='testclient', password='sekret')
+        dest_dir = os.path.join(settings.MEDIA_ROOT, "images")
+        if not os.path.exists(dest_dir):
+            os.mkdir(dest_dir)
+        response = self.client.get('/search_phage/', follow=True)
+        self.assertEqual(response.status_code, 200)
+        user.delete()
+
