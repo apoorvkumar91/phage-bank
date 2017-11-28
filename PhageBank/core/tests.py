@@ -353,3 +353,16 @@ class PhageDataTest(TestCase):
         response = self.client.get('/search_phage/', data, follow=True)
         self.assertEqual(response.status_code, 200)
         user.delete()
+
+
+    def test_PhageData_adv_search_iso_name(self):
+        user = User.objects.create_user(username='testclient', password='sekret')
+        p1 = PhageData.objects.create(phage_name='test_pname', phage_CPT_id='123', phage_isolator_name='IsolatorA')
+        data = {
+            'phage_isolator_name': 'IsolatorA'
+        }
+        self.client.login(username='testclient', password='sekret')
+        response = self.client.post('/search_phage/', data, follow=True)
+        response = self.client.get('/search_phage/', data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        user.delete()
