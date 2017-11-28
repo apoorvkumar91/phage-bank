@@ -159,6 +159,7 @@ class RenewBookFormTest(TestCase):
         self.assertEqual(len(form["new_password2"].errors), 0)
         user.delete()
 
+
 class PhageViewTest(TestCase):
 
     def test_count(self):
@@ -203,22 +204,14 @@ class PhageViewTest(TestCase):
         self.assertRaises(ValidationError, validate_file_extension, x)
         os.remove(filename1)
 
-    def delete_all_phages(self):
-        user = User.objects.create_super_user(username='admin1', password='admin1')
+    def test_delete_all_phages(self):
+        user = User.objects.create_superuser(username='admin1', password='admin1', email="admin1@gmail.com")
         p1= PhageData.objects.create(phage_name='test21',phage_CPT_id='121')
         p2= PhageData.objects.create(phage_name='test22',phage_CPT_id='122')
         p3= PhageData.objects.create(phage_name='test23',phage_CPT_id='123')
-        self.client.login(username='admin', password='admin')
+        self.client.login(username='admin1', password='admin1')
         response = self.client.post('/delete_all/',follow=True)
         self.assertEqual(response.status_code, 200)
         user.delete()
 
-# class DebugTest(TestCase):
-#     @override_settings(DEBUG = False)
-#     def test_debug_settings(self):
-#         self.assertEqual(settings.DEBUG, False)
-
-# class ManageTest(TestCase):
-#     def test_env(self):
-#         p = subprocess.Popen("deactivate.bat", cwd=os.curdir +)
 
