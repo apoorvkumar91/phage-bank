@@ -165,30 +165,25 @@ class URLGETTest(unittest.TestCase):
 
 class RenewBookFormTest(TestCase):
     def test_renew_form_date_field_label(self):
-        form = SignUpForm(data={'username': 'foo',
-                                'email': 'alice@example.com',
-                                'password1': 'foo',
-                                'password2': 'foo'})
+
+        data={'username': 'foo',
+              'email': 'alice@example.com',
+              'password1': 'foo',
+              'password2': 'foo'}
+        form = SignUpForm(data)
         self.failIf(form.is_valid())
-        # self.assertRaises(ValidationError, validate_file_extension, form.errors['email'])
-        #
-        # # self.assertEqual(form.errors['email'],
-        # #                  [u"This email address is already in use."])
-        #
-        # form = forms.SignUpForm(data={'username': 'foo',
-        #                               'email': 'foo@example.com',
-        #                               'password1': 'foo',
-        #                               'password2': 'foo'})
-        # self.failUnless(form.is_valid())
-        # self.failIf(form.is_valid())
         # self.assertEqual(form.errors['email'], [u"This email address is already in use."])
         self.assertTrue(form.is_valid())
-        form = SignUpForm(data={'username': 'foo',
-                                      'email': 'foo@example.com',
-                                      'password1': 'foo',
-                                      'password2': 'foo'})
-        # self.failUnless(form.is_valid())
-        self.assertTrue(form.is_valid())
+        response = self.client.post('/signup', data, follow=True)
+        self.assertEqual(response.status_code,200)
+        data1={'username': 'foobar',
+              'email': 'alice@example.com',
+              'password1': 'foo',
+              'password2': 'foo'}
+        form1 = SignUpForm(data1)
+        self.assertTrue(form1.is_valid())
+        response1 = self.client.post('/signup', data1, follow=True)
+        self.assertEqual(response1.status_code,200)
 
     def test_validates_password(self):
         user = User.objects.create_user(username='testclient', password='sekret')
