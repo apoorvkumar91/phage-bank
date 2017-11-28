@@ -316,23 +316,23 @@ class PhageViewTest(TestCase):
         user.delete()
         # model_form_upload(response)
 
-    def get_temporary_image(self):
-        io = StringIO.StringIO()
-        size = (200, 200)
-        color = (255, 0, 0, 0)
-        image = Image.new("RGBA", size, color)
-        image.save(io, format='JPEG')
-        image_file = InMemoryUploadedFile(io, None, 'foo.jpg', 'jpeg', io.len, None)
-        image_file.seek(0)
-        return image_file
-
-    def test_handle_uploaded_file(self):
-        dest = "a.jpg"
-        self.get_temporary_image()
-
-        handle_uploaded_file(self.get_temporary_image(), dest)
-
-        os.remove("a.jpg")
+    # def get_temporary_image(self):
+    #     io = StringIO.StringIO()
+    #     size = (200, 200)
+    #     color = (255, 0, 0, 0)
+    #     image = Image.new("RGBA", size, color)
+    #     image.save(io, format='JPEG')
+    #     image_file = InMemoryUploadedFile(io, None, 'foo.jpg', 'jpeg', io.len, None)
+    #     image_file.seek(0)
+    #     return image_file
+    #
+    # def test_handle_uploaded_file(self):
+    #     dest = "a.jpg"
+    #     self.get_temporary_image()
+    #
+    #     handle_uploaded_file(self.get_temporary_image(), dest)
+    #
+    #     os.remove("a.jpg")
 
     # def test_fillExpObjectedit(self):
     #     expform = Add_Experiment_Form()
