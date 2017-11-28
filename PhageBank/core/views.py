@@ -38,8 +38,6 @@ def count(dest_dir):
         if filename.endswith(".png") or filename.endswith(".jpg") or filename.endswith(".jpeg"):
             count=count+1;
             continue
-        else:
-            continue
     return count
 
 def list_path(dest_dir):
@@ -47,8 +45,6 @@ def list_path(dest_dir):
     for filename in os.listdir(dest_dir):
         if filename.endswith(".png") or filename.endswith(".jpg") or filename.endswith(".jpeg"):
             list_path.append(filename)
-            continue
-        else:
             continue
     return list_path
 
