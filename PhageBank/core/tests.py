@@ -1,4 +1,13 @@
-<<<<<<< HEAD
+from django.test import TestCase
+import unittest,os,shutil
+from django.test import Client
+from django.contrib.auth.models import User
+from django.views.generic.base import View
+from PhageBank.core.views import *
+from faker import Faker
+fake = Faker()
+
+username=fake.word()
 class URLGETTest(unittest.TestCase):
     client = Client()
 
@@ -93,17 +102,8 @@ class RenewBookFormTest(TestCase):
         form = PasswordChangeForm(user, data)
         self.assertFalse(form.is_valid())
         self.assertEqual(len(form["new_password2"].errors), 1)
-=======
-from django.test import TestCase
-import unittest,os,shutil
-from django.test import Client
-from django.contrib.auth.models import User
-from django.views.generic.base import View
-from PhageBank.core.views import *
-from faker import Faker
-fake = Faker()
 
-username=fake.word()
+
 
 class PhageViewTest(TestCase):
 
@@ -132,5 +132,5 @@ class PhageViewTest(TestCase):
         val = list_path(path)
         self.assertEqual('1.jpg', str(val[0]))
         shutil.rmtree(path)
->>>>>>> d9f4eaf5d17c7418093fa322d60aa250096b6ba2
+
 
