@@ -2,6 +2,12 @@
 {% load widget_tweaks %}
 
 {% block content %}
+    {% if duplicate == 'true' %}
+    <div class="alert alert-danger alert-dismissable">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+        <strong>Failure!</strong> The phage entry with this name already exists.
+    </div>
+ {% endif %}
 <h4>Edit the Phage Details</h4>
 {% load staticfiles %}
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>

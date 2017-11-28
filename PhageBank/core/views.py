@@ -484,6 +484,12 @@ def search_phage(request):
                                                  'username': request.user.username,
                                                  })
 
+def check_entry(name):
+    print(PhageData.objects.filter(phage_name=name).count())
+    if (PhageData.objects.filter(phage_name=name).count() == 0 and PreData.objects.filter(phagename=name).count()==0 ):
+        return False
+    else:
+        return True
 
 @login_required
 def editPhage(request):
@@ -504,7 +510,19 @@ def editPhage(request):
         if request.method=="POST":
             if pform.is_valid() and rrform.is_valid() and rform.is_valid() and aform.is_valid() and aiform.is_valid()\
                     and isoform.is_valid() and expform.is_valid():
-                phage.phage_name = pform.cleaned_data.get('phage_name')
+                curr_phage = pform.cleaned_data.get('phage_name')
+                if(check_entry(curr_phage)):
+                    return render(request, 'EditPhage.html', {'item': phage,
+                                                              'pform': pform,
+                                                              'rrform': rrform,'expform':expform,
+                                                              'rform': rform,
+                                                              'aform': aform,
+                                                              'aiform': aiform,'duplicate':'true',
+                                                              'isoform':isoform,'iso':last,'exp':last_exp,
+                                                              'login_status': request.user.is_authenticated(),
+                                                              'username': request.user.username,
+                                                             })
+                phage.phage_name = curr_phage
                 if(name!=phage.phage_name and PreData.objects.filter(phagename = name).count()==0):
                     obj = PreData.objects.create(testkey=phage)
                     obj.testkey = phage
@@ -691,7 +709,8 @@ def model_form_upload(request):
                                                         })
     else:
         form = UploadFileForm()
-    return render(request, 'model_form_upload.html', {'form': form})
+    return render(request, 'model_form_upload.html', {'form': form,'login_status': request.user.is_authenticated(),
+                                                        'username': request.user.username})
 
 
 def contact(request):
