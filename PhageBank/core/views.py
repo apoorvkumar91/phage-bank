@@ -713,17 +713,6 @@ def model_form_upload(request):
     return render(request, 'model_form_upload.html', {'form': form,'login_status': request.user.is_authenticated(),
                                                         'username': request.user.username})
 
-
-def contact(request):
-    return render(request,'contact.html',{'content':['In case of any questions / suggestions, email me at:','cory.maughmer@tamu.edu'],
-                                          'login_status': request.user.is_authenticated(),
-                                          'username': request.user.username
-                                          })
-
-def header(request):
-    return render(request, 'header.html')
-
-
 def checkDuplicatesInAddPhage(phage_name, phage_CPT_id):
     #db=sqlite3.connect('db.sqlite3')
     #params={'phage_name':phage_name, 'phage_CPT_id':phage_CPT_id}

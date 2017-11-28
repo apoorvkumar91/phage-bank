@@ -1,13 +1,12 @@
 from django.test import TestCase
 import unittest,os,shutil
 from django.test import Client
-from django.contrib.auth.models import User
-from django.views.generic.base import View
 from PhageBank.core.views import *
+from PhageBank.core.forms import *
 from faker import Faker
 fake = Faker()
 
-username=fake.word()
+username = fake.word()
 
 class PhageViewTest(TestCase):
 
@@ -37,3 +36,10 @@ class PhageViewTest(TestCase):
         self.assertEqual('1.jpg', str(val[0]))
         shutil.rmtree(path)
 
+    def test_file_extension(self):
+        filename1 = '1' + '.jpg'
+        f1 = open(filename1, 'wb')
+        f1.close()
+
+        print (validate_file_extension(filename1))
+        shutil.rmtree(filename1)
