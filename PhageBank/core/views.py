@@ -60,8 +60,6 @@ def logged_in_index(request):
         name1 = last_three[0].phage_name
         dest_dir1 = list_path(os.path.join(settings.MEDIA_ROOT, "images", last_three[0].phage_name))
         count1 = count(os.path.join(settings.MEDIA_ROOT, "images", last_three[0].phage_name))
-        print("manish heret")
-        print(count1)
     except:
         pass
 
