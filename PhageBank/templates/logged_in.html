@@ -62,6 +62,12 @@
                         <a class="nav-link text-white" href="/uploads/form/" title="Bulk Upload using Spreadsheet">Bulk
                             Upload</a>
                         {% endif %}
+                    </li>&nbsp; &nbsp;
+                    <li class="nav-item">
+                        {% if request.user.is_superuser %}
+                        <a class="nav-link text-white" href="/delete_all/" title="Delete All Phages">Delete
+                            All</a>
+                        {% endif %}
                     </li>
                 </ul>
                 <form class="form-inline my-2 my-lg-0">
