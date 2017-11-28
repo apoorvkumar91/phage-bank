@@ -1,5 +1,7 @@
 from django.test import TestCase, modify_settings, override_settings
-import unittest,shutil, subprocess, django
+import unittest,shutil, subprocess, django, io
+# import Image
+# import StringIO
 from django.test import Client
 from django.core.management import call_command
 from PhageBank.core.views import *
@@ -15,6 +17,10 @@ from PhageBank.core.forms import Add_ResearchForm, AForm, AIForm, Edit_Phage_Dat
 from django.http.response import  HttpResponse
 from faker import Faker
 from django.conf import settings
+
+from PIL import Image
+from io import StringIO  # Python 3: from io import StringIO
+from django.core.files.uploadedfile import InMemoryUploadedFile
 
 fake = Faker()
 
@@ -171,7 +177,6 @@ class RenewBookFormTest(TestCase):
               'password1': 'foo',
               'password2': 'foo'}
         form = SignUpForm(data)
-        self.failIf(form.is_valid())
         # self.assertEqual(form.errors['email'], [u"This email address is already in use."])
         self.assertTrue(form.is_valid())
         response = self.client.post('/signup', data, follow=True)
@@ -308,8 +313,39 @@ class PhageViewTest(TestCase):
         response.user = user
         # print(response)
         self.assertEqual(response.status_code, 200)
-        model_form_upload(response)
         user.delete()
+        # model_form_upload(response)
+
+    def get_temporary_image(self):
+        io = StringIO.StringIO()
+        size = (200, 200)
+        color = (255, 0, 0, 0)
+        image = Image.new("RGBA", size, color)
+        image.save(io, format='JPEG')
+        image_file = InMemoryUploadedFile(io, None, 'foo.jpg', 'jpeg', io.len, None)
+        image_file.seek(0)
+        return image_file
+
+    def test_handle_uploaded_file(self):
+        dest = "a.jpg"
+        self.get_temporary_image()
+
+        handle_uploaded_file(self.get_temporary_image(), dest)
+
+        os.remove("a.jpg")
+
+    # def test_fillExpObjectedit(self):
+    #     expform = Add_Experiment_Form()
+    #     expform.owner = "blah"
+    #     # expform={"owner:", "TimeStamp","category","short_name","full_name","methods","results")}
+    #     p1= PhageData.objects.create(phage_name='test21',phage_CPT_id='121')
+    #     p_exp= ExperimentData.objects.create(expkey=p1)
+    #     self.client.post('/')
+    #     if expform.is_valid():
+    #         print("here")
+    #         fillExpObjectedit(expform, p_exp)
+    #         print(p_exp)
+    #     self.assertEqual('blah', 'none')
 
 class ModelTest(TestCase):
 
