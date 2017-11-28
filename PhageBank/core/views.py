@@ -33,17 +33,18 @@ import sqlite3
 import pandas as pd
 
 def count(dest_dir):
-    count = 0;
+    count = 0
     for filename in os.listdir(dest_dir):
         if filename.endswith(".png") or filename.endswith(".jpg") or filename.endswith(".jpeg"):
-            count=count+1;
+            count=count+1
             continue
         else:
             continue
     return count
 
+
 def list_path(dest_dir):
-    list_path = [];
+    list_path = []
     for filename in os.listdir(dest_dir):
         if filename.endswith(".png") or filename.endswith(".jpg") or filename.endswith(".jpeg"):
             list_path.append(filename)

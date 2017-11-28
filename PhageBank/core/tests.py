@@ -1,44 +1,39 @@
 from django.test import TestCase
-import unittest
+import unittest,os,shutil
 from django.test import Client
 from django.contrib.auth.models import User
-
+from django.views.generic.base import View
+from PhageBank.core.views import *
 from faker import Faker
-fake=Faker()
+fake = Faker()
 
 username=fake.word()
 
-class SimpleTest(unittest.TestCase):
-    user = User.objects.create(username=username, password='pass@123', email='testuser@test.com')
-    user.save()
-    valid_credentials = {
-        'username': username,
-        'password': 'pass@123'}
-    invalid_credentials = {
-        'username': 'abcde',
-        'password': '12345'}
-    client = Client()
+class PhageViewTest(TestCase):
 
-    def setUp(self):
-        # Every test needs a client.
-        self.client = Client()
-        
-    def test_details(self):
-        # Issue a GET request.
-        response = self.client.get('/login/')
+    def test_count(self):
+        path = 'test1'
+        os.mkdir(path)
+        filename1 = '1' + '.jpg'
+        f1 = open(os.path.join(path, filename1), 'wb')
+        f1.close()
 
-        # Check that the response is 200 OK.
-        self.assertEqual(response.status_code, 200)
+        filename2 = '2' + '.jpg'
+        f2 = open(os.path.join(path, filename2), 'wb')
+        f2.close()
 
-    def test_user_exist(self):
-        # Check that login is successful with valid user
-        response = self.client.post('/login/', self.valid_credentials, follow=True)
-        self.assertEqual(response.status_code,200)
+        dir_name = os.path.join(os.curdir, path)
+        val = count(dir_name)
+        self.assertEqual(val, 2)
+        shutil.rmtree(path)
 
-    def test_user_doesnt_exist(self):
-        # Check that login is unsuccessful with invalid user
-        response = self.client.post('/login/', self.invalid_credentials, follow=True)
-        index = response.content.find(b"Your username and password didn\'t match. Please try again.")
-        
-        self.assertNotEqual(index,-1)
-# Create your tests here.
+    def test_list_path(self):
+        path = "test2"
+        os.mkdir(path)
+        filename1 = '1' + '.jpg'
+        f1 = open(os.path.join(path, filename1), 'wb')
+        f1.close()
+        val = list_path(path)
+        self.assertEqual('1.jpg', str(val[0]))
+        shutil.rmtree(path)
+
