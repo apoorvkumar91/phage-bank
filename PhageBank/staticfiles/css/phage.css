@@ -74,12 +74,50 @@ footer{
     flex: 0 0 auto;
 }
 .center-class{
-	width: 100px;
-	height: 100px;
+	width: 300px;
+	height: 300px;
 	position: absolute;
 	top:0;
 	bottom: 0;
 	left: 0;
 	right: 0;
 	margin: auto;
+	text-align:left;
+}
+
+.front-img {
+    position: relative;
+}
+
+.image {
+  display: block;
+}
+
+.overlay {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  right: 0;
+  background-color: #800000;
+  overflow: hidden;
+  width: 100%;
+  height:0;
+  transition: .5s ease;
+}
+
+.front-img:hover .overlay {
+  bottom: 0;
+  height: 100%;
+}
+
+.text {
+  white-space: pre;
+  color: white;
+  font-size: 20px;
+  position: absolute;
+  overflow: hidden;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
 }

@@ -109,9 +109,9 @@ ALLOWED_HOSTS = ['*']
 if DEBUG:
     SECURE_SSL_REDIRECT = False
 else:
-    SECURE_SSL_REDIRECT = True
-    CSRF_COOKIE_SECURE = True
-    SESSION_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = True  # pragma: no cover
+    CSRF_COOKIE_SECURE = True    # pragma: no cover
+    SESSION_COOKIE_SECURE = True     # pragma: no cover
 # end - AK - more additions at the end of the file
 
 DATABASES = {
