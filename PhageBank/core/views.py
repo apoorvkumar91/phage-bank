@@ -507,7 +507,7 @@ def editPhage(request):
             if pform.is_valid() and rrform.is_valid() and rform.is_valid() and aform.is_valid() and aiform.is_valid()\
                     and isoform.is_valid() and expform.is_valid():
                 curr_phage = pform.cleaned_data.get('phage_name')
-                if(check_entry(curr_phage)):
+                if(check_entry(curr_phage) and curr_phage!=name):
                     return render(request, 'EditPhage.html', {'item': phage,
                                                               'pform': pform,
                                                               'rrform': rrform,'expform':expform,
