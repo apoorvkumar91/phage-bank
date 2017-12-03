@@ -11,6 +11,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
 from django.contrib.auth.models import User
 from PhageBank.core.models import PhageData, PreData
+from django.core.files.uploadedfile import SimpleUploadedFile
 from PhageBank.core.forms import Add_ResearchForm, AForm, AIForm, Edit_Phage_DataForm, Edit_ResearcherForm, Edit_ResearchForm, Edit_IsolationDataForm, Edit_Experiment_Form
 
 from faker import Faker
@@ -542,3 +543,22 @@ class EditPhageDataTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
+class UploadPhageDataTest(TestCase):
+    def setUp(self):
+        # Every test needs a client.
+        user = User.objects.create_superuser("test_user", 'testuser@test.com', 'pass@123')
+        user.save()
+
+
+    def test_UploadPhageData1(self):
+        self.client.login(username="test_user", password='pass@123')
+        response = self.client.get('/uploads/form/')
+        self.assertEqual(response.status_code, 200)
+        csv_path = os.path.join(settings.BASE_DIR, "test2.csv")
+        data = {
+            'title': 'Upload1',
+            'file': csv_path
+        }
+        with open(csv_path) as fp:
+            response = self.client.post('/uploads/form/', {'title': 'Upload1', 'file': fp})
+        self.assertEqual(response.status_code, 200)
