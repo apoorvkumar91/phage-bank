@@ -507,4 +507,38 @@ class EditPhageDataTest(TestCase):
         response = self.client.get('/search_phage/', search_data, follow=True)
         self.assertEqual(response.status_code, 200)
 
+    def test_EditPhageData3(self):
+        self.client.login(username="test_user", password='pass@123')
+        phage_desc = {"phage_name": "test_pname1", "phage_CPT_id": "test_123", "phage_lab": "Lab-A", "flag": 1}
+        response = self.client.post('/add_phage/', phage_desc, follow=True)
+        data = {
+            'phage_name': 'test_pname1'
+        }
+        response = self.client.get('/view_phage/?name=test_pname1')
+        self.assertEqual(response.status_code, 200)
+        # response = self.client.get('/edit_details/', data, follow=True)
+        response = self.client.get('/edit_details/?name=test_pname1')
+        self.assertEqual(response.status_code, 200)
+
+        data = {
+                'phage_name' : 'test_pname2',
+                'phage_host_name' : 'hostA',
+                'phage_isolator_name' : 'IsolatorA',
+                'phage_experimenter_name' : 'ScientistA',
+                'phage_lab': '0',
+                'phage_CPT_id' : 'test_123',
+                'phage_isolator_loc' : 'texas',
+                'owner' : 'someone',
+                'owner_name' : 'else',
+                'link' : "www.google.com",
+                'flag': 1
+               }
+        search_data = {
+            'phage_name': 'test_pname2'
+        }
+        response = self.client.post('/edit_details/?name=test_pname1', data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get('/search_phage/', search_data, follow=True)
+        self.assertEqual(response.status_code, 200)
+
 
