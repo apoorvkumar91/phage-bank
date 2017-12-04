@@ -453,6 +453,20 @@ class PhageDataLoginTest(TestCase):
         self.assertEqual(response.status_code, 200)
         user.delete()
 
+    def test_ChangePassword(self):
+        user = User.objects.create_user(username='testclient', password='sekret')
+        self.client.login(username='testclient', password='sekret')
+        response = self.client.get('/change_password/')
+        self.assertEqual(response.status_code, 200)
+        data = {
+            'old_password': 'sekret',
+            'new_password1': 'testclient',
+            'new_password2': 'testclient',
+        }
+        response = self.client.post('/change_password/', data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        user.delete()
+
 
 class EditPhageDataTest(TestCase):
     def setUp(self):
