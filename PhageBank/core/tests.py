@@ -56,6 +56,16 @@ class SimpleTest(TestCase):    #unittest.TestCase
         self.assertEqual(form_is_valid,False)
 # Create your tests here.
 
+    def test_add_phage_req(self):
+        phage_desc = {"phage_lab": "Lab-A", "flag":1}
+        self.client.login(username = "test_user", password= 'pass@123')
+        response = self.client.post('/add_phage/', phage_desc, follow=True)
+        approvePhage = response.json()['approvePhage']
+        approveCPTid = response.json()['approveCPTid']
+        self.assertEqual(approvePhage,1)
+        self.assertEqual(approveCPTid,1)
+
+
     def test_add_phage_ut(self):
         phage_desc = {"phage_name" : "test_newphage", "phage_CPT_id" : "test_123", "phage_lab": "Lab-A", "flag":1}
         self.client.login(username = "test_user", password= 'pass@123')
