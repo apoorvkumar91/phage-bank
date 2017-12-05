@@ -13,6 +13,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
 from django.contrib.auth.models import User
 from PhageBank.core.models import PhageData, PreData
+from django.core.files.uploadedfile import SimpleUploadedFile
 from PhageBank.core.forms import Add_ResearchForm, AForm, AIForm, Edit_Phage_DataForm, Edit_ResearcherForm, Edit_ResearchForm, Edit_IsolationDataForm, Edit_Experiment_Form
 from django.http.response import  HttpResponse
 from faker import Faker
@@ -65,6 +66,16 @@ class SimpleTest(TestCase):    #unittest.TestCase
 
         self.assertEqual(form_is_valid,False)
 # Create your tests here.
+
+    def test_add_phage_req(self):
+        phage_desc = {"phage_lab": "Lab-A", "flag":1}
+        self.client.login(username = "test_user", password= 'pass@123')
+        response = self.client.post('/add_phage/', phage_desc, follow=True)
+        approvePhage = response.json()['approvePhage']
+        approveCPTid = response.json()['approveCPTid']
+        self.assertEqual(approvePhage,1)
+        self.assertEqual(approveCPTid,1)
+
 
     def test_add_phage_ut(self):
         phage_desc = {"phage_name" : "test_newphage", "phage_CPT_id" : "test_123", "phage_lab": "Lab-A", "flag":1}
@@ -487,11 +498,11 @@ class PhageDataTest(TestCase):
 
     def test_PhageData_adv_search_iso_name(self):
         user = User.objects.create_user(username='testclient', password='sekret')
+        self.client.login(username='testclient', password='sekret')
         p1 = PhageData.objects.create(phage_name='test_pname', phage_CPT_id='123', phage_isolator_name='IsolatorA')
         data = {
             'phage_isolator_name': 'IsolatorA'
         }
-        self.client.login(username='testclient', password='sekret')
         response = self.client.post('/search_phage/', data, follow=True)
         response = self.client.get('/search_phage/', data, follow=True)
         self.assertEqual(response.status_code, 200)
@@ -499,11 +510,11 @@ class PhageDataTest(TestCase):
 
     def test_PhageData_adv_search_start_year(self):
         user = User.objects.create_user(username='testclient', password='sekret')
+        self.client.login(username='testclient', password='sekret')
         p1 = PhageData.objects.create(phage_name='test_pname', phage_CPT_id='123', phage_isolator_name='IsolatorA')
         data = {
             'submitted_year_gt': '-10'
         }
-        self.client.login(username='testclient', password='sekret')
         response = self.client.post('/search_phage/', data, follow=True)
         response = self.client.get('/search_phage/', data, follow=True)
         self.assertEqual(response.status_code, 200)
@@ -511,11 +522,11 @@ class PhageDataTest(TestCase):
 
     def test_PhageData_adv_search_end_year(self):
         user = User.objects.create_user(username='testclient', password='sekret')
+        self.client.login(username='testclient', password='sekret')
         p1 = PhageData.objects.create(phage_name='test_pname', phage_CPT_id='123', phage_isolator_name='IsolatorA')
         data = {
             'submitted_year_lt': '-10'
         }
-        self.client.login(username='testclient', password='sekret')
         response = self.client.post('/search_phage/', data, follow=True)
         response = self.client.get('/search_phage/', data, follow=True)
         self.assertEqual(response.status_code, 200)
@@ -523,11 +534,11 @@ class PhageDataTest(TestCase):
 
     def test_PhageData_adv_search_start_month(self):
         user = User.objects.create_user(username='testclient', password='sekret')
+        self.client.login(username='testclient', password='sekret')
         p1 = PhageData.objects.create(phage_name='test_pname', phage_CPT_id='123', phage_isolator_name='IsolatorA')
         data = {
             'submitted_month_gt': '-10'
         }
-        self.client.login(username='testclient', password='sekret')
         response = self.client.post('/search_phage/', data, follow=True)
         response = self.client.get('/search_phage/', data, follow=True)
         self.assertEqual(response.status_code, 200)
@@ -535,18 +546,18 @@ class PhageDataTest(TestCase):
 
     def test_PhageData_adv_search_end_month(self):
         user = User.objects.create_user(username='testclient', password='sekret')
+        self.client.login(username='testclient', password='sekret')
         p1 = PhageData.objects.create(phage_name='test_pname', phage_CPT_id='123', phage_isolator_name='IsolatorA')
         data = {
             'submitted_month_lt': '-10'
         }
-        self.client.login(username='testclient', password='sekret')
         response = self.client.post('/search_phage/', data, follow=True)
         response = self.client.get('/search_phage/', data, follow=True)
         self.assertEqual(response.status_code, 200)
         user.delete()
 
 class PhageDataLoginTest(TestCase):
-    def create_PhageDataLogin(self, title="only a test", body="yes, this is only a test"):
+    def create_PhageDataLogin(self, title="only a test", body="yes"):
         return PhageData.objects.create(phage_name='test_pname', phage_CPT_id='123')
 
     def test_login1(self):
@@ -558,3 +569,149 @@ class PhageDataLoginTest(TestCase):
         self.assertEqual(response.status_code, 200)
         user.delete()
 
+    def test_logged_in_index(self):
+        user = User.objects.create_user(username='testclient', password='sekret')
+        self.client.login(username='testclient', password='sekret')
+        p1 = PhageData.objects.create(phage_name='test_pname1', phage_CPT_id='1231', phage_isolator_name='IsolatorA')
+        p2 = PhageData.objects.create(phage_name='test_pname2', phage_CPT_id='1232', phage_isolator_name='IsolatorB')
+        p3 = PhageData.objects.create(phage_name='test_pname3', phage_CPT_id='1233', phage_isolator_name='IsolatorC')
+        dest_dir = os.path.join(settings.MEDIA_ROOT, "images")
+        if not os.path.exists(dest_dir):
+            os.mkdir(dest_dir)
+        response = self.client.get('//', follow=True)
+        self.assertEqual(response.status_code, 200)
+        user.delete()
+
+    def test_ChangePassword(self):
+        user = User.objects.create_user(username='testclient', password='sekret')
+        self.client.login(username='testclient', password='sekret')
+        response = self.client.get('/change_password/')
+        self.assertEqual(response.status_code, 200)
+        data = {
+            'old_password': 'sekret',
+            'new_password1': 'testclient',
+            'new_password2': 'testclient',
+        }
+        response = self.client.post('/change_password/', data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        user.delete()
+
+
+class EditPhageDataTest(TestCase):
+    def setUp(self):
+        # Every test needs a client.
+        user = User.objects.create_user("test_user", 'testuser@test.com', 'pass@123')
+        user.save()
+
+    def create_EditPhageData(self, title="only a test", body="yes"):
+        return PhageData.objects.create(phage_name='test_pname', phage_CPT_id='123')
+
+
+    def test_EditPhageData1(self):
+        self.client.login(username="test_user", password='pass@123')
+        phage_desc = {"phage_name": "test_pname1", "phage_CPT_id": "test_123", "phage_lab": "Lab-A", "flag": 1}
+        response = self.client.post('/add_phage/', phage_desc, follow=True)
+        data = {
+            'phage_name': 'test_pname1'
+        }
+        response = self.client.get('/view_phage/?name=test_pname1')
+        self.assertEqual(response.status_code, 200)
+        #response = self.client.get('/edit_details/', data, follow=True)
+        response = self.client.get('/edit_details/?name=test_pname1')
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.post('/edit_details/?name=test_pname1', phage_desc, follow=True)
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get('/search_phage/', data, follow=True)
+        self.assertEqual(response.status_code, 200)
+
+
+
+    def test_EditPhageData2(self):
+        self.client.login(username="test_user", password='pass@123')
+        phage_desc = {"phage_name": "test_pname1", "phage_CPT_id": "test_123", "phage_lab": "Lab-A", "flag": 1}
+        response = self.client.post('/add_phage/', phage_desc, follow=True)
+        data = {
+            'phage_name': 'test_pname1'
+        }
+        response = self.client.get('/view_phage/?name=test_pname1')
+        self.assertEqual(response.status_code, 200)
+        # response = self.client.get('/edit_details/', data, follow=True)
+        response = self.client.get('/edit_details/?name=test_pname1')
+        self.assertEqual(response.status_code, 200)
+
+        data = {
+                'phage_name' : 'test_pname1',
+                'phage_host_name' : 'hostA',
+                'phage_isolator_name' : 'IsolatorA',
+                'phage_experimenter_name' : 'ScientistA',
+                'phage_lab': '0',
+                'phage_CPT_id' : 'test_123',
+                'phage_isolator_loc' : 'texas',
+                'owner' : 'someone',
+                'owner_name' : 'else',
+                'link' : "www.google.com",
+                'flag': 1
+               }
+        search_data = {
+            'phage_name': 'test_pname1'
+        }
+        response = self.client.post('/edit_details/?name=test_pname1', data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get('/search_phage/', search_data, follow=True)
+        self.assertEqual(response.status_code, 200)
+
+    def test_EditPhageData3(self):
+        self.client.login(username="test_user", password='pass@123')
+        phage_desc = {"phage_name": "test_pname1", "phage_CPT_id": "test_123", "phage_lab": "Lab-A", "flag": 1}
+        response = self.client.post('/add_phage/', phage_desc, follow=True)
+        data = {
+            'phage_name': 'test_pname1'
+        }
+        response = self.client.get('/view_phage/?name=test_pname1')
+        self.assertEqual(response.status_code, 200)
+        # response = self.client.get('/edit_details/', data, follow=True)
+        response = self.client.get('/edit_details/?name=test_pname1')
+        self.assertEqual(response.status_code, 200)
+
+        data = {
+                'phage_name' : 'test_pname2',
+                'phage_host_name' : 'hostA',
+                'phage_isolator_name' : 'IsolatorA',
+                'phage_experimenter_name' : 'ScientistA',
+                'phage_lab': '0',
+                'phage_CPT_id' : 'test_123',
+                'phage_isolator_loc' : 'texas',
+                'owner' : 'someone',
+                'owner_name' : 'else',
+                'link' : "www.google.com",
+                'flag': 1
+               }
+        search_data = {
+            'phage_name': 'test_pname2'
+        }
+        response = self.client.post('/edit_details/?name=test_pname1', data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get('/search_phage/', search_data, follow=True)
+        self.assertEqual(response.status_code, 200)
+
+
+class UploadPhageDataTest(TestCase):
+    def setUp(self):
+        # Every test needs a client.
+        user = User.objects.create_superuser("test_user", 'testuser@test.com', 'pass@123')
+        user.save()
+
+
+    def test_UploadPhageData1(self):
+        self.client.login(username="test_user", password='pass@123')
+        response = self.client.get('/uploads/form/')
+        self.assertEqual(response.status_code, 200)
+        csv_path = os.path.join(settings.BASE_DIR, "test2.csv")
+        data = {
+            'title': 'Upload1',
+            'file': csv_path
+        }
+        with open(csv_path) as fp:
+            response = self.client.post('/uploads/form/', {'title': 'Upload1', 'file': fp})
+        self.assertEqual(response.status_code, 200)
